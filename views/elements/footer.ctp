@@ -1,6 +1,9 @@
 <div id="footer-menu">
 	<ul>
 		<li>&copy; 2009 <a href="http://massidea.org">Massidea.org</a></li>
+	</ul>
+</div>
+<?php /* ?>
 		<li>
 			<a href="http://www.massidea.org/blog/?page_id=40">
 			<?php echo __('index-about'); ?></a>
@@ -23,7 +26,7 @@
 		</li>
 	</ul>
 </div>
-<?php /* ?>
+
                 <div class="dot-line-720 clear"></div>
                 <div class="left">
                     <p><?php echo $this->translate('index-funded'); ?></p>

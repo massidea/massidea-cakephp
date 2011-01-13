@@ -1,1 +1,1 @@
-<pre>H   E   A   D   E   R</pre>
+H   E   A   D   E   R
