@@ -6,15 +6,9 @@
 	<?php echo $html->charset(); ?>
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<?php echo $html->css('smoothness/jquery-ui-1.8.7.custom.css'); ?>
-	
 	<?php echo $html->script('jquery-1.4.4.min'); ?>
-	
 	<?php echo $html->script('jquery-ui-1.8.7.custom.min'); ?>
-	
 	<?php echo $html->script('jquery.cookie.js'); ?>
-	
-	<?php echo $html->script('functions'); ?>
-	
 	<?php echo $html->script('events'); ?>
 	
 	<?php echo $scripts_for_layout; ?>
