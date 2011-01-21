@@ -38,4 +38,5 @@ class AppController extends Controller {
 
 		$this->set('title_for_layout','Massidea.org');	
 	}
+
 }

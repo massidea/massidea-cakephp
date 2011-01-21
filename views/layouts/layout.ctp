@@ -10,6 +10,7 @@
 	 application/xhtml+xml is for XHTML. Wonder why CakePHP doesnt use this as default...
 	*/ ?>	
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
 	<?php echo $html->css(array('layout','smoothness/jquery-ui-1.8.7.custom.css')); ?>
 	
 	<!--[if IE 7]> <?php echo $html->css('ie7'); ?> <![endif]-->
@@ -22,6 +23,7 @@
 	)); 
 	?>
 	<?php echo $scripts_for_layout; ?>	
+
 </head>
 <body>
 	<!--[if lt IE 7]> <span style="display:block; width: 100%; background: red; text-align: center; font-size: 24px; padding: 10px; ">Internet Explorer version 6 and below are not supported. Please update your browser for your own security.<br/> <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx">Download newer version here</a> </span><![endif]-->
