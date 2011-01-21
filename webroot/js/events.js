@@ -190,7 +190,7 @@ $(document).ready(function(){
 		}	
 	 });
 	
-	$('.youtube-reference').click(function() {
+	$('.youtube-reference').click(function() { //Since this is not a global event it should be moved to its own specific js file.
 		$(this).removeClass('hover-link');
 		$(this).find('.youtube-preview').toggle();
 		$(this).find('.youtube-embed').toggle();
