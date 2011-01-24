@@ -37,7 +37,7 @@
 
 /* Body styles */
 body { font:80%/135% Arial, Helvetica, sans-serif; color:#333; }
- 
+.iewhine { display:block; width: 100%; background: red; text-align: center; font-size: 24px; padding: 10px; }
 /** 
  * Button styles
  */

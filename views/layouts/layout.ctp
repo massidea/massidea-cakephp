@@ -32,7 +32,7 @@
 
 </head>
 <body>
-	<!--[if lt IE 7]> <span style="display:block; width: 100%; background: red; text-align: center; font-size: 24px; padding: 10px; ">Internet Explorer version 6 and below are not supported. Please update your browser for your own security.<br/> <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx">Download newer version here</a> </span><![endif]-->
+	<!--[if lt IE 7]> <span id="iewhine">Internet Explorer version 6 and below are not supported. Please update your browser for your own security.<br/> <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx">Download newer version here</a> </span><![endif]-->
 	<div id="alert" style="display:none"><?php //This element is hidden because its used to notify users if we are going to do updates to our site.
 		echo $this->element('/layout/alert', array('cache' => false)); 
 	?> 
