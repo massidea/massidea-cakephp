@@ -11,9 +11,15 @@
 	*/ ?>	
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-	<?php echo $html->css(array('layout','smoothness/jquery-ui-1.8.7.custom.css')); ?>
+	<?php echo $html->css(array('reset', //Resets the CSS for browsers
+								'layout', //Layout CSS file
+								'smoothness/jquery-ui-1.8.7.custom.css' //jQuery UI CSS file
+	));
+	//Adds controller.css and its action.css files to CSS styles if exists
+	if(!empty($css_for_layout)) { echo $html->css($css_for_layout); }
+	?>
 	
-	<!--[if IE 7]> <?php echo $html->css('ie7'); ?> <![endif]-->
+	<!--[if IE 7]> <?php echo $html->css('ie7fix'); ?> <![endif]-->
 	<?php 
 	echo $html->script(array('jquery-1.4.4.min', //jQuery javascript library
 							'jquery-ui-1.8.7.custom.min', //User Interface extension for jQuery
@@ -39,8 +45,6 @@
 			<div id="menu">
 				<?php echo $this->element('/layout/menu', array('cache' => true)); ?>
 			</div>
-			<div class="clear"></div>
-			<hr />
 			<div id="content">		
 				<?php echo $content_for_layout ?>
 			</div>

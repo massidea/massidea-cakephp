@@ -154,7 +154,17 @@ $(document).ready(function(){
 			function(){$("#user_options").delay(1000).slideUp();}
 	);
 	
-/*		 
+	/**
+	 * When selecting option from Footers select box direct to values url
+	 */
+	$('#project_groups').change(function() {
+		var value = $(this).val();
+		if(value != '' && value != undefined && value != 0) {
+			window.open(value);
+		}
+	});
+
+/**		 
 	 $("#notification_close").live("mouseover mouseout click", function(event){ 
 		 if(event.type == "mouseover")
 			 $("a",this).addClass("notification_close_button");

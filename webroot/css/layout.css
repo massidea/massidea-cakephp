@@ -1,6 +1,7 @@
 @charset "utf-8";
 /** 
  * CSS styles for Massidea.org layout
+ * 
  */
 
 /**
@@ -14,25 +15,18 @@
  */
 
 
-/** Reset */
-* { margin:0px; padding:0px; }
-
-/**
- * HTML body styles
- */
-body {
-	font:80%/135% Arial, Helvetica, sans-serif;
-	color:#333;
-}
-
-
 /**
  * General styles
  */
-
+ 
+.dot-line-720 { background:transparent url("../img/gray_dot_line_720.png") no-repeat; height:1px; }
+.dot-line-500 { background:transparent url("../img/gray_dot_line_500.png") no-repeat; height:1px; }
+.dot-line-200 { background:transparent url("../img/gray_dot_line_200.png") no-repeat; height:1px; }
+.dot-line { background:transparent url("../img/gray_dot_line.png") no-repeat; height:1px; }
 .left { float:left; }
 .right { float:right; }
 .center { text-align:center; }
+.middle { vertical-align: middle; }
 .grey { color: #CCCCCC }
 .hidden { display: none; }
 .clear { clear:both; }
@@ -41,8 +35,20 @@ body {
 .nolist { word-wrap: break-word; }
 .nolist ul { list-style: none outside none; }
 
-input.submit-button {
-
+/* Body styles */
+body { font:80%/135% Arial, Helvetica, sans-serif; color:#333; }
+ 
+/** 
+ * Button styles
+ */
+input[type="submit"], input[type="button"] {
+	border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: 1px solid #003C74;
+    cursor: pointer;
+    font: 12px Arial,Helvetica,sans-serif;
+    padding: 2px;
 }
 
 /** 
@@ -51,59 +57,45 @@ input.submit-button {
 a { text-decoration:none; color: #0089CF; }
 a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 
-
 /**
  * Alert box, Background and Container
  */
-#alert { 
-	background: #D21034;
-	color: white;
-	text-align: center;
-	padding: 6px;
-	font-weight: bold;
-}
-#alert p {
-	padding: 0px;
-	margin: 0px;
-}
-
+#alert { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold; }
+#alert p { padding: 0px; margin: 0px; }
 #background { background: white; }
-
-#container { 
-	width: 850px;
-	margin: 0 auto;
-	padding: 0px 1px 20px 1px;
-	background: white;
-}
+#container { width: 750px; margin: 0 auto; padding: 0px 1px 20px 1px; background: none repeat scroll 0 0 #FFFFFF; }
 
 /** 
- * Header
+ * Header consists of:
+ * - Title
+ * - Search
  */
-#header {
-	background: #003581;
-	height: 94px; 
-}
+#header { background: white; height: 94px; }
+
  /* Title */
+#title h1 { margin: 0 0 0 15px; padding: 0; }
+#title h1 a, #title h1 a:visited { height: 94px; position: absolute; width: 256px; background: url("../img/massidea_logo.png") no-repeat scroll center center transparent; }
+#title h1 span { display: block; height: 0; margin: 0; overflow: hidden; padding: 0; width: 0; }
 
- #header #title a, #header #title a:visited {
- 	padding: 0px;
- 	width: 256px;
- 	height: 94px;
- 	position: absolute;
- 	background: transparent no-repeat url('../img/massidea_logo.png') center center;
- 	margin-left: 15px;
- }
-
+/* Search */
+#search { float: left; margin: 5px 20px 0 290px;} 
+#search #search-top { margin: 4px 0; text-align: right; width: 358px; }
+#search #search-field { float: left; width: 358px; }
+#search #search-field #globalSearch { float: left; margin: 0 10px 10px 0; padding: 2px; width: 350px; }
+#search #search-submit { float: right; width: 50px; }
+#search #submitsearch { margin-left: 20px; }
+#search #select { width: 358px; }
 
 /**
  * Menu
  */
-#menu { font-size: 0.9em; font-weight: bold; line-height: 1.3em; }
-#menu ul { list-style: none outside none; margin: 0 0 0 16px; padding: 0; }
-#menu ul li { float: left; margin: 0 15px 0 0; }
+#menu { font-size: 0.9em; font-weight: bold; line-height: 1.3em; border-bottom: 5px solid #CCCCCC; position: relative; height: 48px; margin: 14px 0px; }
+#menu ul { list-style: none outside none; margin: 0 0 0 16px; padding: 0px; }
+#menu ul li { float: left; margin: 0 12px 0 0; width: 65px; text-align: center;}
 #menu ul li a { border-bottom: 5px solid; }
 #menu ul li a:hover { border-bottom: 10px solid; }
 #menu ul li a, #menu ul li a:visited { display: block; height: 48px; }
+#menu ul li a:hover { height:43px; }
 
 #menu ul li.red a, #menu ul li.red a:hover { color: #D21034; border-bottom-color: #D21034; }
 #menu ul li.green a, #menu ul li.green a:hover { color: #4B9B07; border-bottom-color: 10px solid #4B9B07; }
@@ -111,3 +103,14 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #menu ul li.blue a, #menu ul li.blue a:hover { color: #0089CF; border-bottom-color: #0089CF; }
 #menu ul li.deepblue a, #menu ul li.deepblue a:hover { color: #003581; border-bottom-color: #003581; }
 
+#menu #addNewContentButton { width: 100px; }
+	
+/**
+ * Footer
+ */
+#footer { color: #999999; margin-top: 10px; padding: 0 16px 5px; }
+#footer #footer-menu { color: #000000; height: 26px; margin: 0 auto; width: 500px; }
+#footer #footer-menu ul { display: inline; list-style: none outside none; width: 490px; }
+#footer #footer-menu ul li { display: inline; float: left; margin: 0 5px; }
+#footer .left { float: left; margin-bottom: 10px; padding-left: 10px; width: 340px; }
+#footer .right { float: right; margin-bottom: 10px; width: 360px; }
