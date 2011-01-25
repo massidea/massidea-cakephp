@@ -20,7 +20,7 @@
  *  Maintains actions for browsing, adding and viewin contents
  *
  *  @package        controllers
- *  @author         
+ *  @author         Jari Korpela
  *  @copyright      
  *  @license        GPL v2
  *  @version        1.0
@@ -31,6 +31,7 @@ class ContentsController extends AppController {
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
+
 	}
 	
 	/**
@@ -46,7 +47,7 @@ class ContentsController extends AppController {
 
 	/**
 	 * add action - method
-	 * Adds content to database using specific form
+	 * Adds content
 	 * 
 	 * @author	
 	 * @param
@@ -57,7 +58,7 @@ class ContentsController extends AppController {
 	
 	/**
 	 * edit action - method
-	 * Edits content from database using specific form
+	 * Edits content
 	 * 
 	 * @author	
 	 * @param
@@ -68,7 +69,7 @@ class ContentsController extends AppController {
 	
 	/**
 	 * delete action - method
-	 * 
+	 * Deletes content
 	 * 
 	 * @author	
 	 * @param
@@ -79,7 +80,7 @@ class ContentsController extends AppController {
 	
 	/**
 	 * preview action - method
-	 * 
+	 * Previews content
 	 * 
 	 * @author	
 	 * @param
@@ -90,7 +91,7 @@ class ContentsController extends AppController {
 	
 	/**
 	 * flag action - method
-	 * 
+	 * Flags content
 	 * 
 	 * @author	
 	 * @param

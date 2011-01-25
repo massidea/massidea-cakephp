@@ -24,4 +24,4 @@
 
 
 Router::connect('/', array('controller' => 'contents', 'action' => 'index', 'index'));
-	Router::connect('/contents/*', array('controller' => 'contents', 'action' => 'list'));
+	Router::connect('/contents/*', array('controller' => 'contents', 'action' => 'view'));

@@ -56,6 +56,16 @@ class AppController extends Controller {
 		$this->set('css_for_layout',$cssFiles);
 		//End of automated CSS load
 		
+		/**
+		 * Automated class load for content
+		 * 
+		 * content_class is used to define how the page is viewed. Default narrow.
+		 * 'narrow' class leaves room for sidebar while 'wide' class does not.
+		 * Should be overridden in controller if wished to use wide class.
+		 */
+		$this->set('content_class','narrow');
+		//End of automated class load for content
+		
 	}
 
 }
