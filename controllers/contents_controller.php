@@ -27,11 +27,12 @@
  */
 
 class ContentsController extends AppController {
-	public $uses = null;
+	var $uses = null;
+	var $Nodes = null;
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-
+		$this->Nodes = Classregistry::init('Node');
 	}
 	
 	/**
@@ -42,7 +43,8 @@ class ContentsController extends AppController {
 	 * @param	
 	 */
 	public function index() {
-
+		$contents = $this->Nodes->find(array('type' => 'Content'), 10, false);
+		$this->set('contents',$contents);
 	}
 
 	/**

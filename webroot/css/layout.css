@@ -1,7 +1,7 @@
 @charset "utf-8";
 /** 
  * CSS styles for Massidea.org layout
- * 
+ * See sidebar.css for sidebar styles
  */
 
 /**
@@ -34,6 +34,8 @@
 .column { width:220px; float:left; margin:0px 20px 10px 0px; }
 .nolist { word-wrap: break-word; }
 .nolist ul { list-style: none outside none; }
+
+p { margin: 10px 0; }
 
 /* Body styles */
 body { font:80%/135% Arial, Helvetica, sans-serif; color:#333; }

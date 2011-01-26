@@ -1,5 +1,9 @@
 <?php
 App::import('Model','Baseclass');
+App::import('Model','Contents');
+App::import('Model','Groups');
+App::import('Model','Files');
+
 
 class Node extends AppModel {
 	var $name = 'Node';
