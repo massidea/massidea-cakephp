@@ -1,17 +1,30 @@
 <?php
+
+/**
+* @author Jussi Raitanen <jussi.raitanen@samk.fi>
+* @package Model
+*/
+
 App::import('Model','Baseclass');
 App::import('Model','Contents');
 App::import('Model','Groups');
 App::import('Model','Files');
 
 
+/**
+* @package Model
+*/
 class Node extends AppModel {
 	var $name = 'Node';
 	var $useTable = false;
 	var $TableModel = null;
 	static $cls = null;
 
-
+/**
+* Deletes a record or multiple records based on criteria.
+* @param mixed $id Can be passed as an array or a single id.
+* @param boolean $cascade Not used.
+*/
 	function delete($id = null, $cascade = true) {
 
 		if (!is_array($id)) {
@@ -22,17 +35,20 @@ class Node extends AppModel {
 			$bc = new Baseclass();
 			$bc->deleteAll($id);
 		}
+
+		$hash = $this->_createHash($id);
+                $obj = Cache::delete('Node:'.$hash);
 	}
 
+/**
+* Returns all nodes that matches the criteria.
+* @param mixed $id Can be passed as an array or a single id.
+* @param integer $limit
+* @param boolean $walk Can be used to find all objects that relates directly.
+*/
 	function find($id = null, $limit = 0, $walk = true) {
 
-		$tmp = null;
-		if (is_array($tmp))
-			$tmp = implode($id);
-		else
-			$tmp = (string)$id;
-		$hash = sha1($tmp);
-
+		$hash = $this->_createHash($id);
 		$obj = Cache::read('Node:'.$hash);
 
 		if ($obj !== false)
@@ -91,12 +107,15 @@ class Node extends AppModel {
 				$inst = Node::$cls . 's';
 			else {
 				$res = $bc->find(array('id' => $id));
-				$inst = $res['Baseclass']['type'] . 's';
+				if ($res)
+					$inst = $res['Baseclass']['type'] . 's';
 			}
 
-			$t = new $inst();
-			$node = $t->find(array('id' => $id));
-			$obj['Node'] = $node[$inst];
+			if ($inst) {
+				$t = new $inst();
+				$node = $t->find(array('id' => $id));
+				$obj['Node'] = $node[$inst];
+			}
 		}
 
 
@@ -106,6 +125,10 @@ class Node extends AppModel {
 		}
 	}
 
+/**
+* Inserts a new object or modifies existing object.
+* @param array $data Actual node to be passed.
+*/
 	function save($data) {
 
 		$bc = new Baseclass();
@@ -127,9 +150,25 @@ class Node extends AppModel {
 		$t->save($data);
 
 		$id = (string)$data['id'];
-                $hash = sha1($id);
+                $hash = $this->_createHash($id);
 
                 $obj = Cache::delete('Node:'.$hash);
+	}
+
+/**
+* Creates a sha1 hash from passed value.
+* @param mixed $value
+*/
+	function _createHash($value) {
+
+		$tmp = null;
+                if (is_array($value))
+                        $tmp = implode($value);
+                else
+                        $tmp = (string)$value;
+                $hash = sha1($tmp);
+
+		return $hash;
 
 	}
 }
