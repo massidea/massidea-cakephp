@@ -1,6 +1,6 @@
 <div class="left">
 	<ul>
-		<li id="home" class="deepblue"><a href="#">Home</a></li>
+		<li id="home" class="deepblue"><a href="<?php echo $html->url('/');?>">Home</a></li>
 		<li id="challenges" class="red"><a href="#">Challenges</a></li>
 		<li id="ideas" class="green"><a href="#">Ideas</a></li>
 		<li id="visions" class="yellow"><a href="#">Visions</a></li>

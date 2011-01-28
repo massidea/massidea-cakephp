@@ -7,11 +7,11 @@
 	<div id="search-top">
 		<a href="#" id="loginlink">Login</a> | <a href="#">Sign up</a>
 	</div>
-	<?php echo $this->element('/layout/forms/globalsearch', array('cache' => true));  ?>
+	<?php echo $this->element('layout'.DS.'forms'.DS.'globalsearch', array('cache' => true));  ?>
 	<div class="clear"></div>
 	<div id="select">
 		<div class="left">
-	<?php echo $this->element('/layout/forms/languagechange', array('cache' => true));  ?>		
+	<?php echo $this->element('layout'.DS.'forms'.DS.'languagechange', array('cache' => true));  ?>		
 		</div>
 		<div class="right"></div>
 		<div class="clear"></div>

@@ -61,20 +61,23 @@ echo $html->docType('xhtml11');
 			<?php 
 			/**
 			 *	Some controller pages have sidebar and some dont. 
-			 *	All pages have though content div and its defined id is:
-			 *	controller-action-page
+			 *	All pages have content div and its defined id is: controller
+			 *	Inside this div there is action div with defined id: action-page
 			 *	The $content_class defines whether the content uses narrow or wide style.
 			 *	narrow style is used with sidebar and wide without and it's globally set to narrow in app_controller.php.
 			 *	Sidebar is loaded from elements:
-			 *	elements/controller/sidebar.ctp
+			 *	elements/controller/action_sidebar.ctp
 			 */
-			 $id 		= strtolower($this->name) . '-' . $this->action . '-page';
-			 $sidebar	= strtolower($this->name) . DS . 'sidebar';
+			 $controller_id = strtolower($this->name);
+			 $action_id		= $this->action . '-page';
+			 $sidebar		= strtolower($this->name) . DS . $this->action. '_sidebar';
 			 ?>
 			
 			<div id="content">
-				<div id="<?php echo $id; ?>" class="<?php echo $content_class; ?>">
-					<?php echo $content_for_layout ?>
+				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
+					<div id="<?php echo $action_id; ?>">
+						<?php echo $content_for_layout ?>
+					</div>
 				</div>
 			</div>
 			<?php if ($content_class == 'narrow'): ?>
