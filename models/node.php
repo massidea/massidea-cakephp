@@ -171,5 +171,43 @@ class Node extends AppModel {
 		return $hash;
 
 	}
+
+/**
+* Links together two nodes.
+* @param integer $parent Parent node
+* @param integer $child Child node
+* @param boolean $hardlink If hardlink is true and parent is deleted then the child node will be deleted automatically. 
+* @return Returns true if linked successfully otherwise false
+*/
+	function link($parent, $child, $hardlink = true) {
+		$hardlink = (int)$hardlink;
+		@$res = $this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
+
+		$phash = $this->_createHash($parent);
+		$chash = $this->_createHash($child);
+
+		Cache::delete('Node:'.$phash);
+		Cache::delete('Node:'.$chash);
+	
+		if ($res)
+			return true;
+		return false;
+	}
+
+/**
+* Removes the link between two nodes.
+* @param integer $parent Parent node
+* @param integer $child Child node
+*/
+	function removeLink($parent, $child) {
+		$res = $this->query("delete from mapping where parent_object = $parent and child_object = $child");
+
+		$phash = $this->_createHash($parent);
+                $chash = $this->_createHash($child);
+
+                Cache::delete('Node:'.$phash);
+                Cache::delete('Node:'.$chash);
+	}
 }
+
 ?>
