@@ -57,6 +57,7 @@ class Node extends AppModel {
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
+		$privileges = $bc->find('all', array('conditions' => $id, 'limit' => $limit) );
 
 		if(is_array($id)) {
 			if ($type = isset($id['type']) ? $id['type'] : null ) {
@@ -68,12 +69,24 @@ class Node extends AppModel {
 			$result = $bc->find('all', array('conditions' => $id, 'limit' => $limit) );
 			$nodes = null;
 
+			$index = 0;
+			foreach ($result as $res) {
+				$result[$index]['Node'] = $result[$index][$class];
+				$result[$index]['Privileges'] = array('creator' => $privileges[$index]['Baseclass']['creator'], 'privileges' => $privileges[$index]['Baseclass']['privileges']);
+				unset($result[$index][$class]);
+				$index++;
+			}
+
 			if ($walk) {
 			foreach ($result as $res) {
-				Node::$cls = $res[$class]['type'];
-				$node = $this->find($res[$class]['id']);
-					$nodes[] = $node;
+				static $node_id = 0;
+				Node::$cls = $res['Node']['type'];
+				$node = $this->find($res['Node']['id']);
+
+				$nodes[$node_id] = $node;
+				$node_id++;
 			}
+
 			return $nodes;
 			}
 
@@ -90,6 +103,7 @@ class Node extends AppModel {
 		$t = new $inst();
 		$node = $t->find(array('id' => $id));
 		$obj['Node'] = $node[$inst];
+		$obj['Privileges'] = array('creator' =>  $m[0]['o1']['creator'], 'privileges' =>  $m[0]['o1']['privileges']);
 
                 foreach ($m as $d) {
 			$id = $d['o3']['id'];
@@ -102,6 +116,7 @@ class Node extends AppModel {
                 }
 		
 		} else {
+			$res = null;
 			$inst = null;
 			if (!empty(Node::$cls))
 				$inst = Node::$cls . 's';
@@ -115,9 +130,9 @@ class Node extends AppModel {
 				$t = new $inst();
 				$node = $t->find(array('id' => $id));
 				$obj['Node'] = $node[$inst];
+				$obj['Privileges'] = array('creator' => $res['Baseclass']['creator'], 'privileges' => $res['Baseclass']['privileges']);
 			}
 		}
-
 
 		Cache::write('Node:'.$hash, $obj);
 
@@ -131,25 +146,32 @@ class Node extends AppModel {
 */
 	function save($data) {
 
+		if(!isset($data['Node']['type']))
+			return NULL;
+
 		$bc = new Baseclass();
 
-		$type = $data['type'];
+		$type = $data['Node']['type'];
 		$inst = $type . 's';
-		$base_data['type'] = $data['type'];
+		$base_data['type'] = $data['Node']['type'];
+		$base_data['creator'] = $data['Privileges']['creator'];
+		$base_data['privileges'] = $data['Privileges']['privileges'];
 		
-		if (isset($data['id']))
-			$base_data['id'] = $data['id'];
+		if (isset($data['Node']['id']))
+			$base_data['id'] = $data['Node']['id'];
 
 		$bc->save($base_data);
 		$last_id = $bc->getLastInsertId();
 
 		if ($last_id)
-			$data['id'] = $last_id;
+			$data['Node']['id'] = $last_id;
+
+		$node_data = $data['Node'];
 
 		$t = new $inst();
-		$t->save($data);
+		$t->save($node_data);
 
-		$id = (string)$data['id'];
+		$id = (string)$node_data['id'];
                 $hash = $this->_createHash($id);
 
                 $obj = Cache::delete('Node:'.$hash);
