@@ -77,10 +77,11 @@ class Node extends AppModel {
 				$index++;
 			}
 
+
 			if ($walk) {
 			foreach ($result as $res) {
 				static $node_id = 0;
-				Node::$cls = $res['Node']['type'];
+//				Node::$cls = $res['Node']['type'];
 				$node = $this->find($res['Node']['id']);
 
 				$nodes[$node_id] = $node;
@@ -118,13 +119,14 @@ class Node extends AppModel {
 		} else {
 			$res = null;
 			$inst = null;
-			if (!empty(Node::$cls))
-				$inst = Node::$cls . 's';
-			else {
+
+//			if (!empty(Node::$cls))
+//				$inst = Node::$cls . 's';
+//			else {
 				$res = $bc->find(array('id' => $id));
 				if ($res)
 					$inst = $res['Baseclass']['type'] . 's';
-			}
+//			}
 
 			if ($inst) {
 				$t = new $inst();
@@ -169,12 +171,14 @@ class Node extends AppModel {
 		$node_data = $data['Node'];
 
 		$t = new $inst();
-		$t->save($node_data);
+		$success = $t->save($node_data);
 
 		$id = (string)$node_data['id'];
                 $hash = $this->_createHash($id);
 
                 $obj = Cache::delete('Node:'.$hash);
+
+		return $success;
 	}
 
 /**
