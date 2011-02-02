@@ -46,7 +46,7 @@ class Node extends AppModel {
 * @param integer $limit
 * @param boolean $walk Can be used to find all objects that relates directly.
 */
-	function find($id = null, $limit = 0, $walk = true) {
+	function find($id = null, $params = array(), $walk = true) {
 
 		$hash = $this->_createHash($id);
 		$obj = Cache::read('Node:'.$hash);
@@ -57,7 +57,6 @@ class Node extends AppModel {
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
-		$privileges = $bc->find('all', array('conditions' => $id, 'limit' => $limit) );
 
 		if(is_array($id)) {
 			if ($type = isset($id['type']) ? $id['type'] : null ) {
@@ -66,22 +65,28 @@ class Node extends AppModel {
 				$class = get_class($bc);
 			}
 
-			$result = $bc->find('all', array('conditions' => $id, 'limit' => $limit) );
+			$_type = $id['type'] . 's';
+			unset($id['type']);
+
+			$cond = array('conditions' => $id, 'fields' => array('*'), 'joins' => array( array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $_type.id") ) ) );
+			$cond = array_merge($cond, $params);
+
+			$result = $bc->find('all', $cond);
+
 			$nodes = null;
 
 			$index = 0;
 			foreach ($result as $res) {
 				$result[$index]['Node'] = $result[$index][$class];
-				$result[$index]['Privileges'] = array('creator' => $privileges[$index]['Baseclass']['creator'], 'privileges' => $privileges[$index]['Baseclass']['privileges']);
 				unset($result[$index][$class]);
 				$index++;
 			}
 
 
+
 			if ($walk) {
 			foreach ($result as $res) {
 				static $node_id = 0;
-//				Node::$cls = $res['Node']['type'];
 				$node = $this->find($res['Node']['id']);
 
 				$nodes[$node_id] = $node;
