@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 /* Sidebar */
-#sidebar.left { float:left !important; margin-top:10px; } /*Whats this?*/
+#sidebar.left { float:left !important; margin-top:10px; } 
 
 #sidebar { width:200px; float:right; margin-right:13px; }
 #sidebar h2 { font-size:1.15em; background:transparent url("../img/gray_dot_line_200.png") bottom no-repeat; color: #C0C0C0; padding:0px 0px 5px 0px; margin-top:20px; }

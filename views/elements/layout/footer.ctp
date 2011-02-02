@@ -4,8 +4,8 @@
 		<li><a href="http://www.massidea.org/blog/?page_id=40">About</a></li>		
 		<li><a href="http://www.massidea.org/blog/?page_id=71">Contact</a></li>
 		<li><a href="http://www.massidea.org/blog/?page_id=74">Development</a></li>
-		<li><a href="#">Terms</a></li> <?php //Terms and privacy will be done with jQuery UI dialog widget ?>
-		<li><a href="#">Privacy</a></li>
+		<li><a id="terms_link" href="#">Terms</a></li> <?php //Terms and privacy will be done with jQuery UI dialog widget ?>
+		<li><a id="privacy_link" href="#">Privacy</a></li>
 	</ul>
 </div>
 
@@ -41,3 +41,6 @@
 </div>
                 
 <div class="dot-line-720 clear"></div>
+
+<div id="terms"><?php echo $this->element('layout'.DS.'register_description', array('cache' => true)); ?></div>
+<div id="privacy"><?php echo $this->element('layout'.DS.'network_services_agreement', array('cache' => true)); ?></div>

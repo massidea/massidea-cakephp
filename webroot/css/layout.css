@@ -60,10 +60,11 @@ a { text-decoration:none; color: #0089CF; }
 a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 
 /**
- * Alert box, Background and Container
+ * Alert box, FlashBox, Background and Container
  */
 #alert { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold; display:none; }
 #alert p { padding: 0px; margin: 0px; }
+#flash { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold;  z-index: 99999; width: 200px;  position: fixed; margin-left: -100px; left: 50%; display: none; }
 #background { background: white; }
 #container { width: 750px; margin: 0 auto; padding: 0px 1px 20px 1px; background: none repeat scroll 0 0 #FFFFFF; }
 
@@ -89,7 +90,9 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #search #select { width: 358px; }
 
 /**
- * Menu
+ * Menu consists of:
+ * - The menu
+ * - Add new content button and dialog
  */
 #menu { font-size: 0.9em; font-weight: bold; line-height: 1.3em; border-bottom: 5px solid #CCCCCC; position: relative; height: 48px; margin: 14px 0px; }
 #menu ul { list-style: none outside none; margin: 0 0 0 16px; padding: 0px; }
@@ -105,7 +108,24 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #menu ul li.blue a, #menu ul li.blue a:hover { color: #0089CF; border-bottom-color: #0089CF; }
 #menu ul li.deepblue a, #menu ul li.deepblue a:hover { color: #003581; border-bottom-color: #003581; }
 
-#menu #addNewContentButton { width: 100px; }
+#addNewContentButton { width: 100px; }
+#addNewContentDialog { padding: 0px 0px 0px 0px; display: none; background-color: #eee; }
+#addNewContentDialog .add_new { float: left; width: 200px; }
+#addNewContentDialog .add_new_info { position: relative; background-color: #fff; height: 290px; border: 1px solid #AAA; margin-top: 10px; }
+#addNewContentDialog .add_new_info p { padding:0px 10px 0px 10px; font-size: 0.8em; color: #999 }
+#addNewContentDialog .add_new_title {  border-bottom: 1px solid #AAA; font-weight: bold; vertical-align: middle; }
+#addNewContentDialog .add_new_info a { color: #FFF; font-size: 14px; height: inherit; width: inherit; display: block; position: relative; overflow: hidden;}
+#addNewContentDialog span { padding: 5px; display: block; width: inherit; }
+
+#addNewContentDialog #add_new_challenge .add_new_title { background-color: #D21034; }
+#addNewContentDialog #add_new_challenge .add_new_info:hover span { background-color: #FFF; color: #D21034; }
+#addNewContentDialog #add_new_idea .add_new_title { background-color: #4B9B07; }
+#addNewContentDialog #add_new_idea .add_new_info:hover span { background-color: #fff; color: #4B9B07; }
+#addNewContentDialog #add_new_vision .add_new_title { background-color: #FFC726; }
+#addNewContentDialog #add_new_vision .add_new_info:hover span { background-color: #FFF; color: #FFC726; }
+#addNewContentDialog #add_new_idea { margin-left: 8px; margin-right: 8px; }
+#addNewContentDialog #add_new_challenge { margin-left: 4px; }
+#addNewContentDialog #add_new_vision { margin-right: 4px; }
 
 
 /**
@@ -128,4 +148,6 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #footer .left { float: left; margin-bottom: 10px; padding-left: 10px; width: 340px; }
 #footer .right { float: right; margin-bottom: 10px; width: 360px; }
 
+#privacy, #terms { display:none;}
+.fixedDialog .ui-dialog { position: fixed; }
 

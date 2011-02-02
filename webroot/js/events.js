@@ -19,7 +19,19 @@
  * 
  */
 
+
+/**
+ * If we have set up a flash message, we display it
+ */
+function showFlash() {
+	if(!$("#flash").is(':empty')) {
+		$("#flash:hidden").slideDown(500).delay(2000).slideUp(1000,function(){ $("#flash").empty(); });
+	}
+}
+
 $(document).ready(function(){
+	
+	showFlash();
 	
 	/**	
 	 * jsMeta box contains information about:
@@ -39,9 +51,11 @@ $(document).ready(function(){
 	
 	/**
 	 * Dialog is jQuery UI widget (http://jqueryui.com/demos/dialog/)
-	 * - login_box: 		Opens the log in dialog
-	 * - login_box_opendid: Opens the open id log in box
-	 * - add_new_content:	Opens the add new content dialog
+	 * - login_box: 			Opens the log in dialog
+	 * - login_box_opendid: 	Opens the open id log in box
+	 * - addNewContentDialog:	Opens the add new content dialog
+	 * - terms:					Opens Register Description
+	 * - privacy:				Opens Network Services Agreement
 	 */
 	$("#login_box").dialog({
 		closeOnEscape: true,
@@ -49,6 +63,7 @@ $(document).ready(function(){
 		modal: true,
 		resizable: false,
 		title: 'Login to Massidea',
+		dialogClass: "fixedDialog",
 		autoOpen: false
 	});
 
@@ -58,26 +73,54 @@ $(document).ready(function(){
 		modal: true,
 		resizable: false,
 		title: 'Login with OpenID',
+		dialogClass: "fixedDialog",
 		autoOpen: false
 	});
 	
-	$("#add_new_content").dialog({
+	$("#addNewContentDialog").dialog({
 		closeOnEscape: true,
 		draggable: false,
 		modal: true,
 		resizable: false,
 		title: 'Select content type',
+		dialogClass: "fixedDialog",
 		autoOpen: false,
 		width: 625,
 		height: 345
 	});
 	
+	$("#terms").dialog({
+		closeOnEscape: true,
+		draggable: false,
+		modal: true,
+		resizable: true,
+		title: 'Register Description',
+		autoOpen: false,
+		position: 'top',
+		dialogClass: "fixedDialog",
+		width: 700,
+		height: 400
+	});
+	
+	$("#privacy").dialog({
+		closeOnEscape: true,
+		draggable: false,
+		modal: true,
+		resizable: true,
+		title: 'Network Services Agreement',
+		autoOpen: false,
+		position: 'top',
+		dialogClass: "fixedDialog",
+		width: 700,
+		height: 400
+	});
+	
 	/**
 	 * After selecting content type, close the dialog
 	 */
-	$("#add_new_content > .add_new > .add_new_info > a").each(function(){
+	$("#addNewContentDialog > .add_new > .add_new_info > a").each(function(){
 		$(this).click(function(){		
-			$("#add_new_content").dialog("close");
+			$("#addNewContentDialog").dialog("close");
 		});
 	});
 	
@@ -86,9 +129,9 @@ $(document).ready(function(){
 	 * If user is logged in, open the add_new_content dialog.
 	 * Else show login_box dialog and focus on username field.
 	 */
-	$("#addnewcontent").click(function(){
-		if($("#add_new_content").html() != null) {
-			$("#add_new_content").dialog("open");
+	$("#addNewContentButton").click(function(){
+		if($("#addNewContentDialog").html() != null) {
+			$("#addNewContentDialog").dialog("open");
 		}
 		else {
 			$("#login_box").dialog( "option", "title", 'You must login to add content' );
@@ -96,6 +139,21 @@ $(document).ready(function(){
 			$("#login_box > form > div:nth-child(2) > input").focus();
 		}
 		
+	});
+	
+	/**
+	 * Clicing terms link opens the terms dialog and
+	 * Clicking privacy link opens the privacy dialog
+	 */
+	
+	$("#terms_link").click(function(e){
+		e.preventDefault();
+		$("#terms").dialog("open");	
+	});
+	
+	$("#privacy_link").click(function(e){
+		e.preventDefault();
+		$("#privacy").dialog("open");	
 	});
 	
 	/**
@@ -208,4 +266,6 @@ $(document).ready(function(){
 	});
 */
 });
+
+
 

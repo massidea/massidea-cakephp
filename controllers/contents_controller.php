@@ -37,13 +37,27 @@ class ContentsController extends AppController {
 	
 	/**
 	 * index Action - method
-	 * Lists contents for browsing
+	 * Configured in routes to redirect to browse action
 	 * 
 	 * @author	
 	 * @param	
 	 */
-	public function index() {
-		$contents = $this->Nodes->find(array('type' => 'Content'), 10, false);
+	public function index() {}
+	
+	/**
+	 * browse Action - method
+	 * Lists contents
+	 * 
+	 * @author	
+	 * @param	
+	 */
+	public function browse($content_type = 'all') {
+		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) {
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $content_type));
+		}
+		else {
+			$contents = $this->Nodes->find(array('type' => 'Content'));
+		}
 		$this->set('contents',$contents);
 	}
 
@@ -54,7 +68,26 @@ class ContentsController extends AppController {
 	 * @author	
 	 * @param
 	 */
-	public function add() {
+	public function add($content_type = 'challenge') {
+		//We check the content_type received from url to prevent XSS.
+		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) { 
+			$this->set('content_type',$content_type);
+		} else { 
+			$this->set('content_type',$content_type);
+		}
+		
+		if (!empty($this->data)) {
+			$this->data['Privileges']['creator'] = NULL;
+			//$this->data['Privileges']['privileges'] = '666';
+			//var_dump($this->data);
+
+			if($this->Nodes->save($this->data) !== false){
+				$this->Session->setFlash('Your content has been saved.');
+				$this->redirect('/');
+			}
+
+		}
+
 		
 	}
 	

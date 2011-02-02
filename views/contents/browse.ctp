@@ -9,6 +9,6 @@
 </h2>
 
 <?php
-//print_r($contents);
+print_r($contents);
 
 ?>

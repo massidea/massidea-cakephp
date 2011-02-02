@@ -23,5 +23,10 @@
  */
 
 
-Router::connect('/', array('controller' => 'contents', 'action' => 'index', 'index'));
-	Router::connect('/contents/*', array('controller' => 'contents', 'action' => 'view'));
+Router::connect('/', array('controller' => 'contents', 'action' => 'browse', 'index'));
+	Router::connect('/contents/add/*', array('controller' => 'contents', 'action' => 'add'));
+	Router::connect('/contents/browse/*', array('controller' => 'contents', 'action' => 'browse'));
+	Router::connect('/contents/*', array('controller' => 'contents', 'action' => 'browse')); //This is needed to route all other traffic to browse
+	
+	
+	

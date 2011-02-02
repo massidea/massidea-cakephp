@@ -13,13 +13,14 @@ echo $html->docType('xhtml11');
 	 For some reason this returns content as just text/html which is used for HTML.
 	 application/xhtml+xml is for XHTML. Wonder why CakePHP doesnt use this as default...
 	*/ ?>	
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="<?php echo $html->url('/') . 'favicon.ico'; ?>" type="image/x-icon">
 	
 	<?php 
 	//Here we set our own css files
-	$cssFiles = array('reset', //Resets the CSS for browsers
+	$cssFiles = array_merge(array('reset', //Resets the CSS for browsers
 					'layout' //Layout CSS file
-	);
+	),$css_for_layout); //Adds controller.css and its action.css files to CSS styles if they exists
+	
 	//Sidebar css file added if we have a sidebar
 	if ($content_class == 'narrow') {
 		$cssFiles[] = 'sidebar'; //Sidebar CSS file
@@ -27,16 +28,14 @@ echo $html->docType('xhtml11');
 	//Here we add additional CSS files from plugins etc.
 	$cssFiles[] = 'smoothness'.DS.'jquery-ui-1.8.7.custom.css'; //jQuery UI CSS file
 	echo $html->css($cssFiles);
-	
-	//Adds controller.css and its action.css files to CSS styles if exists
-	if(!empty($css_for_layout)) { echo $html->css($css_for_layout); }
+
 	?>
 	
 	<!--[if IE 7]> <?php echo $html->css('ie7fix'); ?> <![endif]-->
 	<?php 
 	echo $html->script(array('jquery-1.4.4.min', //jQuery javascript library
 							'jquery-ui-1.8.7.custom.min', //User Interface extension for jQuery
-							'jquery.cookie.js', //jQuery cookie plugin
+							'jquery.cookie', //jQuery cookie plugin
 							'functions', //All global functions used in site
 							'events' //All global events used in site
 	)); 
@@ -50,6 +49,7 @@ echo $html->docType('xhtml11');
 		echo $this->element($layout.'alert', array('cache' => false)); 
 	?> 
 	</div>
+	<div id="flash"><?php echo $session->flash(); ?></div>
 	<div id="background">
 		<div id="container">
 			<div id="header">
@@ -66,11 +66,11 @@ echo $html->docType('xhtml11');
 			 *	The $content_class defines whether the content uses narrow or wide style.
 			 *	narrow style is used with sidebar and wide without and it's globally set to narrow in app_controller.php.
 			 *	Sidebar is loaded from elements:
-			 *	elements/controller/action_sidebar.ctp
+			 *	elements/controller/sidebars/action.ctp
 			 */
 			 $controller_id = strtolower($this->name);
 			 $action_id		= $this->action . '-page';
-			 $sidebar		= strtolower($this->name) . DS . $this->action. '_sidebar';
+			 $sidebar		= strtolower($this->name) . DS . 'sidebars' . DS. $this->action;
 			 ?>
 			
 			<div id="content">
@@ -82,7 +82,13 @@ echo $html->docType('xhtml11');
 			</div>
 			<?php if ($content_class == 'narrow'): ?>
 			<div id="sidebar">
-				<?php echo $this->element($sidebar, array('cache' => true)); ?>
+				<?php 
+				/**
+				 * Its important that sidebar element is not cached because its view may also depend on parameters
+				 * and not just action. If you want to cache things in sidebar, you should cache them inside the element.
+				 */
+				echo $this->element($sidebar, array('cache' => false));
+				?>
 			</div>
 			<?php endif; ?>
 			<div class="clear"></div>
