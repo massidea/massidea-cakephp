@@ -21,7 +21,7 @@
 
 
 /**
- * If we have set up a flash message, we display it
+ * If we have set up a flash message, we display it and then remove it
  */
 function showFlash() {
 	if(!$("#flash").is(':empty')) {

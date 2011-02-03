@@ -34,30 +34,30 @@ class ContentsController extends AppController {
 		parent::beforeFilter();
 		$this->Nodes = Classregistry::init('Node');
 	}
-	
-	/**
-	 * index Action - method
-	 * Configured in routes to redirect to browse action
-	 * 
-	 * @author	
-	 * @param	
-	 */
-	public function index() {}
-	
+		
 	/**
 	 * browse Action - method
-	 * Lists contents
+	 * Lists contents.
 	 * 
-	 * @author	
-	 * @param	
+	 * Routes that direct to this action are:
+	 * Router::connect('/', array('controller' => 'contents', 'action' => 'browse', 'index'));
+	 * Router::connect('/contents/challenge/', array('controller' => 'contents', 'action' => 'browse', 'challenge'));
+	 * Router::connect('/contents/idea/', array('controller' => 'contents', 'action' => 'browse', 'idea'));
+	 * Router::connect('/contents/vision/', array('controller' => 'contents', 'action' => 'browse', 'vision'));
+	 * Router::connect('/contents/*', array('controller' => 'contents', 'action' => 'browse'));
+	 * 
+	 * @author	Jari Korpela
+	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function browse($content_type = 'all') {
 		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) {
-			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $content_type));
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $content_type),array('limit' => 10),false);
 		}
 		else {
-			$contents = $this->Nodes->find(array('type' => 'Content'));
+			$content_type = 'all';
+			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10),false);
 		}
+		$this->set('content_type',$content_type);
 		$this->set('contents',$contents);
 	}
 
@@ -65,8 +65,11 @@ class ContentsController extends AppController {
 	 * add action - method
 	 * Adds content
 	 * 
-	 * @author	
-	 * @param
+	 * Routes that direct to this action are:
+	 * Router::connect('/contents/add/*', array('controller' => 'contents', 'action' => 'add'));
+	 * 
+	 * @author	Jari Korpela
+	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function add($content_type = 'challenge') {
 		//We check the content_type received from url to prevent XSS.

@@ -3,21 +3,21 @@ $url_add_challenge = $html->url(array('controller' => 'contents', 'action' => 'a
 $url_add_idea = $html->url(array('controller' => 'contents', 'action' => 'add', 'idea'));
 $url_add_vision = $html->url(array('controller' => 'contents', 'action' => 'add', 'vision'));
 
-$url_view_challenge = $html->url(array('controller' => 'contents', 'action' => 'browse', 'challenge'));
-$url_view_idea = $html->url(array('controller' => 'contents', 'action' => 'browse', 'idea'));
-$url_view_vision = $html->url(array('controller' => 'contents', 'action' => 'browse', 'vision'));
+$url_view_challenge = $html->url(array('controller' => 'contents', 'challenge'));
+$url_view_idea = $html->url(array('controller' => 'contents', 'idea'));
+$url_view_vision = $html->url(array('controller' => 'contents', 'vision'));
 ?>
 
 <div class="left">
 	<ul>
-		<li id="home" class="deepblue"><a href="<?php echo $html->url('/');?>">Home</a></li>
-		<li id="challenges" class="red"><a href="<?php echo $url_view_challenge;?>">Challenges</a></li>
-		<li id="ideas" class="green"><a href="<?php echo $url_view_idea;?>">Ideas</a></li>
-		<li id="visions" class="yellow"><a href="<?php echo $url_view_vision;?>">Visions</a></li>
+		<li id="home" class="deepblue"><a href="<?php echo $html->url('/'); ?>">Home</a></li>
+		<li id="challenges" class="red"><a href="<?php echo $url_view_challenge; ?>">Challenges</a></li>
+		<li id="ideas" class="green"><a href="<?php echo $url_view_idea; ?>">Ideas</a></li>
+		<li id="visions" class="yellow"><a href="<?php echo $url_view_vision; ?>">Visions</a></li>
 		<li id="users" class="blue"><a href="#">Users</a></li>
 		<li id="groups" class="blue"><a href="#">Groups</a></li>
 		<li id="campaigns" class="deepblue"><a href="#">Campaigns</a></li>
-		<li id="blog" class="deepblue"><a href="#">Blog</a></li>
+		<li id="blog" class="deepblue"><a href="<?php echo $html->url('/blog'); ?>">Blog</a></li>
 	</ul>
 </div>
 <div class="right">

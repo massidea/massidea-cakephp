@@ -30,6 +30,7 @@
 class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
+	public $components = array('Session','Jsmeta');
 	
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
@@ -60,11 +61,18 @@ class AppController extends Controller {
 		 * Automated class load for content
 		 * 
 		 * content_class is used to define how the page is viewed. Default narrow.
-		 * 'narrow' class leaves room for sidebar while 'wide' class does not.
+		 * 'narrow' class leaves space for sidebar while 'wide' class does not.
 		 * Should be overridden in controller if wished to use wide class.
 		 */
 		$this->set('content_class','narrow');
 		//End of automated class load for content
+		
+		/**
+		 * Jsmeta - Inject JSON encoded PHP variables for Javascript access (hidden metabox in layout)
+		 * Uses Jsmeta component
+		 */
+		$this->set('Jsmeta',$this->Jsmeta->append("baseUrl",$this->base));
+		
 		
 	}
 

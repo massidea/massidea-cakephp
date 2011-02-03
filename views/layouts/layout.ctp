@@ -1,4 +1,5 @@
 <?php 
+//print_r($this);die;
 $layout = 'layout'.DS; //Used for element folder structures
 
 echo $html->docType('xhtml11'); 
@@ -97,5 +98,8 @@ echo $html->docType('xhtml11');
 			</div>			
 		</div>
 	</div>
+	<div id="jsmetabox" style="display:none;">
+    	<?php echo $Jsmeta->output(); ?>
+    </div>
 </body>
 </html>

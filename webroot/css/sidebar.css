@@ -31,9 +31,9 @@
 #sidebar .scroll-box { max-height:300px; border:1px solid #ccc; overflow:auto; overflow-x: hidden; margin-top:5px; }
 #sidebar .scroll-box p { margin-left:10px; }
 #sidebar .scroll-box ul li { margin:15px 0px 15px 5px; padding-left:5px; }
-#sidebar .scroll-box ul li.problem  { border-left:3px solid #D21034; }
+#sidebar .scroll-box ul li.challenge  { border-left:3px solid #D21034; }
 #sidebar .scroll-box ul li.idea { border-left:3px solid #4B9B07; }
-#sidebar .scroll-box ul li.finfo { border-left:3px solid #FFC726; }
+#sidebar .scroll-box ul li.vision { border-left:3px solid #FFC726; }
 
 /* Sidebar --> Campaings & Groups*/
 #sidebar #campaigns p, #sidebar #groups p { margin:15px 0px 20px 15px; }
