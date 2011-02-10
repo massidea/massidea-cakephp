@@ -25,14 +25,13 @@
  *  @license        GPL v2
  *  @version        1.0
  */
+App::import('Vendor', 'content_externals');
 
 class ContentsController extends AppController {
-	var $uses = null;
-	var $Nodes = null;
+
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Nodes = Classregistry::init('Node');
 	}
 		
 	/**
@@ -72,6 +71,13 @@ class ContentsController extends AppController {
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function add($content_type = 'challenge') {
+		//$this->helpers[] = 'TinyMce.TinyMce';
+		//$data = array('Node' => array('type' => 'Tag', 'name' => 'huh'), 'Privileges' => array('privileges' => '755', 'creator' => NULL) );
+		//$this->Nodes->save($data);
+		
+		//$this->Nodes->link(2,14);
+		
+		
 		//We check the content_type received from url to prevent XSS.
 		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) { 
 			$this->set('content_type',$content_type);
@@ -80,7 +86,58 @@ class ContentsController extends AppController {
 		}
 		
 		if (!empty($this->data)) {
+			$error = array();
 			$this->data['Privileges']['creator'] = NULL;
+			
+			//Take tags away from data and save them to tags
+			/*$tags = $this->data['Node']['tags'];
+			unset($this->data['Node']['tags']);
+			$tags = explode(',',$tags);
+			foreach($tags as $tag) {
+				$tagSave['Node']['name'] = trim($tag);
+				$tagSave['Node']['type'] = 'Tag';
+				$tagSave['Privileges'] = array('privileges' => '755', 'creator' => NULL);
+				
+				if($this->Nodes->save($tagSave) === false) {
+					$error['tags'][$tag] = 'Save failed';
+				}
+				
+			}*/
+			
+			//Take companies away from data and save them to related companies
+			/*$companies = $this->data['Node']['companies'];
+			unset($this->data['Node']['companies']);
+			$companies = explode(',',$companies);
+			foreach($companies as $company) {
+				$companySave['Node']['name'] = trim($company);
+				$companySave['Node']['type'] = 'Related_company';
+				$companySave['Privileges'] = array('privileges' => '755', 'creator' => NULL);
+				
+				if($this->Nodes->save($companySave) === false) {
+					$error['companies'] = 'Save failed';
+				}
+			}
+			die;*/
+			
+			$contentSpecificData = array();
+			
+			if($content_type === 'vision') {
+				$contentSpecificData['opportunity'] = $this->data['Node']['opportunity'];
+				$contentSpecificData['threat'] = $this->data['Node']['threat'];
+				unset($this->data['Node']['opportunity']);
+				unset($this->data['Node']['threat']);
+				
+			} 
+			elseif ($content_type === 'idea') {
+				$contentSpecificData['solution'] = $this->data['Node']['solution'];
+				unset($this->data['Node']['solution']);
+			} 
+			elseif ($content_type === 'challenge') {
+				$contentSpecificData['research'] = $this->data['Node']['research'];
+				unset($this->data['Node']['research']);
+			}
+			$this->data['Node']['data'] = to_externals($contentSpecificData);
+			
 			//$this->data['Privileges']['privileges'] = '666';
 			//var_dump($this->data);
 

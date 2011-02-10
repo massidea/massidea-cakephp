@@ -64,7 +64,7 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
  */
 #alert { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold; display:none; }
 #alert p { padding: 0px; margin: 0px; }
-#flash { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold;  z-index: 99999; width: 200px;  position: fixed; margin-left: -100px; left: 50%; display: none; }
+#flash { background: #4B9B07; color: white; text-align: center; padding: 6px; font-weight: bold;  z-index: 99999; width: 200px;  position: fixed; margin-left: -100px; left: 50%; display: none; }
 #background { background: white; }
 #container { width: 750px; margin: 0 auto; padding: 0px 1px 20px 1px; background: none repeat scroll 0 0 #FFFFFF; }
 
@@ -149,5 +149,5 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #footer .right { float: right; margin-bottom: 10px; width: 360px; }
 
 #privacy, #terms { display:none;}
-.fixedDialog .ui-dialog { position: fixed; }
+.fixedDialog .ui-dialog { position: fixed !important; }
 

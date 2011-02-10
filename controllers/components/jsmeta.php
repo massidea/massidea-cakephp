@@ -1,6 +1,6 @@
 <?php
 /**
- *  JsMeta - Inject JSON encoded PHP variables for Javascript access (hidden metabox in layout) 
+ *  Jsmeta - Inject JSON encoded PHP variables for Javascript access (hidden metabox in layout) 
  *
  *  Copyright (c) <2010>, Jaakko Paukamainen <jaakko.paukamainen@student.samk.fi>
  *
@@ -18,10 +18,10 @@
  */
 
 /**
- *  JsMetaBox - class
+ *  Jsmeta - class
  *
  *  @package    plugins
- *  @author     Jaakko Paukamainen, Jari Korpela (Imported to CakePHP)
+ *  @author     Jaakko Paukamainen (ZEND version), Jari Korpela (Imported from ZEND to CakePHP)
  *  @copyright  2010 Jaakko Paukamainen
  *  @license    GPL v2
  *  @version    1.0

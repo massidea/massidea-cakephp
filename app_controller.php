@@ -31,9 +31,12 @@ class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
 	public $components = array('Session','Jsmeta');
+	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags');
+	var $Nodes;
 	
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
+	$this->Nodes = Classregistry::init('Node');
 	}
 	
 	public function beforeRender() {
@@ -56,7 +59,7 @@ class AppController extends Controller {
         } 
 		$this->set('css_for_layout',$cssFiles);
 		//End of automated CSS load
-		
+				
 		/**
 		 * Automated class load for content
 		 * 

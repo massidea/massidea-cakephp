@@ -41,6 +41,7 @@ echo $html->docType('xhtml11');
 							'events' //All global events used in site
 	)); 
 	?>
+
 	<?php echo $scripts_for_layout; ?>	
 
 </head>
