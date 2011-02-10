@@ -158,8 +158,11 @@ class Node extends AppModel {
 
 		$bc = new Baseclass();
 
-		$type = $data['Node']['type'];
-		$inst = $type . 's';
+//		$type = $data['Node']['type'];
+		$type = $this->get_type($data['Node']['type']);
+
+
+		$inst = $type;
 		@$base_data['type'] = $data['Node']['type'];
 		@$base_data['creator'] = $data['Privileges']['creator'];
 		@$base_data['privileges'] = $data['Privileges']['privileges'];
