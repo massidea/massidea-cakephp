@@ -16,6 +16,9 @@ class Node extends AppModel {
 	var $name = 'Node';
 	var $useTable = false;
 	var $TableModel = null;
+	var $last_id = null;
+	private $_map = array();
+	private $_map_keys = array();
 	static $cls = null;
 
 /**
@@ -41,7 +44,7 @@ class Node extends AppModel {
 /**
 * Returns all nodes that matches the criteria.
 * @param mixed $id Can be passed as an array or a single id.
-* @param integer $limit
+* @param array $params See CakePHP find
 * @param boolean $walk Can be used to find all objects that relates directly.
 */
 	function find($id = null, $params = array(), $walk = true) {
@@ -51,19 +54,20 @@ class Node extends AppModel {
 
 		if ($obj !== false)
 			return $obj;
-		
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
 
 		if(is_array($id)) {
 			if ($type = isset($id['type']) ? $id['type'] : null ) {
-				$inst = $type . 's';
+
+				$inst = $this->get_type($type);
+
 				$bc = new $inst();
 				$class = get_class($bc);
 			}
 
-			$_type = $id['type'] . 's';
+			$_type = $inst;
 			unset($id['type']);
 
 			$cond = array('conditions' => $id, 'fields' => array('*'), 'joins' => array( array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $_type.id") ) ) );
@@ -102,7 +106,7 @@ class Node extends AppModel {
                 $obj['relates'];
 
 		if($m) {
-		$inst = $m[0]['o1']['type'] . 's';
+		$inst = $this->get_type($m[0]['o1']['type']);
 
 		$t = new $inst();
 		$node = $t->find(array('id' => $id));
@@ -111,7 +115,7 @@ class Node extends AppModel {
 
                 foreach ($m as $d) {
 			$id = $d['o3']['id'];
-			$inst = $d['o3']['type'] . 's';
+			$inst = $this->get_type($d['o3']['type']);
 
 			$t = new $inst();
 			$result = $t->find(array('id' => $id));
@@ -128,7 +132,7 @@ class Node extends AppModel {
 //			else {
 				$res = $bc->find(array('id' => $id));
 				if ($res)
-					$inst = $res['Baseclass']['type'] . 's';
+					$inst = $this->get_type($res['Baseclass']['type']);
 //			}
 
 			if ($inst) {
@@ -147,7 +151,7 @@ class Node extends AppModel {
 
 /**
 * Inserts a new object or modifies existing object.
-* @param array $data Actual node to be passed.
+* @param array $data Actual node to be saved
 */
 	function save($data) {
 
@@ -158,9 +162,9 @@ class Node extends AppModel {
 
 		$type = $data['Node']['type'];
 		$inst = $type . 's';
-		$base_data['type'] = $data['Node']['type'];
-		$base_data['creator'] = $data['Privileges']['creator'];
-		$base_data['privileges'] = $data['Privileges']['privileges'];
+		@$base_data['type'] = $data['Node']['type'];
+		@$base_data['creator'] = $data['Privileges']['creator'];
+		@$base_data['privileges'] = $data['Privileges']['privileges'];
 		
 		if (isset($data['Node']['id']))
 			$base_data['id'] = $data['Node']['id'];
@@ -172,6 +176,8 @@ class Node extends AppModel {
 			$data['Node']['id'] = $last_id;
 
 		$node_data = $data['Node'];
+
+		$this->last_id = $data['Node']['id'];
 
 		$t = new $inst();
 		$success = $t->save($node_data);
@@ -236,6 +242,25 @@ class Node extends AppModel {
 
                 Cache::delete('Node:'.$phash);
                 Cache::delete('Node:'.$chash);
+	}
+
+	function last_id() {
+		return $this->last_id;
+	}
+
+	function __set($name, $value) {
+		$this->_map = array_merge($this->_map, $value);
+		$this->_map_keys = array_keys($this->_map);
+	}
+
+	private function get_type($type) {
+		$inst = null;
+		if (!in_array($type, $this->_map_keys))
+	                $inst = $type . 's';
+                else
+        	        $inst = $this->_map[$type];
+
+		return $inst;
 	}
 }
 
