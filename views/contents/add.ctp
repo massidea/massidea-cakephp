@@ -75,7 +75,7 @@ $afterClear = '</div><div class="clear">';
 <?php echo $form->hidden('published', array('value' => 0)); ?>
 
 <?php $languageOptions = array("en" => "English", "fi" => "Finnish"); ?>
-<?php echo $form->input('language', array('type' => 'select',
+<?php echo $form->input('language_id', array('type' => 'select',
 										'label' 	=> 'Select language',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_languages', 'class' => 'row'),
@@ -110,7 +110,7 @@ $afterClear = '</div><div class="clear">';
 
 <?php if($content_type === 'challenge'): ?>
 
-<?php echo $form->input('research', array('label' 	=> 'Research question',
+<?php echo $form->input('Specific.research', array('label' 	=> 'Research question',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_research', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','(The single question you want to get an answer)',$beforeTemplate),
@@ -121,7 +121,7 @@ $afterClear = '</div><div class="clear">';
 
 <?php elseif($content_type === 'idea'): ?>
 
-<?php echo $form->input('solution', array('label' 	=> 'Your idea/solution in one sentence',
+<?php echo $form->input('Specific.solution', array('label' 	=> 'Your idea/solution in one sentence',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_solution', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','',$beforeTemplate),
@@ -132,7 +132,7 @@ $afterClear = '</div><div class="clear">';
 
 <?php elseif($content_type === 'vision'): ?>
 
-<?php echo $form->input('opportunity', array('label' 	=> 'Opportunity',
+<?php echo $form->input('Specific.opportunity', array('label' 	=> 'Opportunity',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_opportunity', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','(The most important if future scenario becomes realized)',$beforeTemplate),
@@ -141,7 +141,7 @@ $afterClear = '</div><div class="clear">';
 )); 
 ?>
 
-<?php echo $form->input('threat', array('label' 	=> 'Threat',
+<?php echo $form->input('Specific.threat', array('label' 	=> 'Threat',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_threat', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','(The most important if future scenario becomes realized)',$beforeTemplate),
@@ -152,7 +152,7 @@ $afterClear = '</div><div class="clear">';
 
 <?php endif;?>
 
-<?php echo $form->input('tags', array('label' 		=> 'Keywords, Tags',
+<?php echo $form->input('Tags.tags', array('label' 		=> 'Keywords, Tags',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_tags', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','(Use commas to separate tags)',$beforeTemplate),
@@ -161,7 +161,7 @@ $afterClear = '</div><div class="clear">';
 )); 
 ?>
 
-<?php echo $form->input('companies', array('label' 	=> 'Related companies and organizations',
+<?php echo $form->input('Companies.companies', array('label' 	=> 'Related companies and organizations',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
 										'div'		=> array('id' => 'content_form_companies', 'class' => 'row'),
 										'before' 	=> str_replace('%text%','(Use commas to separate)',$beforeTemplate),

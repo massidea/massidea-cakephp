@@ -3,9 +3,9 @@ $url_add_challenge = $html->url(array('controller' => 'contents', 'action' => 'a
 $url_add_idea = $html->url(array('controller' => 'contents', 'action' => 'add', 'idea'));
 $url_add_vision = $html->url(array('controller' => 'contents', 'action' => 'add', 'vision'));
 
-$url_view_challenge = $html->url(array('controller' => 'contents', 'challenge'));
-$url_view_idea = $html->url(array('controller' => 'contents', 'idea'));
-$url_view_vision = $html->url(array('controller' => 'contents', 'vision'));
+$url_view_challenge = $html->url(array('controller' => 'contents', 'action' => 'challenge'));
+$url_view_idea = $html->url(array('controller' => 'contents', 'action' => 'idea'));
+$url_view_vision = $html->url(array('controller' => 'contents', 'action' => 'vision'));
 ?>
 
 <div class="left">

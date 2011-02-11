@@ -20,14 +20,14 @@
 /**
  *  Jsmeta - class
  *
- *  @package    plugins
+ *  @package    vendors
  *  @author     Jaakko Paukamainen (ZEND version), Jari Korpela (Imported from ZEND to CakePHP)
  *  @copyright  2010 Jaakko Paukamainen
  *  @license    GPL v2
  *  @version    1.0
  */ 
 
-class JsmetaComponent extends object {
+class Jsmeta extends object {
 	
 	private $_output = null;
 	

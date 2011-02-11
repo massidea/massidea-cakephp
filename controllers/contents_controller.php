@@ -25,13 +25,14 @@
  *  @license        GPL v2
  *  @version        1.0
  */
-App::import('Vendor', 'content_externals');
+
+App::import('Lib', 'MassideaContents', array('file' => 'massidea_contents.php'));
 
 class ContentsController extends AppController {
-
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$this->Nodes->map = array('RelatedCompany' => 'RelatedCompanies');
 	}
 		
 	/**
@@ -70,85 +71,57 @@ class ContentsController extends AppController {
 	 * @author	Jari Korpela
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
-	public function add($content_type = 'challenge') {
-		//$this->helpers[] = 'TinyMce.TinyMce';
-		//$data = array('Node' => array('type' => 'Tag', 'name' => 'huh'), 'Privileges' => array('privileges' => '755', 'creator' => NULL) );
-		//$this->Nodes->save($data);
+	public function add($contentType = 'challenge') {
+		$errors = array();
+		//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
+		$this->Libloader->loadLib(array(
+			'myContent' => array('file' => 'massidea_contents.php', 'className' => 'MassideaContents')
+		));
 		
-		//$this->Nodes->link(2,14);
-		
-		
-		//We check the content_type received from url to prevent XSS.
-		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) { 
-			$this->set('content_type',$content_type);
-		} else { 
-			$this->set('content_type',$content_type);
+		if(!$contentType = $this->myContent->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
+			$contentType = 'challenge';
 		}
 		
-		if (!empty($this->data)) {
-			$error = array();
-			$this->data['Privileges']['creator'] = NULL;
-			
-			//Take tags away from data and save them to tags
-			/*$tags = $this->data['Node']['tags'];
-			unset($this->data['Node']['tags']);
-			$tags = explode(',',$tags);
-			foreach($tags as $tag) {
-				$tagSave['Node']['name'] = trim($tag);
-				$tagSave['Node']['type'] = 'Tag';
-				$tagSave['Privileges'] = array('privileges' => '755', 'creator' => NULL);
-				
-				if($this->Nodes->save($tagSave) === false) {
-					$error['tags'][$tag] = 'Save failed';
-				}
-				
-			}*/
-			
-			//Take companies away from data and save them to related companies
-			/*$companies = $this->data['Node']['companies'];
-			unset($this->data['Node']['companies']);
-			$companies = explode(',',$companies);
-			foreach($companies as $company) {
-				$companySave['Node']['name'] = trim($company);
-				$companySave['Node']['type'] = 'Related_company';
-				$companySave['Privileges'] = array('privileges' => '755', 'creator' => NULL);
-				
-				if($this->Nodes->save($companySave) === false) {
-					$error['companies'] = 'Save failed';
-				}
-			}
-			die;*/
-			
-			$contentSpecificData = array();
-			
-			if($content_type === 'vision') {
-				$contentSpecificData['opportunity'] = $this->data['Node']['opportunity'];
-				$contentSpecificData['threat'] = $this->data['Node']['threat'];
-				unset($this->data['Node']['opportunity']);
-				unset($this->data['Node']['threat']);
-				
-			} 
-			elseif ($content_type === 'idea') {
-				$contentSpecificData['solution'] = $this->data['Node']['solution'];
-				unset($this->data['Node']['solution']);
-			} 
-			elseif ($content_type === 'challenge') {
-				$contentSpecificData['research'] = $this->data['Node']['research'];
-				unset($this->data['Node']['research']);
-			}
-			$this->data['Node']['data'] = to_externals($contentSpecificData);
-			
-			//$this->data['Privileges']['privileges'] = '666';
-			//var_dump($this->data);
+		$this->set('content_type',$contentType);
+		
+		if (!empty($this->data)) { // If form has been posted
+			$this->myContent->setContentData($this->data);
+			if($this->Nodes->save($this->myContent->getContentData()) !== false){ //If saving the content was successfull then...
+				$this->myContent->setContentId((int)$this->Nodes->last_id()); //Set the saved contents id
+				$tags = $this->myContent->getTags();
 
-			if($this->Nodes->save($this->data) !== false){
-				$this->Session->setFlash('Your content has been saved.');
+				foreach($tags as $tag) {
+					if($this->Nodes->save($tag) === false) { // If saving the tag was NOT successfull
+						$errors['tags'][$tag] = 'Save failed'; // We set the tag to $error array for further inspection
+					} else { // If saving the tag was successfull
+						$tag_id = $this->Nodes->last_id(); // Get the saved tags id
+						$this->Nodes->link($this->myContent->getContentId(),$tag_id); // Link content_id and tag_id
+					}
+				}
+				
+				$companies = $this->myContent->getCompanies();
+
+				foreach($companies as $company) { //We go through the companies array
+
+					if($this->Nodes->save($company) === false) { // If saving the tag was NOT successfull
+						$errors['companies'][$company] = 'Save failed'; // We set the company to $error array for further inspection
+					} else { // If saving the company was successfull
+						$tag_id = $this->Nodes->last_id(); // Get the saved companys id
+						$this->Nodes->link($this->myContent->getContentId(),$tag_id); // Link content_id and company_id
+					}
+				}
+				
+				$errors = array_merge($errors,$this->myContent->getErrors());
+		
+				if(empty($errors)) {
+					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
+					
+				} else {
+					$this->Session->setFlash('Your content has NOT been successfully saved.');
+				}
 				$this->redirect('/');
 			}
-
-		}
-
-		
+		}	
 	}
 	
 	/**

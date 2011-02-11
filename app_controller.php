@@ -26,17 +26,18 @@
  */
 
 //App::import('i18n'); Needed for translations
+App::import('Vendor', 'Jsmeta', array('file' => 'jsmeta.php'));
 
 class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
-	public $components = array('Session','Jsmeta');
-	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags');
+	public $components = array('Session','Libloader');
+	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags', 'RelatedCompanies');
 	var $Nodes;
 	
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
-	$this->Nodes = Classregistry::init('Node');
+		$this->Nodes = Classregistry::init('Node');
 	}
 	
 	public function beforeRender() {
@@ -72,9 +73,10 @@ class AppController extends Controller {
 		
 		/**
 		 * Jsmeta - Inject JSON encoded PHP variables for Javascript access (hidden metabox in layout)
-		 * Uses Jsmeta component
+		 * Uses jsmeta.php in vendors
 		 */
-		$this->set('Jsmeta',$this->Jsmeta->append("baseUrl",$this->base));
+		$Jsmeta = new Jsmeta();
+		$this->set('Jsmeta',$Jsmeta->append("baseUrl",$this->base));
 		
 		
 	}

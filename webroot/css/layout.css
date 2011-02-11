@@ -60,11 +60,10 @@ a { text-decoration:none; color: #0089CF; }
 a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 
 /**
- * Alert box, FlashBox, Background and Container
+ * Alert box, Background and Container
  */
 #alert { background: #D21034; color: white; text-align: center; padding: 6px; font-weight: bold; display:none; }
 #alert p { padding: 0px; margin: 0px; }
-#flash { background: #4B9B07; color: white; text-align: center; padding: 6px; font-weight: bold;  z-index: 99999; width: 200px;  position: fixed; margin-left: -100px; left: 50%; display: none; }
 #background { background: white; }
 #container { width: 750px; margin: 0 auto; padding: 0px 1px 20px 1px; background: none repeat scroll 0 0 #FFFFFF; }
 
@@ -151,3 +150,9 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #privacy, #terms { display:none;}
 .fixedDialog .ui-dialog { position: fixed !important; }
 
+/**
+ * Flash
+ */
+#flash { background: #000; color: white; text-align: center; font-weight: bold;  z-index: 99999; width: 300px;  position: fixed; margin-left: -150px; left: 50%; display: none; }
+#flash .flashBox  { padding: 6px; }
+#flash #successfull_operation { background: #4B9B07; }
