@@ -200,14 +200,15 @@ class Node extends AppModel {
 	function _createHash($value) {
 
 		$tmp = null;
-                if (is_array($value))
-                        $tmp = implode($value);
+                if (is_array($value)) {
+			foreach ($value as $v)
+				$tmp .= is_array($v) ? implode($v) : $v;
+		}
                 else
                         $tmp = (string)$value;
                 $hash = sha1($tmp);
 
 		return $hash;
-
 	}
 
 /**
@@ -218,15 +219,25 @@ class Node extends AppModel {
 * @return Returns true if linked successfully otherwise false
 */
 	function link($parent, $child, $hardlink = true) {
-		$hardlink = (int)$hardlink;
-		@$res = $this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
 
-		$phash = $this->_createHash($parent);
-		$chash = $this->_createHash($child);
+		$parent_node = $this->find($parent);
+		$child_node = $this->find($child);
 
-		Cache::delete('Node:'.$phash);
-		Cache::delete('Node:'.$chash);
-	
+		$res = null;
+
+		if ($parent_node['Node']['type'] == $child_node['Node']['type']) {
+			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
+		} else {
+			$hardlink = (int)$hardlink;
+			@$res = $this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
+		}
+
+                $phash = $this->_createHash($parent);
+                $chash = $this->_createHash($child);
+
+                Cache::delete('Node:'.$phash);
+                Cache::delete('Node:'.$chash);
+
 		if ($res)
 			return true;
 		return false;
@@ -238,15 +249,29 @@ class Node extends AppModel {
 * @param integer $child Child node
 */
 	function removeLink($parent, $child) {
-		$res = $this->query("delete from mapping where parent_object = $parent and child_object = $child");
+
+                $parent_node = $this->find($parent);
+                $child_node = $this->find($child);
+		$res = null;
+
+		if ($parent_node['Node']['type'] == $child_node['Node']['type']) {
+			@$res = $this->query("delete from linked_contents where `from` = $parent and `to` = $child");
+		} else {
+			@$res = $this->query("delete from mapping where parent_object = $parent and child_object = $child");
+		}
 
 		$phash = $this->_createHash($parent);
                 $chash = $this->_createHash($child);
 
                 Cache::delete('Node:'.$phash);
                 Cache::delete('Node:'.$chash);
+
+		return $res;
 	}
 
+/**
+* Returns last inserted id
+*/
 	function last_id() {
 		return $this->last_id;
 	}
@@ -256,6 +281,10 @@ class Node extends AppModel {
 		$this->_map_keys = array_keys($this->_map);
 	}
 
+/**
+* Returns node type
+* @param mixed $parent Node type
+*/
 	private function get_type($type) {
 		$inst = null;
 		if (!in_array($type, $this->_map_keys))
