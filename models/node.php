@@ -198,14 +198,15 @@ class Node extends AppModel {
 	function _createHash($value) {
 
 		$tmp = null;
-                if (is_array($value))
-                        $tmp = implode($value);
+                if (is_array($value)) {
+			foreach ($value as $v)
+				$tmp .= is_array($v) ? implode($v) : $v;
+		}
                 else
                         $tmp = (string)$value;
                 $hash = sha1($tmp);
 
 		return $hash;
-
 	}
 
 /**
