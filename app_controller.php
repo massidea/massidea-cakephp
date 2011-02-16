@@ -31,7 +31,7 @@ App::import('Vendor', 'Jsmeta', array('file' => 'jsmeta.php'));
 class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
-	public $components = array('Session','Libloader');
+	public $components = array('Session');
 	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags', 'RelatedCompanies');
 	var $Nodes;
 	

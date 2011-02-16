@@ -26,9 +26,9 @@
  *  @version        1.0
  */
 
-App::import('Lib', 'MassideaContents', array('file' => 'massidea_contents.php'));
-
 class ContentsController extends AppController {
+	
+	public $components = array('Content_','Tag_','Company_');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -49,15 +49,15 @@ class ContentsController extends AppController {
 	 * @author	Jari Korpela
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
-	public function browse($content_type = 'all') {
-		if(($content_type === 'challenge') || ($content_type === 'idea') || ($content_type === 'vision')) {
-			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $content_type),array('limit' => 10),false);
+	public function browse($contentType = 'all') {
+		if($contentType = $this->Content_->validateContentType($contentType)) { 
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10),false);
 		}
 		else {
-			$content_type = 'all';
+			$contentType = 'all';
 			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10),false);
 		}
-		$this->set('content_type',$content_type);
+		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
 	}
 
@@ -72,47 +72,26 @@ class ContentsController extends AppController {
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function add($contentType = 'challenge') {
-		$errors = array();
 		//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
-		$this->Libloader->loadLib(array(
-			'myContent' => array('file' => 'massidea_contents.php', 'className' => 'MassideaContents')
-		));
-		
-		if(!$contentType = $this->myContent->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
-			$contentType = 'challenge';
+
+		if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
+			$this->redirect(array('controller' => '/'));
 		}
-		
+
 		$this->set('content_type',$contentType);
-		
+
 		if (!empty($this->data)) { // If form has been posted
-			$this->myContent->setContentData($this->data);
-			if($this->Nodes->save($this->myContent->getContentData()) !== false){ //If saving the content was successfull then...
-				$this->myContent->setContentId((int)$this->Nodes->last_id()); //Set the saved contents id
-				$tags = $this->myContent->getTags();
+			$this->data['Privileges']['creator'] = NULL;
+			$this->Content_->setAllContentDataForSave($this->data);
+			$this->Tag_->setTagsForSave($this->data['Tags']['tags']);
+			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
+			
+			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
 
-				foreach($tags as $tag) {
-					if($this->Nodes->save($tag) === false) { // If saving the tag was NOT successfull
-						$errors['tags'][$tag] = 'Save failed'; // We set the tag to $error array for further inspection
-					} else { // If saving the tag was successfull
-						$tag_id = $this->Nodes->last_id(); // Get the saved tags id
-						$this->Nodes->link($this->myContent->getContentId(),$tag_id); // Link content_id and tag_id
-					}
-				}
+				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
+				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
 				
-				$companies = $this->myContent->getCompanies();
-
-				foreach($companies as $company) { //We go through the companies array
-
-					if($this->Nodes->save($company) === false) { // If saving the tag was NOT successfull
-						$errors['companies'][$company] = 'Save failed'; // We set the company to $error array for further inspection
-					} else { // If saving the company was successfull
-						$tag_id = $this->Nodes->last_id(); // Get the saved companys id
-						$this->Nodes->link($this->myContent->getContentId(),$tag_id); // Link content_id and company_id
-					}
-				}
-				
-				$errors = array_merge($errors,$this->myContent->getErrors());
-		
+				$errors = array();		
 				if(empty($errors)) {
 					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
 					
