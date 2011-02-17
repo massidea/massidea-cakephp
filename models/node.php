@@ -264,7 +264,7 @@ class Node extends AppModel {
 
 		$res = null;
 
-		if ($parent_node['Node']['type'] == $child_node['Node']['type']) {
+		if ($parent_node[0]['Node']['type'] == $child_node[0]['Node']['type']) {
 			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
 		} else {
 			$hardlink = (int)$hardlink;
@@ -278,7 +278,7 @@ class Node extends AppModel {
                 Cache::delete('Node:'.$chash);
 
 		if ($res)
-			return true;
+			return $res;
 		return false;
 	}
 
@@ -293,7 +293,7 @@ class Node extends AppModel {
                 $child_node = $this->find($child);
 		$res = null;
 
-		if ($parent_node['Node']['type'] == $child_node['Node']['type']) {
+		if ($parent_node[0]['Node']['type'] == $child_node[0]['Node']['type']) {
 			@$res = $this->query("delete from linked_contents where `from` = $parent and `to` = $child");
 		} else {
 			@$res = $this->query("delete from mapping where parent_object = $parent and child_object = $child");
