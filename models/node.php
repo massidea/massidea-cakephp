@@ -15,8 +15,10 @@ class Node extends AppModel {
 	var $useTable = false;
 	var $TableModel = null;
 	var $last_id = null;
+	var $other = array();
 	private $_map = array();
 	private $_map_keys = array();
+	private $_join = array();
 	static $cls = null;
 
 /**
@@ -50,8 +52,10 @@ class Node extends AppModel {
 		$hash = $this->_createHash($id);
 		$obj = Cache::read('Node:'.$hash);
 
-		if ($obj !== false)
+/*		if ($obj !== false)
 			return $obj;
+*/
+
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
@@ -68,10 +72,19 @@ class Node extends AppModel {
 			$_type = $inst;
 			unset($id['type']);
 
-			$cond = array('conditions' => $id, 'fields' => array('*'), 'joins' => array( array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $_type.id") ) ) );
+			$basejoin = array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $_type.id") );
+			$joins = array($basejoin);
+			if ($this->_join) {
+				foreach ($this->_join as $j)
+				$joins[] = $j;
+			}
+
+
+			$cond = array('conditions' => $id, 'fields' => array('*'), 'joins' => $joins );
 			$cond = array_merge($cond, $params);
 
 			$result = $bc->find('all', $cond);
+
 
 			$nodes = null;
 
@@ -89,6 +102,7 @@ class Node extends AppModel {
 				static $node_id = 0;
 				$node = $this->find($res['Node']['id']);
 
+				$node = isset($node[0]) ? $node[0] : $node;
 				$nodes[$node_id] = $node;
 				$node_id++;
 			}
@@ -101,15 +115,24 @@ class Node extends AppModel {
 
 		$m = $bc->query("select * from mapping as o2, baseclasses as o1 inner join baseclasses as o3 on o1.id where o2.parent_object = o1.id and o3.id=o2.child_object and o1.id = $id;");
 		$obj = null;
-                $obj['relates'];
 
 		if($m) {
 		$inst = $this->get_type($m[0]['o1']['type']);
 
+		$basejoin = array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $inst.id") );
+                $joins = array($basejoin);
+                if ($this->_join) {
+                	foreach ($this->_join as $j)
+                        	$joins[] = $j;
+                }
+
+                $cond = array('conditions' => array("$inst.id" => $id), 'fields' => array('*'), 'joins' => $joins );
+
 		$t = new $inst();
-		$node = $t->find(array('id' => $id));
-		$obj['Node'] = $node[$inst];
-		$obj['Privileges'] = array('creator' =>  $m[0]['o1']['creator'], 'privileges' =>  $m[0]['o1']['privileges']);
+		$node = $t->find('all',$cond);
+		$node[0]['Node'] = $node[0][$inst];
+		unset($node[0][$inst]);
+		$obj = $node;
 
                 foreach ($m as $d) {
 			$id = $d['o3']['id'];
@@ -118,7 +141,8 @@ class Node extends AppModel {
 			$t = new $inst();
 			$result = $t->find(array('id' => $id));
 			$object = $result[$inst];
-			$obj['relates'][] = $object;
+
+			$obj[0]['Child'][] = $object;
                 }
 		
 		} else {
@@ -135,11 +159,26 @@ class Node extends AppModel {
 
 			if ($inst) {
 				$t = new $inst();
-				$node = $t->find(array('id' => $id));
-				$obj['Node'] = $node[$inst];
-				$obj['Privileges'] = array('creator' => $res['Baseclass']['creator'], 'privileges' => $res['Baseclass']['privileges']);
+				$_type = $inst;
+				$basejoin = array('table' => 'baseclasses', 'alias' => 'Privileges', 'type' => 'left', 'conditions' => array("Privileges.id = $_type.id") );
+	                        $joins = array($basejoin);
+				if ($this->_join) {
+                	                foreach ($this->_join as $j)
+        	                        $joins[] = $j;
+	                        }
+				
+				$cond = array('conditions' => array("$inst.id" => $id), 'fields' => array('*'), 'joins' => $joins );
+				$node = $t->find('all', $cond); //array('id' => $id));
+				$node[0]['Node'] = $node[0][$inst];
+				unset($node[0][$inst]);
+
+				//$obj['Node'] = $node;
+				//$obj['Privileges'] = array('creator' => $res['Baseclass']['creator'], 'privileges' => $res['Baseclass']['privileges']);
+				return $node;
 			}
+
 		}
+
 
 		Cache::write('Node:'.$hash, $obj);
 
@@ -275,8 +314,23 @@ class Node extends AppModel {
 	}
 
 	function __set($name, $value) {
-		$this->_map = array_merge($this->_map, $value);
-		$this->_map_keys = array_keys($this->_map);
+		if ($name == 'map') {
+			$this->_map = array_merge($this->_map, $value);
+			$this->_map_keys = array_keys($this->_map);
+			return;
+		}
+		if($name == 'join') {
+			foreach ($value as $v)
+				$this->_join[] = $v;
+		}
+	}
+
+	function __get($name) {
+/*		$$name = Classregistry::init($name);
+		$s = $$name->find('all');
+		$this->other[$name] = "LELE";
+		return $this;
+*/
 	}
 
 /**
