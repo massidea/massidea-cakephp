@@ -56,6 +56,7 @@ class DataHandlerComponent extends Object {
 	 * @return	array $array	 *
 	 */
 	public function striptagsAndTrimArrayValues($arr) {
+		$res = array();
 		foreach($arr as $val) {
 			$val = strip_tags(trim($val));
 			if($val != "") {

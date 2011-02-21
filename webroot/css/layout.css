@@ -148,7 +148,7 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #footer .right { float: right; margin-bottom: 10px; width: 360px; }
 
 #privacy, #terms { display:none;}
-.fixedDialog .ui-dialog { position: fixed !important; }
+.fixedDialog { position: fixed !important; }
 
 /**
  * Flash

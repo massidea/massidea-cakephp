@@ -64,6 +64,8 @@
 #contents #add-page #NodeAddForm .limit.bad { background: url("../../img/icon_thumb_down.png") no-repeat scroll 1px 50% #FFCFCF; }
 #contents #add-page #NodeAddForm textarea#textlead { height: 49px; }
 #contents #add-page #NodeAddForm textarea#text { height: 232px; }
+
+#contents #add-page #NodeAddForm .row { margin-top: 4px; }
 #contents #add-page #NodeAddForm .row.upload { margin: 10px 0 75px; }
 
 #contents #add-page #NodeAddForm .row.upload .field,
@@ -80,6 +82,14 @@
 #contents #add-page #innovation-type-classification,
 #contents #add-page #visions-of-the-future-classification { background: url("../../img/gray_dot_line_500.png") no-repeat scroll left bottom transparent; padding-bottom: 5px; }
 #contents #add-page select { margin: 3px 0; width: 390px; }
-#contents #add-page #submit { margin-top: 10px; }
-#contents #add-page #submit input#publish { width: 100px; }
-#contents #add-page #submit input#preview { width: 65px; }
+#contents #add-page .submit { margin-top: 10px; }
+#contents #add-page #content_send input { width: 100px; }
+#contents #add-page #content_send input.ok { background: url("../../img/icon_thumb_up.png") no-repeat scroll 1px 50% #F0FEE9 }
+#contents #add-page #content_send input.bad { background: url("../../img/icon_thumb_down.png") no-repeat scroll 1px 50% #FFCFCF; }
+
+
+#contents #add-page #content_publish input, #contents #add-page #content_publish label { float:left; }
+#contents #add-page #content_publish input { width: 30px; }
+#contents #add-page #content_publish label { margin-top: 3px; }
+
+

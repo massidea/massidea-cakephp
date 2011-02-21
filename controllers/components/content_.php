@@ -31,6 +31,9 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	protected $_contentType = null;
 	protected $_contentData = array();
 	protected $_contentSpecificData = array();
+	protected $_contentTags = array();
+	protected $_contentCompanies = array();
+	
 	protected $_privileges = array();
 	protected $_savedData = array();
 	protected $_contentId = null;
@@ -73,19 +76,68 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		}
 	}
 	
+	public function getContentDataForEdit() {
+		return array(
+			'Node' => $this->_contentData,
+			'Specific' => $this->_contentSpecificData,
+			'Tags' => array('tags' => $this->_contentTags),
+			'Companies' => array('companies' => $this->_contentCompanies),
+			'Privileges' => $this->_privileges
+		);
+	}
+	
+	public function setAllContentDataForEdit($data) {
+		$this->setContentDataForEdit($data['Node']);
+		$this->setContentPrivileges($data['Privileges']);
+		$this->setContentChildsForEdit($data['Child']);
+		return $this;
+	}
+	
+	public function setContentDataForEdit($data) {
+		$this->_contentSpecificData = $this->DataHandler->parseExternals($data['data']);
+		$this->_contentData = $data;
+		return $this;
+	}
+	
+	public function setContentChildsForEdit($data) {
+		foreach($data as $child) {
+			if($child['type'] == 'Tag') {
+				$this->addContentTagForEdit($child['name']);
+			}
+			elseif($child['type'] == 'RelatedCompany') {
+				$this->addContentCompanyForEdit($child['name']);
+			}
+		}
+		$this->_contentTags = implode(', ',$this->_contentTags);
+		$this->_contentCompanies = implode(', ',$this->_contentCompanies);
+		return $this;
+	}
+	
+	public function addContentTagForEdit($tag) {
+		$this->_contentTags[] = $tag;
+		return $this;
+	}
+	
+	public function addContentCompanyForEdit($company) {
+		$this->_contentCompanies[] = $company;
+		return $this;
+	}
+	
+	
 	public function setAllContentDataForSave($data) {
 		$this->setContentDataForSave($data['Node']);
-		$this->setContentSpecificData($data['Specific']);
+		$this->setContentSpecificDataForSave($data['Specific']);
 		$this->setContentPrivileges($data['Privileges']);
 		return $this;
 	}
 	
 	public function setContentPrivileges($data) {
+		$this->_privileges = $data;
 		$this->DataHandler->setPrivileges($this->_privileges); // Privileges must be set before parsing is possible	
 		return $this;
 	}
 	
-	public function setContentSpecificData($data) {
+	public function setContentSpecificDataForSave($data) {
 		$contentSpecificData = $this->DataHandler->addHtmlSpecialCharsToArrayValues($data);
 		$contentSpecificData = $this->DataHandler->toExternals($contentSpecificData);
 		$this->_contentSpecificData = $contentSpecificData;

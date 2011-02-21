@@ -29,6 +29,7 @@
 class ContentsController extends AppController {
 	
 	public $components = array('Content_','Tag_','Company_');
+	public $uses = array('Language');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -72,13 +73,6 @@ class ContentsController extends AppController {
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function add($contentType = 'challenge') {
-		//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
-
-		if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
-			$this->redirect(array('controller' => '/'));
-		}
-
-		$this->set('content_type',$contentType);
 
 		if (!empty($this->data)) { // If form has been posted
 			$this->data['Privileges']['creator'] = NULL;
@@ -99,8 +93,20 @@ class ContentsController extends AppController {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
 				}
 				$this->redirect('/');
+			} else {
+				$this->Session->setFlash('Your content has NOT been successfully saved.');
 			}
-		}	
+		} else { // If FORM is NOT Posted
+
+			//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
+	
+			if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
+				$this->redirect(array('controller' => '/'));
+			}
+	
+			$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
+			$this->set('content_type',$contentType);
+		}
 	}
 	
 	/**
@@ -110,8 +116,46 @@ class ContentsController extends AppController {
 	 * @author	
 	 * @param
 	 */
-	public function edit($content_id) {
-		
+	public function edit($contentId = -1) {
+		if (!empty($this->data)) { // If form has been posted
+			$this->data['Privileges']['creator'] = NULL;
+			$this->Content_->setAllContentDataForSave($this->data);
+			$this->Tag_->setTagsForSave($this->data['Tags']['tags']);
+			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
+			
+			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
+				
+				//$this->Tag_->removeLinksToObject($this->Content_->getContentId()); //Not yet working
+				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
+				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
+				
+				$errors = array();		
+				if(empty($errors)) {
+					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
+					
+				} else {
+					$this->Session->setFlash('Your content has NOT been successfully saved.');
+				}
+				$this->redirect('/');
+			} else {
+				$this->Session->setFlash('Your content has NOT been successfully saved.');
+			}
+		} else {
+			if($contentId == -1) {
+				$this->redirect('/');
+			}
+			$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+			if(empty($content)) {
+				$this->Session->setFlash('Invalid content ID');
+				$this->redirect('/');
+			} else {
+				$this->Content_->setAllContentDataForEdit($content[0]);
+				$editData = $this->Content_->getContentDataForEdit();
+				$this->data = $editData;
+			}
+			$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
+			$this->set('content_type',$content[0]['Node']['class']);
+		}
 	}
 	
 	/**

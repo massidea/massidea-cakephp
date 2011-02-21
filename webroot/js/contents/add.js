@@ -13,16 +13,10 @@
  *	
  *	 License text found in /license/ and on the website.
  *	
- *	authors:	Joel Peltonen <joel.peltonen@cs.tamk.fi>
- *				Jaakko Paukamainen <jaakko.paukamainen@student.samk.fi>
+ *	authors:	Jaakko Paukamainen <jaakko.paukamainen@student.samk.fi>,
+ *				Jari Korpela
  *	Licence:	GPL v2.0
  */	
-
-var inPreview = 0;
-var canExit = 0;
-var tmpFormData;
-var previewId = 'form_content_previewcontent';
-var contentId = 'form_content_realcontent';
 
 function textValidation(obj) {
 	var thisProgress = $('#progressbar_'+obj.name);
@@ -35,16 +29,18 @@ function textValidation(obj) {
 	}
 }
 
-function textCount(obj) {
-	var thisMin = inputDefinitions[obj.name][0];
-	var thisMax = inputDefinitions[obj.name][1];
-	var thisReq = inputDefinitions[obj.name][2];
-	// Quick and ugly hack to prevent newline to fail whole validator
+function textCount(obj,inputDefinitions,allInputs) {
+	var field = $(obj).parent().parent();
+
+	var thisMin = inputDefinitions[field[0].id][0];
+	var thisMax = inputDefinitions[field[0].id][1];
+	var thisReq = inputDefinitions[field[0].id][2];
+	// Quick hack to prevent newline to fail whole validator
 	var newLines = $(obj).val().split("\n").length - 1;
 	var curLength = $(obj).val().length + newLines;
 	var curLeft = (thisMax-curLength);
 	
-	var thisProgress = $('#progressbar_'+obj.name);
+	var thisProgress = $('#'+ field[0].id + '> .limit');
 
 	if(curLength < thisMax) {
 		progressText = curLeft + " until limit";
@@ -65,121 +61,65 @@ function textCount(obj) {
 	}
 
 	$(thisProgress).html(progressText);
-	
-	window.onbeforeunload = unloadWarning;
+	publishValidation(allInputs);	
 }
 
-function selectCheck(obj) {
-	if(inputDefinitions[obj.name]) {
-		var thisReq = inputDefinitions[obj.name][2];
-		var thisProgress = $('#progressbar_' + obj.name);
-		if ( $(obj).attr('value') != 0 || thisReq == 0) {
-			progressText = "ok";
-			$(thisProgress).attr('class', 'limit ok');
+function enableSubmit(bool) {
+	if(bool) {
+		$("#content_send > input").removeAttr('disabled');
+		$("#content_send > input").removeClass('bad');
+		$("#content_send > input").addClass('ok');
+	} else {
+		$("#content_send > input").attr('disabled', 'disabled');
+		$("#content_send > input").removeClass('ok');
+		$("#content_send > input").addClass('bad');
+	}
+}
+
+function publishValidation(allInputs) {
+	if($("#content_publish > fieldset > input:first").is(":checked")) {
+		var submitOk = true;
+		$(allInputs).each(function(){
+			var thisProgress = $('#'+ $(this).parent().parent()[0].id + '> .limit');
+			if(thisProgress.hasClass('bad')) { submitOk = false; }
+		});
+		
+		if(submitOk) {
+			enableSubmit(true);
+			return;
 		} else {
-			progressText = "required";
-			$(thisProgress).attr('class', 'limit bad');
+			enableSubmit(false);
+			return;
 		}
-		$(thisProgress).html(progressText);
 	}
+	enableSubmit(true);
+	return;
 }
-
-//Warn user on exit
-function unloadWarning()
-{
-	if(contentHasChanged() && !canExit){
-		switch(inPreview){
-		case 0:
-			return "You have made changes to your content that have not yet been saved. Exiting now will abandon them.";
-			break;
-		case 1:
-			return "You are currently in preview mode, exiting now will abandon your changes to your content.";
-			break;
-		}		
-	}
-}
-
-function contentHasChanged()
-{
-	if(tmpFormData == getPreviewData()){
-		return 0;
-	}
-	else if(tmpFormData != getPreviewData()){
-		return 1;
-	}
-}
-
-function generatePreview()
-{
-	if(inPreview==0)
-	{
-		$.ajax({
-			type: 'POST',
-			url: previewUrl,
-			data: getPreviewData(),
-			success: function(html){
-				$('#'+previewId).html(html);
-				disableLinks();
-			}
-		});
-	}
-	toggleDiv();
-}
-
-function getPreviewData()
-{
-	return $('#content form').serialize();
-}
-
-function toggleDiv()
-{
-	if(inPreview==0){
-		inPreview = 1;
-		$('#'+contentId).fadeOut('normal', function(){
-			$('#'+previewId).fadeIn();
-		});
-	} else if(inPreview==1) {
-		inPreview = 0;
-		$('#'+previewId).fadeOut('normal', function(){
-			$('#'+contentId).fadeIn();
-		});
-	}
-}
-
-function disableLinks()
-{
-	$('#'+previewId+' a').click(function(e){
-		e.preventDefault();
-	});
-}
-
 
 $(document).ready(function() {
-	tmpFormData = getPreviewData();
-	
-	// Get all input elements
-	var allInputs = $(":input[type=text], :input[type=textarea]");
 
+	// Get all input elements
+	var allInputs = $("#contents :input[type=text], #contents :input[type=textarea]");
+	var publish = $("#content_publish > fieldset :input");
+	
 	// Definitions for input boxes ([0] = minimum, [1] = maximum, [2] = required (1 true/0 false)
 	var inputDefinitions = {
-		'content_header': 				[1,  140, 1],
-		'content_keywords': 			[1,  120, 1],
-		'content_textlead': 			[1,  320, 1],
-		'content_text': 				[0, 4000, 0],
-		'content_header': 				[1,  140, 1],
-		'content_related_companies':	[0,  120, 0],		
+		'content_title': 				[1,  140, 1],
+		'content_lead': 				[1,  320, 1],
 		'content_research': 			[1,  140, 1],
+		'content_solution': 			[1,  140, 1],
 		'content_opportunity': 			[1,  140, 1],
 		'content_threat': 				[1,  140, 1],
-		'content_solution': 			[1,  140, 1],
-		'content_references': 			[0, 2000, 0],
-		'content_language':				[0,    0, 1]
+		'content_tags': 				[1,  120, 1],
+		'content_companies':			[0,  120, 0],	
+		'content_body': 				[0, 4000, 0],
+		'content_references': 			[0, 2000, 0]
 	};
 	
-	var inputValidations = { 
-		'content_keywords':				XRegExp("^[\\p{L}0-9, ]*$")		
-	};
-	
+	//var inputValidations = { 
+	//	'content_keywords':				XRegExp("^[\\p{L}0-9, ]*$")		
+	//};
+	/*
 	var inputHelps = {
 		'content_header': "<strong>Headline</strong><br /> Grabâ€™s attention, summarize the whole thought and attracts to read the rest of the story.",
 		'content_keywords': "<strong>Keywords</strong><br /> Words that capture the essence of the topic of your content. <br /> Are important, since we use them for related content automatization. <br />Use commas '<strong>,</strong>' to separate tags!",
@@ -191,24 +131,25 @@ $(document).ready(function() {
 		'content_threat': "<strong>Threat</strong><br /> Identify the most important threat if vision is realized.",
 		'content_solution': "<strong>Solution</strong><br /> Summarize your idea's key point to a one sentence.",
 		'content_references': "<strong>References</strong><br /> Include references in your content when possible (e.g. website, book or article)."
-	};
-	                 
-	$(allInputs).live('keydown', function(){
-		if(this.name != "q") {
-			textCount(this);
+	};*/
+	
+	$(publish).live('change', function(){
+		if(this.value == 0) {
+			enableSubmit(true);
+		} else {
+			publishValidation(allInputs);
 		}
+	});
+	                 
+	$(allInputs).live('keydown keyup', function(){
+		textCount(this,inputDefinitions,allInputs);
+		//if (this.name == "content_keywords") textValidation(this);
 	});
 	
-	$(allInputs).live('keyup', function(){
-		if(this.name != "q") { 
-			textCount(this);
-			if (this.name == "content_keywords") textValidation(this);
-		}
-	});
 	
 	$(allInputs).each(function(){
-		if(this.name != "q") { 
-			textCount(this);
+			textCount(this,inputDefinitions,allInputs);
+			/*
 			if (this.name == "content_keywords") textValidation(this);
 			
 			$(this).focus(function (event) {
@@ -226,8 +167,8 @@ $(document).ready(function() {
 				$(this).css("position","");
 				$(this).css("width","");
 				$("#progressbar_"+this.name).css("position","");
-			});
-			$(this).qtip({
+			}); */
+			/*$(this).qtip({
 				content: inputHelps[this.name],
 				style: { 
 					width: "300",
@@ -241,27 +182,13 @@ $(document).ready(function() {
 				show: { when: { event: "focus" } },
 				hide: { when: { event: "blur" } },
 				position: { corner: { target: 'topLeft', tooltip: 'bottomLeft' } }
-			});
-		}
+			});*/
 	});
-
-	$('select').live('change keyup', function() {
-		selectCheck(this);
-	});
-
-
-	
-	
-	$('select').each(function() {
-		if ($(this).attr('id') != "languages") { 
-			selectCheck(this);
-		}
-	});
-	
+		
 	/**
 	 * Set content publish button to disabled after click
 	 * and submit form.
-	 */
+	 */ /*
 	$('.content_manage_button').click(function() {	
 		if($(this).attr('id') == "content_publish_button") {
 			canExit = 1;
@@ -281,6 +208,6 @@ $(document).ready(function() {
 			window.onbeforeunload = unloadWarning;
 			generatePreview();
 		}
-	});
+	}); */
 });
 

@@ -24,6 +24,7 @@
 
 
 Router::connect('/', array('controller' => 'contents', 'action' => 'browse', 'index'));
+	Router::connect('/contents/edit/*', array('controller' => 'contents', 'action' => 'edit'));
 	Router::connect('/contents/add/*', array('controller' => 'contents', 'action' => 'add'));
 	Router::connect('/contents/challenge/', array('controller' => 'contents', 'action' => 'browse', 'challenge'));
 	Router::connect('/contents/idea/', array('controller' => 'contents', 'action' => 'browse', 'idea'));

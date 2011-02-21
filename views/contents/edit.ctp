@@ -1,5 +1,5 @@
 <?php
-echo $this->Html->script(strtolower($this->name).DS.$this->action,array('inline' => false));
+echo $this->Html->script(strtolower($this->name).DS.'add',array('inline' => false));
 
  
 /*
@@ -61,7 +61,7 @@ $afterClear = '</div><div class="clear">';
 ?>
 
 <?php echo $form->create('Node', array('type' => 'file',
-						 				'url' => array('controller' => 'contents', 'action' => 'add', $content_type),
+						 				'url' => array('controller' => 'contents', 'action' => 'edit'),
 						 				'inputDefaults' => array('label' => false,
 																'div' => false)
 ));
@@ -69,12 +69,15 @@ $afterClear = '</div><div class="clear">';
 
 <?php echo $form->hidden('type', array('value' => "Content")); ?>
 
+<?php echo $form->hidden('id'); ?>
+
 <?php echo $form->hidden('class', array('value' => $content_type)); ?>
 
-<?php echo $form->hidden('Privileges.privileges', array('value' => '755')); ?>
+<?php echo $form->hidden('Privileges.privileges'); ?>
 
-<?php echo $form->hidden('published', array('value' => 0)); ?>
+<?php echo $form->hidden('published'); ?>
 
+<?php ?>
 <?php echo $form->input('language_id', array('type' => 'select',
 										'label' 	=> 'Select language',
 										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
@@ -82,8 +85,7 @@ $afterClear = '</div><div class="clear">';
 										'before' 	=> str_replace('%text%','',$beforeTemplate),
 										'between'	=> $between,
 										'after'		=> $afterNoReq,
-										'options' 	=> $language_list,
-										'selected' 	=> "en"									
+										'options' 	=> $language_list							
 )); 
 ?>
 
@@ -197,16 +199,16 @@ $afterClear = '</div><div class="clear">';
 										'label'		=> true,
 										'div'		=> array('id' => 'content_publish', 'class' => 'row'),
 										'options'	=> array('1' => 'Yes', '0' => 'No, I want to save it for later editing'),
-										'value'		=> '1',
+										'value'		=> '0',
 										'after'		=> $afterClear								
 )); 
 ?>
 
-<?php echo $form->end(array('div' => array('class' => 'row',
+<?php echo $form->end(array('div' => array('class' => 'row field',
 											'id' => 'content_send'),
 							'value' => 'Send',
 							'label' => 'Send',
-							'after'	=> $afterClear
+							'after'	=> $afterClear	
 ));
  ?>
 
