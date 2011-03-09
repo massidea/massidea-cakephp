@@ -52,14 +52,6 @@ $body = '';
 <?php endif; ?>
 
 
-<?php 
-$beforeTemplate = '<div class="field-label"><small class="right">%text%</small>';
-$between = '</div><div class="field">';
-$after = '</div><div class="limit bad">required</div></div><div class="clear">';
-$afterNoReq = '</div></div><div class="clear">';
-$afterClear = '</div><div class="clear">';
-?>
-
 <?php echo $form->create('Node', array('type' => 'file',
 						 				'url' => array('controller' => 'contents', 'action' => 'add', $content_type),
 						 				'inputDefaults' => array('label' => false,
@@ -75,122 +67,149 @@ $afterClear = '</div><div class="clear">';
 
 <?php echo $form->hidden('published', array('value' => 0)); ?>
 
+<div id="content_languages" class="row field">
 <?php echo $form->input('language_id', array('type' => 'select',
-										'label' 	=> 'Select language',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_languages', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $afterNoReq,
-										'options' 	=> $language_list,
-										'selected' 	=> "en"									
-)); 
-?>
+											 'selected' => "en",
+											 'label' => 'Select language',
+											 'options' => $language_list, )); ?>
 
-<?php echo $form->input('title', array('label' 		=> 'Header',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_title', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(Explain in one sentence the whole story)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+</div>
+<div class="clear"></div>
+
+<div id="content_title" class="row">
+	<div class="field-label">
+		<label for="NodeTitle">Header</label>
+		<small class="right">(Explain in one sentence the whole story)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('title', array('error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
+
+<div id="content_lead" class="row">
+	<div class="field-label">
+		<label for="NodeLead">Lead chapter</label>
+		<small class="right">(This text is shown in search result lists)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('lead', array('type' => 'textarea',	'error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>	
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
 
-<?php echo $form->input('lead', array('type' => 'textarea',
-										'label' 	=> 'Lead chapter',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_lead', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(This text is shown in search result lists)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after	
-
-));
-?>
 
 <?php if($content_type === 'challenge'): ?>
 
-<?php echo $form->input('Specific.research', array('label' 	=> 'Research question',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_research', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(The single question you want to get an answer)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_research" class="row">
+	<div class="field-label">
+		<label for="SpecificResearch">Research question</label>
+		<small class="right">(The single question you want to get an answer)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Specific.research', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
+
+
 
 <?php elseif($content_type === 'idea'): ?>
 
-<?php echo $form->input('Specific.solution', array('label' 	=> 'Your idea/solution in one sentence',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_solution', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_solution" class="row">
+	<div class="field-label">
+		<label for="SpecificSolution">Solution</label>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Specific.solution', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
+
 
 <?php elseif($content_type === 'vision'): ?>
 
-<?php echo $form->input('Specific.opportunity', array('label' 	=> 'Opportunity',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_opportunity', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(The most important if future scenario becomes realized)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_opportunity" class="row">
+	<div class="field-label">
+		<label for="SpecificOpportunity">Opportunity</label>
+		<small class="right">(The most important if future scenario becomes realized)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Specific.opportunity', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
-<?php echo $form->input('Specific.threat', array('label' 	=> 'Threat',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_threat', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(The most important if future scenario becomes realized)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_threat" class="row">
+	<div class="field-label">
+		<label for="SpecificThreat">Threat</label>
+		<small class="right">(The most important if future scenario becomes realized)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Specific.threat', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
 <?php endif;?>
 
-<?php echo $form->input('Tags.tags', array('label' 		=> 'Keywords, Tags',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_tags', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(Use commas to separate tags)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_tags" class="row">
+	<div class="field-label">
+		<label for="TagsTags">Keywords, Tags</label>
+		<small class="right">(Use commas to separate tags)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Tags.tags', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
-<?php echo $form->input('Companies.companies', array('label' 	=> 'Related companies and organizations',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_companies', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','(Use commas to separate)',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after									
-)); 
-?>
+<div id="content_companies" class="row">
+	<div class="field-label">
+		<label for="CompaniesCompanies">Related companies and organizations</label>
+		<small class="right">(Use commas to separate)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('Companies.companies', array('error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
-<?php echo $form->input('body', array('type' => 'textarea',
-										'label' 	=> 'Body text',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_body', 'class' => 'row'),
-										'before' 	=> str_replace('%text%',$body,$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after,
-										'rows'		=> '20'	
+<div id="content_body" class="row">
+	<div class="field-label">
+		<label for="NodeBody">Body text</label>
+		<small class="right"><?php echo $body; ?></small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('body', array('type' => 'textarea',	'rows' => '20' , 'error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>	
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
 
-));
-?>
 
-<?php echo $form->input('references', array('type' => 'textarea',
-										'label' 	=> 'References',
-										'error' 	=> array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true),
-										'div'		=> array('id' => 'content_references', 'class' => 'row'),
-										'before' 	=> str_replace('%text%','',$beforeTemplate),
-										'between'	=> $between,
-										'after'		=> $after	
-));
-?>
+<div id="content_references" class="row">
+	<div class="field-label">
+		<label for="NodeReferences">References</label>
+		<small class="right">(Youtube video url references are embedded)</small>
+	</div>
+	<div class="field">
+	<?php echo $form->input('references', array('type' => 'textarea', 'error' => array('tooLong' => 'This is too long', 'wrap' => 'div', 'class' => 'error', true))); ?>	
+	</div>
+	<div class="limit bad">required</div>
+</div>
+<div class="clear"></div>
+
+
 
 <?php echo $form->input('publish', array('type' 	=> 'radio',
 										'legend' 	=> 'Do you want to publish your content now?',
@@ -198,7 +217,7 @@ $afterClear = '</div><div class="clear">';
 										'div'		=> array('id' => 'content_publish', 'class' => 'row'),
 										'options'	=> array('1' => 'Yes', '0' => 'No, I want to save it for later editing'),
 										'value'		=> '1',
-										'after'		=> $afterClear								
+										'after'		=> '</div><div class="clear">'							
 )); 
 ?>
 
@@ -206,7 +225,7 @@ $afterClear = '</div><div class="clear">';
 											'id' => 'content_send'),
 							'value' => 'Send',
 							'label' => 'Send',
-							'after'	=> $afterClear
+							'after'	=> '</div><div class="clear">'
 ));
  ?>
 

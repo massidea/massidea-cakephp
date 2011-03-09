@@ -28,7 +28,7 @@
 
 class ContentsController extends AppController {
 	
-	public $components = array('Content_','Tag_','Company_');
+	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
 	public $uses = array('Language');
 	
 	public function beforeFilter() {
@@ -52,11 +52,11 @@ class ContentsController extends AppController {
 	 */
 	public function browse($contentType = 'all') {
 		if($contentType = $this->Content_->validateContentType($contentType)) { 
-			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10),false);
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10),true);
 		}
 		else {
 			$contentType = 'all';
-			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10),false);
+			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10),true);
 		}
 		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
@@ -79,12 +79,13 @@ class ContentsController extends AppController {
 			$this->Content_->setAllContentDataForSave($this->data);
 			$this->Tag_->setTagsForSave($this->data['Tags']['tags']);
 			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
-			
+
 			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
 
-				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
-				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
-				
+				//These are yet to be fixed and waits for updates
+				//$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
+				//$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
+
 				$errors = array();		
 				if(empty($errors)) {
 					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
@@ -92,7 +93,13 @@ class ContentsController extends AppController {
 				} else {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
 				}
-				$this->redirect('/');
+				
+				if($this->Content_->getContentPublishedStatus() === 1) {
+					$this->redirect('/');
+				}
+				else {
+					$this->redirect(array('controller' => 'contents', 'action' => 'edit', $this->Content_->getContentId()));
+				}
 			} else {
 				$this->Session->setFlash('Your content has NOT been successfully saved.');
 			}
@@ -159,6 +166,36 @@ class ContentsController extends AppController {
 	}
 	
 	/**
+	 * view action - method
+	 * Views content
+	 * 
+	 * @author	
+	 * @param
+	 */
+	public function view($contentId = -1) {
+		if($contentId == -1) {
+			$this->redirect('/');
+		}
+
+		$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+
+		$sidebarCookies = $this->Cookie->read('expandStatus');
+		$groups = $this->Cookievalidation->getGroups('contentsView','expandStatus');
+		if(!empty($sidebarCookies)) {
+			$sidebarCookies = $this->Cookievalidation->doMatchCheck($sidebarCookies);
+		} else {
+			$sidebarCookies = $this->Cookievalidation->useDefaults();
+		}
+
+		$this->set('sidebarCookies',$sidebarCookies);
+
+		if(empty($content)) {
+			$this->Session->setFlash('Invalid content ID');
+			$this->redirect('/');
+		}
+	}
+	
+	/**
 	 * delete action - method
 	 * Deletes content
 	 * 
@@ -190,6 +227,7 @@ class ContentsController extends AppController {
 	public function flag($content_id) {
 		
 	}
+	
 	
 
 }

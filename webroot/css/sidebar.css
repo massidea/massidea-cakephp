@@ -12,7 +12,7 @@
 #sidebar .box-content { background:#f2f2f2;font-size:.9em; border:1px solid #ccc; padding:0px 10px 0px 10px; }
 #sidebar .box-user-content { background:#f2f2f2;font-size:.9em; border:1px solid #ccc; padding:8px; }
 #sidebar .box-user-content ul li { list-style:none; }
-#sidebar .box-user-content input#send-message { margin:8px 0px 8px 0px; width:100%; }
+#sidebar .box-user-content .send-message { margin:8px 0px 8px 0px; width:100%; }
 
 #sidebar ul.tags  { padding:0px; margin:0px; clear:both; font-size:.8em; }
 #sidebar ul.tags li { float:left; list-style:none; display:inline; margin:0px 5px 0px 0px; }
@@ -30,7 +30,7 @@
 /* Sidebar --> Scrollbox */
 #sidebar .scroll-box { max-height:300px; border:1px solid #ccc; overflow:auto; overflow-x: hidden; margin-top:5px; }
 #sidebar .scroll-box p { margin-left:10px; }
-#sidebar .scroll-box ul li { margin:15px 0px 15px 5px; padding-left:5px; }
+#sidebar .scroll-box ul li { margin:15px 5px; padding-left:5px; }
 #sidebar .scroll-box ul li.challenge  { border-left:3px solid #D21034; }
 #sidebar .scroll-box ul li.idea { border-left:3px solid #4B9B07; }
 #sidebar .scroll-box ul li.vision { border-left:3px solid #FFC726; }

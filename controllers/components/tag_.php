@@ -39,8 +39,7 @@ class Tag_Component extends Object {
 	public function linkTagsToObject($objectId = -1) {
 		if($objectId != -1) {
 			$this->DataHandler->addLinkBetween($objectId,$this->_existingTags);
-			die;
-			$this->DataHandler->saveData($this->_newTags,$objectId);
+			$this->DataHandler->saveData($this->_newTags,$objectId); //Needs to make to work :O
 		} else {
 			return false;
 		}

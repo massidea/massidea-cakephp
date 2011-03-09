@@ -12,7 +12,7 @@ echo $html->docType('xhtml11');
 	<?php /*
 	 echo $html->charset();
 	 For some reason this returns content as just text/html which is used for HTML.
-	 application/xhtml+xml is for XHTML. Wonder why CakePHP doesnt use this as default...
+	 application/xhtml+xml is for XHTML. Wonder why CakePHP doesnt use this as default unless we are now at HTML 5 age :O	 
 	*/ ?>	
 	<link rel="shortcut icon" href="<?php echo $html->url('/') . 'favicon.ico'; ?>" type="image/x-icon">
 	
@@ -37,8 +37,7 @@ echo $html->docType('xhtml11');
 	echo $html->script(array('jquery-1.4.4.min', //jQuery javascript library
 							'jquery-ui-1.8.7.custom.min', //User Interface extension for jQuery
 							'jquery.cookie', //jQuery cookie plugin
-							'functions', //All global functions used in site
-							'events' //All global events used in site
+							'global' //All global JS things used in site
 	)); 
 	?>
 

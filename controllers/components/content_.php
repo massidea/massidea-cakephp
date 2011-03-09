@@ -46,6 +46,10 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		return $this->_contentId;
 	}
 	
+	public function getContentPublishedStatus() {
+		return $this->_contentData['published'];
+	}
+	
 	/**
 	 * getContentType
 	 * @return string $contentType 
@@ -56,6 +60,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	
 	public function getContentData() {
 		$node = $this->_contentData;
+		var_dump(1);
 		$node['data'] = $this->_contentSpecificData;
 		$content = $this->DataHandler->parseToNodes(array($node),$this->__type);
 		return $content;
@@ -89,7 +94,9 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	public function setAllContentDataForEdit($data) {
 		$this->setContentDataForEdit($data['Node']);
 		$this->setContentPrivileges($data['Privileges']);
-		$this->setContentChildsForEdit($data['Child']);
+		if(isset($data['Child'])) {
+			$this->setContentChildsForEdit($data['Child']);
+		}
 		return $this;
 	}
 	
