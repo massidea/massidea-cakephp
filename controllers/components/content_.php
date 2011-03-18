@@ -68,7 +68,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		
 	public function saveContent() {
 		if(!empty($this->_contentData)) {
-			
+
 			$node = $this->_contentData;
 			$node['data'] = $this->_contentSpecificData;
 			
@@ -176,6 +176,11 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		}
 	
 		return $this->_contentType;
+	}
+	
+	
+	public function removeChildsFromContent($childsToDelete) {
+		$this->DataHandler->removeLinksBetweenNodes($this->_contentId,$childsToDelete);
 	}
 	
 

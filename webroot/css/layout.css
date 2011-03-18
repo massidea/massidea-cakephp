@@ -31,17 +31,27 @@
 .hidden { display: none; }
 .clear { clear:both; }
 .italic { font-style:italic; }
+.bold { font-weight: bold; }
 .column { width:220px; float:left; margin:0px 20px 10px 0px; }
 .nolist { word-wrap: break-word; }
 .nolist ul { list-style: none outside none; }
 .pointerCursor { cursor: pointer; }
-.icon_plusminus { vertical-align: text-top; }
+.icon { vertical-align: text-top; }
 .blockLink { display: block; width: 100%; height: 100%; }
 .bodyColor { color: #333333; }
-.hoverLink:hover { background: none repeat scroll 0 0 #F2F2F2; cursor: pointer; }
+.hoverLink:hover { background-color: #F2F2F2; cursor: pointer; }
+.magnifyFont { font-size: 1.1em; }
+.magnifyFontMore { font-size: 1.2em; }
 .shrinkFont { font-size: 0.9em; }
 .shrinkFontMore { font-size: 0.85em; }
 .shrinkFontMost { font-size: 0.8em; }
+.margin-top { margin-top: 10px; }
+.margin { margin: 5px; }
+.small-padding-top-bottom { padding: 3px 0px; }
+.small-padding-left-right { padding: 0px 3px; }
+.force-small-padding { padding: 4px !important; }
+.green { color: #4B9B07; }
+.red { color: #D21034; }
 
 p { margin: 10px 0; }
 
@@ -167,7 +177,11 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 
 /** Element styles */
 #signuplink { padding-bottom: 2px; text-align: center; }
-.border-vision { border-left: 5px solid #FFC726; padding: 0 0 0 10px !important; }
-.border-idea { border-left: 5px solid #4B9B07; padding: 0 0 0 10px !important; }
-.border-challenge { border-left: 5px solid #D21034; padding: 0 0 0 10px !important; }
-.border-campaign { border-left: 5px solid #003581; padding: 0 0 0 10px !important; }
+.border-vision { border-left: 5px solid #FFC726; padding: 0 0 0 10px; }
+.border-idea { border-left: 5px solid #4B9B07; padding: 0 0 0 10px; }
+.border-challenge { border-left: 5px solid #D21034; padding: 0 0 0 10px; }
+.border-campaign { border-left: 5px solid #003581; padding: 0 0 0 10px; }
+#PrivateMessageForm label { display: block; float: left; font-weight: bold; width: 70px; }
+.gift { background: url("../img/cake.icon.png") no-repeat scroll 10px transparent; }
+.favourite_off { background: url("../img/icon_fav_off.png") no-repeat scroll 10px transparent; }
+.favourite_on { background: url("../img/icon_fav_on.png") no-repeat scroll 10px transparent; }

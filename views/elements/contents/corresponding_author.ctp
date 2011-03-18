@@ -7,6 +7,10 @@
 			<p>Joined: 03 Jan 2011</p>
 		</div>
 		<div class="clear"></div>
-		<input type="button" id="user_33" class="send-message" value="Send private message" href="#" />
+		<div class="send-message">
+			<input type="hidden" value="6" class="send-message-id" />
+			<input type="hidden" value="Hihhuli" class="send-message-name" />
+			<input type="button" value="Send private message" />
+		</div>
 	</div>
 </div>

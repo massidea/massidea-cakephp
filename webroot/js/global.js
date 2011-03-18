@@ -36,11 +36,16 @@ function showFlash() {
 /**
  * 
  * @param 	text	Text to be set in flash message
+ * @param	style	Sets flash with different style
  * @return 	boolean True If success, else false
  */
-function setFlash(text) {
+function setFlash(text, style) {
 	if($("#flash").is(':empty')) {
-		$("#flash").text(text);
+		if(style == 'successfull') {
+			$("#flash").html('<div id="successfull_operation" class="flashBox">'+text+'</div>');
+		} else {
+			$("#flash").text(text);
+		}
 		return true;
 	}
 	return false;
@@ -57,9 +62,11 @@ function setFlash(text) {
  * @return 	boolean		True If success, else false
  */
 function saveToCookie(page, event, type, value, successMsg) {
+	data = {'page':page,'event':event,'type':type,'value':value};
 	$.ajax({ 
 		type: 'POST',
-		url: jsMeta.baseUrl+"/cookies/setcookie/"+page+"/"+event+"/"+type+"/"+value,
+		data: data,
+		url: jsMeta.baseUrl+"/cookies/setcookie/",
 		success: function(data) {
 			if(successMsg && setFlash(successMsg)) {
 				showFlash();
@@ -68,6 +75,47 @@ function saveToCookie(page, event, type, value, successMsg) {
 		}
 	});
 	return false;
+}
+
+/**
+ * countCharactersLeft
+ * Use this function to count characters left that can be written in text fields
+ * @param 	jQuery object o		Object to check
+ * @param 	int limit			Limit to check on
+ * @return	int charactersLeft	Returns number of character space left
+ */
+function countCharactersLeft(o,limit) {
+	var newLines = $(o).val().split("\n").length - 1;
+	var length = $(o).val().length + newLines;
+	return limit-length;
+}
+
+/**
+ * eventAnimate
+ * Function is used to show user that he activated some event. Background returns back to white.
+ * @param jQuery object o	Object to put the animation to	
+ * @param string color		The color to use
+ * @return null
+ */
+function eventAnimate(o,color) {
+	if(!color) { 
+		color = 'red';
+	}
+	$(o).animate({backgroundColor: color}, 1).animate({backgroundColor: "#ffffff"}, 1400);
+}
+
+function hexFromRGB(r, g, b) {
+	var hex = [
+		r.toString( 16 ),
+		g.toString( 16 ),
+		b.toString( 16 )
+	];
+	$.each( hex, function( nr, val ) {
+		if ( val.length === 1 ) {
+			hex[ nr ] = "0" + val;
+		}
+	});
+	return hex.join( "" ).toUpperCase();
 }
 
 $(document).ready(function(){

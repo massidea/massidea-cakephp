@@ -34,8 +34,7 @@
  */
 
 class CookiesController extends AppController {
-	
-	public $components = array('Cookie','Cookievalidation'); //Get Cookie component ofcourse :)
+	public $components = array('RequestHandler','Cookie','Cookievalidation'); //Get Cookie component ofcourse :)
 	public $helpers = null; //Set helpers off
 	public $uses = null; //Set model off
 	
@@ -103,6 +102,7 @@ class CookiesController extends AppController {
 	/**
 	 *  setcookie
 	 *  Used to set cookies withing site.
+	 *  Doesn't really have params as they come from ajax post event
 	 *  "Returns" int $result by echoing it if use of the function is correct, otherwise dies.
 	 *  $result is 0 if cookie setting failed and 1 if success. 
 	 *  Cookie setting can only fail if there is an error in data set in _getGroups, for example name is missing.
@@ -112,25 +112,33 @@ class CookiesController extends AppController {
 	 *  @param	string $type 	Type is cookies' name
 	 *  @param	string $value 	Value represents cookies' value
 	 *  
-	 *  @author Jari Korpela
+	 *  @author Jari Korpela $page = null, $event = null, $type = null, $value = null
 	 */
-	public function setcookie($page = null, $event = null, $type = null, $value = null) {
-		if(!$page || !$event) { die; }
-		var_dump(!$this->RequestHandler->isPost()));
-		$result = 0;
-		$groups = null;
-		$pages = array('contentsView'); //Possible Pages to set cookies to.
-		
-		if(in_array($page,$pages)) {
-			$this->_setCookiePath($page);
-			$groups = $this->Cookievalidation->getGroups($page);
-		} else { die; }
-	
-		if(!empty($groups)) {
-			$result = $this->_saveCookie($groups[$event],$type,$value); //$result gets 1 if saving is successfull and 0 if fails
-		} else { die; }
-		
-		echo $result;
+	public function setcookie() {
+		if ($this->RequestHandler->isAjax()) {
+            if (!empty($this->params['form'])) {
+            	$page = $this->params['form']['page'];
+            	$event = $this->params['form']['event'];
+            	$type = $this->params['form']['type'];
+            	$value = $this->params['form']['value'];
+            	
+				if(empty($page) || empty($event)) { die; }
+				$result = 0;
+				$groups = null;
+				$pages = array('contentsView'); //Possible Pages to set cookies to.
+				
+				if(in_array($page,$pages)) {
+					$this->_setCookiePath($page);
+					$groups = $this->Cookievalidation->getGroups($page);
+				} else { die; }
+			
+				if(!empty($groups)) {
+					$result = $this->_saveCookie($groups[$event],$type,$value); //$result gets 1 if saving is successfull and 0 if fails
+				} else { die; }
+				
+				echo $result;
+            }
+		}
 	}
 	
 

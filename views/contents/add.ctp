@@ -65,8 +65,6 @@ $body = '';
 
 <?php echo $form->hidden('Privileges.privileges', array('value' => '755')); ?>
 
-<?php echo $form->hidden('published', array('value' => 0)); ?>
-
 <div id="content_languages" class="row field">
 <?php echo $form->input('language_id', array('type' => 'select',
 											 'selected' => "en",
@@ -211,7 +209,7 @@ $body = '';
 
 
 
-<?php echo $form->input('publish', array('type' 	=> 'radio',
+<?php echo $form->input('published', array('type' 	=> 'radio',
 										'legend' 	=> 'Do you want to publish your content now?',
 										'label'		=> true,
 										'div'		=> array('id' => 'content_publish', 'class' => 'row'),

@@ -70,6 +70,9 @@ class Company_Component extends Object {
 		return $this->_companies;
 	}
 	
+	public function getNewAndExistingCompanies() {
+		return array_merge($this->_newCompanies,$this->_existingCompanies);
+	}
 	
 }
 

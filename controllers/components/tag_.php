@@ -47,7 +47,6 @@ class Tag_Component extends Object {
 	
 	public function removeLinksToObject($objectId = -1) {
 		if($objectId != -1) {
-			
 			$this->DataHandler->removeLinkBetween($objectId,$this->_existingTags); //Luomatta
 		} else {
 			return false;
@@ -83,6 +82,10 @@ class Tag_Component extends Object {
 	
 	public function getTags() {
 		return $this->_tags;
+	}
+	
+	public function getNewAndExistingTags() {
+		return array_merge($this->_newTags,$this->_existingTags);
 	}
 		
 	

@@ -28,3 +28,4 @@
 		</a>
 	</li>
 </ul>
+<a href="#" id="show_more">Show more</a>

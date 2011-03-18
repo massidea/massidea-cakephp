@@ -82,7 +82,7 @@ class DataHandlerComponent extends Object {
 	
 	/**
 	 * toExternals
-	 * Forms array data to string (#key[base64encoded value]#otherkey[...])
+	 * Forms' array data to string (#key[base64encoded value]#otherkey[...])
 	 * @author	Jussi Raitanen
 	 * @param	array $data - Associative array to form into string
 	 * @return	string $data - Result string	 *
@@ -299,5 +299,10 @@ class DataHandlerComponent extends Object {
 		return false;
 	}
 	
+	public function removeLinksBetweenNodes($parentId,$childs) {
+		foreach($childs as $child) {
+			$this->Nodes->removeLink($parentId, $child['id']);
+		}		
+	}
 	
 }

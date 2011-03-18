@@ -75,8 +75,6 @@ $afterClear = '</div><div class="clear">';
 
 <?php echo $form->hidden('Privileges.privileges'); ?>
 
-<?php echo $form->hidden('published'); ?>
-
 <div id="content_languages" class="row field">
 <?php echo $form->input('language_id', array('type' => 'select',
 											 'selected' => "en",
@@ -219,7 +217,7 @@ $afterClear = '</div><div class="clear">';
 </div>
 <div class="clear"></div>
 
-<?php echo $form->input('publish', array('type' 	=> 'radio',
+<?php echo $form->input('published', array('type' 	=> 'radio',
 										'legend' 	=> 'Do you want to publish your content now?',
 										'label'		=> true,
 										'div'		=> array('id' => 'content_publish', 'class' => 'row'),

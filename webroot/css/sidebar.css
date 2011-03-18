@@ -12,7 +12,7 @@
 #sidebar .box-content { background:#f2f2f2;font-size:.9em; border:1px solid #ccc; padding:0px 10px 0px 10px; }
 #sidebar .box-user-content { background:#f2f2f2;font-size:.9em; border:1px solid #ccc; padding:8px; }
 #sidebar .box-user-content ul li { list-style:none; }
-#sidebar .box-user-content .send-message { margin:8px 0px 8px 0px; width:100%; }
+#sidebar .box-user-content .send-message input { margin:8px 0px 8px 0px; width:100%; }
 
 #sidebar ul.tags  { padding:0px; margin:0px; clear:both; font-size:.8em; }
 #sidebar ul.tags li { float:left; list-style:none; display:inline; margin:0px 5px 0px 0px; }
@@ -22,7 +22,7 @@
 #sidebar .info-box h2 { font-size:1.2em; margin:3px 3px 4px 0px; padding:0px; background:none; }
 #sidebar .info-content { background:#f2f2f2;font-size:.9em; border:1px solid #ccc; padding:0px 10px 0px 10px; }
 
-#sidebar img.avatar { width:50px; float:left; margin:0px 10px 0px 0px; }
+#sidebar img.avatar { width:50px; height: 50px; float:left; margin:0px 10px 0px 0px; }
 
 #sidebar #more-from-author h4,
 #sidebar #related-contents h4 { background:transparent url("../images/triangle.png") no-repeat 0px 4px; padding-left:10px; }

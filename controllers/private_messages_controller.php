@@ -27,14 +27,29 @@
  */
 
 class PrivateMessagesController extends AppController {
-	
+	var $components = array('RequestHandler');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
 
 	}
 	
-	
+	public function send() {
+		$this->autoRender = false;
+		$this->autoLayout = false;
+		
+		if ($this->RequestHandler->isAjax()) {
+            if (!empty($this->data)) {
+            	//When users are ready this needs validation because data can be altered by end user.
+            	$this->data['PrivateMessage']['sender'] = 2; //Should be replaced with user id from session when they are ready!
+				if($this->PrivateMessage->save($this->data)) {
+					echo 1;
+				} else {
+					die;
+				}
+            }
+		}
+	}
 	
 	
 	

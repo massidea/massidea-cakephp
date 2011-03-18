@@ -1,53 +1,65 @@
-function updateTips(t) {
-	tips.text(t).addClass("ui-state-highlight");
-	setTimeout(function() {
-		tips.removeClass("ui-state-highlight", 1500);
-	}, 500 );
+function sendPrivateMessage(formData) {
+	$.ajax({ 
+		type: 'POST',
+		data: formData,
+		url: jsMeta.baseUrl+"/private_messages/send/",
+		success: function(data) {
+			if(data) {
+				setFlash("Message sent successfully",'successfull');
+				showFlash();
+			} else {
+				setFlash("Failure in message send. Message not delivered");
+				showFlash();
+			}
+		}
+	});
 }
-
-
-function checkLength(o, n, min, max) {
-	if (o.val().length > max || o.val().length < min) {
-		o.addClass("ui-state-error");
-		updateTips("Length of " + n + " must be between " +
-			min + " and " + max + ".");
-		return false;
-	} else {
-		return true;
-	}
-}
-
 
 function initSendPrivateMessageDialog() {
-	var name = $("#name");
-	var allFields = $( [] ).add( name );
-	var tips = $(".validateTips");
-
+	var message = $("#PrivateMessageMessage");
+	var characters = $("#privateMessageCharacters");
+	var receiver = $("#PrivateMessageReceiver");
+	var limit = 1000;
+	$(characters).html(limit);
+	$(message).live("keydown keyup change",function(){ 
+		var chars = countCharactersLeft(this,limit);
+		$(characters).html(chars);
+	});
 	
 	$("#send_private_message").dialog({
 		autoOpen: false,
-		height: 300,
-		width: 350,
+		resizable: false,
+		height: 310,
+		width: 450,
+		show: {effect: 'slide', duration: 300},
+		hide: {effect:'slide', duration: 300, direction: 'right'},
 		modal: true,
 		buttons: {
-			"Create an account": function() {
-				var bValid = true;
-				
-				allFields.removeClass("ui-state-error");
-				bValid = bValid && checkLength( name, "username", 1, 16 );
-
-				if (bValid) {
-					name.val(); 
-					$(this).dialog("close");
-				}
-			},
+			'Send Message': function() {
+				$("#PrivateMessageForm").submit();
+			}, 
 			Cancel: function() {
 				$(this).dialog("close");
 			}
 		},
 		close: function() {
-			allFields.val("").removeClass("ui-state-error");
+			$(message).val("");
+			$(characters).text(limit);
+			$("#PrivateMessageTo").text("");
+			$(receiver).val("");
 		}
+	});
+	
+	
+	$("#PrivateMessageForm").submit(function(){
+		var chars = countCharactersLeft(message,limit);
+		if(chars < 0 || chars == limit) {
+			eventAnimate(message);
+		} else {
+			sendPrivateMessage($(this).serializeArray());
+			$("#send_private_message").dialog("close");
+		}
+		return false;
 	});
 
 }
@@ -55,8 +67,11 @@ function initSendPrivateMessageDialog() {
 $(document).ready(function(){
 	initSendPrivateMessageDialog();
 	
-	$(".send-message").click(function() {
-		console.debug(this.id);
+	$(".send-message > input:button").click(function() {
+		var id = $(this).siblings('.send-message-id');
+		var name = $(this).siblings('.send-message-name');
+		$("#PrivateMessageTo").text(name.val());
+		$("#PrivateMessageReceiver").val(id.val());
 		$("#send_private_message").dialog("open");
 	});
 	

@@ -18,7 +18,7 @@
 /**
  *  ContentController - class
  *  Maintains actions for browsing, adding and viewin contents
- *
+ *	TODO: User checks when users done.
  *  @package        controllers
  *  @author         Jari Korpela
  *  @copyright      
@@ -28,8 +28,8 @@
 
 class ContentsController extends AppController {
 	
-	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
-	public $uses = array('Language');
+	public $components = array('RequestHandler','Cookie','Cookievalidation','Content_','Tag_','Company_');
+	public $uses = array('Language','LinkedContent');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -52,11 +52,11 @@ class ContentsController extends AppController {
 	 */
 	public function browse($contentType = 'all') {
 		if($contentType = $this->Content_->validateContentType($contentType)) { 
-			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10),true);
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10, 'order' => 'created DESC'),true);
 		}
 		else {
 			$contentType = 'all';
-			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10),true);
+			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'created DESC'),true);
 		}
 		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
@@ -71,8 +71,9 @@ class ContentsController extends AppController {
 	 * 
 	 * @author	Jari Korpela
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
+	 * @param	int	$related To what content this content will be linked to
 	 */
-	public function add($contentType = 'challenge') {
+	public function add($contentType = 'challenge', $related = 0) {
 
 		if (!empty($this->data)) { // If form has been posted
 			$this->data['Privileges']['creator'] = NULL;
@@ -81,23 +82,21 @@ class ContentsController extends AppController {
 			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
 
 			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
-
-				//These are yet to be fixed and waits for updates
-				//$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
-				//$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
-
-				$errors = array();		
+				//TODO: This area is missing a method to link the $related content to this content. Should be done when the link method is ready.
+				
+				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
+				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
+				
+				$errors = array();
 				if(empty($errors)) {
 					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
-					
 				} else {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
 				}
 				
-				if($this->Content_->getContentPublishedStatus() === 1) {
+				if($this->Content_->getContentPublishedStatus() === "1") {
 					$this->redirect('/');
-				}
-				else {
+				} else {
 					$this->redirect(array('controller' => 'contents', 'action' => 'edit', $this->Content_->getContentId()));
 				}
 			} else {
@@ -120,19 +119,37 @@ class ContentsController extends AppController {
 	 * edit action - method
 	 * Edits content
 	 * 
-	 * @author	
-	 * @param
+	 * @author	Jari Korpela
+	 * @param	int $contentId
 	 */
 	public function edit($contentId = -1) {
 		if (!empty($this->data)) { // If form has been posted
+
 			$this->data['Privileges']['creator'] = NULL;
 			$this->Content_->setAllContentDataForSave($this->data);
+			
 			$this->Tag_->setTagsForSave($this->data['Tags']['tags']);
 			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
 			
+			$contentBeforeSave = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+			$childsToDelete = $contentBeforeSave[0]['Child'];
+
+			foreach($childsToDelete as $key => $child) {
+				foreach($this->Tag_->getNewAndExistingTags() as $tag) {
+					if($child['id'] == $tag['Node']['id']) {
+						unset($childsToDelete[$key]); continue 2;
+					}
+				}
+				foreach($this->Company_->getNewAndExistingCompanies() as $company) {
+					if($child['id'] == $company['Node']['id']) {
+						unset($childsToDelete[$key]); continue 2;
+					}
+				}
+			}
+			
 			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
 				
-				//$this->Tag_->removeLinksToObject($this->Content_->getContentId()); //Not yet working
+				$this->Content_->removeChildsFromContent($childsToDelete);
 				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
 				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
 				
@@ -143,15 +160,24 @@ class ContentsController extends AppController {
 				} else {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
 				}
-				$this->redirect('/');
+
+				if($this->Content_->getContentPublishedStatus() === "1") {
+					
+					$this->redirect('/');
+				} else {
+					$this->redirect('edit/'.$contentId);
+				}
+
 			} else {
 				$this->Session->setFlash('Your content has NOT been successfully saved.');
+				$this->redirect('edit/'.$contentId);
 			}
 		} else {
 			if($contentId == -1) {
 				$this->redirect('/');
 			}
 			$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+			
 			if(empty($content)) {
 				$this->Session->setFlash('Invalid content ID');
 				$this->redirect('/');
@@ -169,8 +195,8 @@ class ContentsController extends AppController {
 	 * view action - method
 	 * Views content
 	 * 
-	 * @author	
-	 * @param
+	 * @author	Jari Korpela
+	 * @param	int $contentId
 	 */
 	public function view($contentId = -1) {
 		if($contentId == -1) {
@@ -178,6 +204,20 @@ class ContentsController extends AppController {
 		}
 
 		$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+		if(empty($content)) {
+			$this->Session->setFlash('Invalid content ID');
+			$this->redirect('/');
+		}
+		
+		$linkedContents = $this->LinkedContent->find('all',array(
+													'conditions' => array('LinkedContent.from' => $contentId)
+		));
+		$linkedContentsIds = array();
+		foreach($linkedContents as $linkedContent) {
+			$linkedContentsIds[] = $linkedContent['LinkedContent']['to'];
+		}
+		$linkedcontents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),array(),true);
+		
 
 		$sidebarCookies = $this->Cookie->read('expandStatus');
 		$groups = $this->Cookievalidation->getGroups('contentsView','expandStatus');
@@ -187,12 +227,11 @@ class ContentsController extends AppController {
 			$sidebarCookies = $this->Cookievalidation->useDefaults();
 		}
 
-		$this->set('sidebarCookies',$sidebarCookies);
 
-		if(empty($content)) {
-			$this->Session->setFlash('Invalid content ID');
-			$this->redirect('/');
-		}
+		$this->set('sidebarCookies',$sidebarCookies);
+		$this->set('contentId',$contentId);
+
+		
 	}
 	
 	/**
@@ -228,6 +267,43 @@ class ContentsController extends AppController {
 		
 	}
 	
+	/**
+	 * link action - method
+	 * Links two contents together
+	 * 
+	 * @author Jari Korpela
+	 */
+	public function link() {
+		if ($this->RequestHandler->isAjax()) {
+            
+		}
+	}
+	
+	/**
+	 * linksearch action - method
+	 * Searches contents linked contents
+	 * 
+	 * @author Jari Korpela
+	 */
+	public function linksearch() {
+		$this->autoRender = false;
+		$this->autoLayout = false;
+		if ($this->RequestHandler->isAjax()) {
+			$title = $this->data['Content']['title'];
+			$id = $this->data['Content']['id'];
+			$contents = $this->Nodes->find(array('type' => 'Content', 'published' => 1),array('order' => 'title ASC'),true);
+			if(empty($contents)) { echo "[]";die; }
+		
+			$parsedContents = array();
+            foreach($contents as $content) {
+            	$parsedContents[] = array('id' => $content['Node']['id'],
+            							'class' => $content['Node']['class'],
+            							'title' => $content['Node']['title']);
+            }
+         
+            echo json_encode($parsedContents);
+		}
+	}
 	
 
 }

@@ -24,6 +24,8 @@
 
 
 Router::connect('/', array('controller' => 'contents', 'action' => 'browse', 'index'));
+	Router::connect('/contents/link/', array('controller' => 'contents', 'action' => 'link'));
+	Router::connect('/contents/linksearch/', array('controller' => 'contents', 'action' => 'linksearch'));
 	Router::connect('/contents/setcookie/*', array('controller' => 'contents', 'action' => 'setcookie'));
 	Router::connect('/contents/view/*', array('controller' => 'contents', 'action' => 'view'));
 	Router::connect('/contents/edit/*', array('controller' => 'contents', 'action' => 'edit'));

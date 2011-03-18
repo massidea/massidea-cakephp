@@ -261,14 +261,22 @@ class Node extends AppModel {
 
 		$parent_node = $this->find($parent);
 		$child_node = $this->find($child);
+		$found = null;
 
 		$res = null;
 
 		if ($parent_node[0]['Node']['type'] == $child_node[0]['Node']['type']) {
+			$found = $this->query("select count(from) as found from linked_contents where from = $parent and to = $child");
+			if ($found[0][0]['found'] == '1')
+				return true;
+
 			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
 		} else {
+			$found = $this->query("select count(parent_object) as found from mapping where parent_object = $parent and child_object = $child");
+			if ($found[0][0]['found'] == '1')
+				return true;
 			$hardlink = (int)$hardlink;
-			@$res = $this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
+			$res = @$this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
 		}
 
                 $phash = $this->_createHash($parent);

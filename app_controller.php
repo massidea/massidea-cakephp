@@ -32,7 +32,7 @@ class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
 	public $components = array('Session');
-	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags', 'RelatedCompanies');
+	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags', 'RelatedCompanies', 'LinkedContents');
 	var $Nodes;
 	
 	public function beforeFilter() {
