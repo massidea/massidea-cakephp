@@ -50,16 +50,16 @@ class ContentsController extends AppController {
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function browse($contentType = 'all') {
-		//$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
-		//$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));
-		//$this->Nodes->join = array($users, $lang);
+		$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
+		$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));
+		$this->Nodes->join = array($users, $lang);
 		
 		if($contentType = $this->Content_->validateContentType($contentType)) { 
-			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10, 'order' => 'created DESC'),true);
+			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10, 'order' => 'Contents.created DESC'),true);
 		}
 		else {
 			$contentType = 'all';
-			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'created DESC'),true);
+			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'Contents.created DESC'),true);
 		}
 
 		$this->set('content_type',$contentType);
@@ -281,21 +281,6 @@ class ContentsController extends AppController {
 	public function preview($content_id) {
 		
 	}
-	
-	/**
-	 * flag action - method
-	 * Flags content // FLAGGING SHOULD BE MOVED TO OWN CONTROLLER
-	 * 
-	 * @author	
-	 * @param
-	 */
-	public function flag($content_id) {
-		
-	}
-	
-	
-	
-	
 	
 
 }
