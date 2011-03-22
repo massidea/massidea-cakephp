@@ -197,7 +197,6 @@ class Node extends AppModel {
 
 		$bc = new Baseclass();
 
-//		$type = $data['Node']['type'];
 		$type = $this->get_type($data['Node']['type']);
 
 
