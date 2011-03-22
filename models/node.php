@@ -235,12 +235,21 @@ class Node extends AppModel {
 	function _createHash($value) {
 
 		$tmp = null;
+
+		foreach ($this->_join as $join) {
+			foreach ($join as $v) {
+				$tmp .= is_array($v) ? implode($v) : $v;
+			}
+		}
+
+
                 if (is_array($value)) {
 			foreach ($value as $v)
 				$tmp .= is_array($v) ? implode($v) : $v;
 		}
                 else
-                        $tmp = (string)$value;
+                        $tmp .= (string)$value;
+
                 $hash = sha1($tmp);
 
 		return $hash;
