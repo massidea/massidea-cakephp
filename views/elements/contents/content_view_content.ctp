@@ -1,20 +1,45 @@
-<div class="border-idea" id="content-page-head">
-	<h2>Invalid hotel in Rovaniemi, Lapland</h2>
-	<p class="italic magnifyFont">This idea is about establishing a high-quality hotel with all the proper facilities and services for invalid people and their companion in Rovaniemi, Lapland.</p>
+<div class="border-<?php echo $content['class']; ?>" id="content-page-head">
+	<h2><?php echo $content['title']; ?></h2>
+	<p class="italic magnifyFont"><?php echo $content['lead']; ?></p>
 </div>
-	
+
+
 <div id="content-page-context">
-	<div class="small-padding-top-bottom" id="content_view_tags">
-		<span class="content_view_bold">
-			<a href="#">Tags:</a>
-		</span>
-		<a href="#">high-quality</a>,
-		<a href="#">Service</a>,
-		<a href="#">activities</a>,
-		<a href="#">Invalid</a>
-	</div>
+	<p>This content is written in <?php echo $language['name']; ?></p>
 	<p>
-	The idea is to offer invalid people high-quality accommodation with great service and possibility to attend different kind of activities. There would be established a hotel in Rovaniemi which would be designed particularly for disabled people. It would offer all the typical Lappish activities for them (reindeer safaris, husky safaris etc.) and also a small spa and treatments for their use only. There would also be arranged some trips to popular tourist attractions and also somewhere else if the customers are not satisfied with the selection of activities. Activities would be designed in a way that would be more suitable for invalids. The idea would not still differ from the normal theory: services would be the same but the target group would be considered in the practice.  Activities would be concentrated more in quality than quantity of several different things. Creating unforgettable experiences instead of seeing everything would be the main goal of these activities.<br>
-	The hotel would offer customers the same services and opportunities than healthy people get in hotels and with the same price &ndash; they would not be charged more because they are limited in some ways. The hotel would also offer transport for disabled people from the airport; for example to the hotel, to different sights etc. The hotel would have different kind of offers for disabled people and their friends and relatives who are going to travel and stay in the hotel with them. This would increase the amount of customers and also the interest among disabled people all over the world. <br>
+		<a href="#" class="bold">Tags: </a>
+		<?php $tagSize = sizeof($tags); foreach($tags as $k => $tag): ?>
+			<a href="#" class="<?php echo ($k % 2) ? "deepblue" : "blue"; ?>"><?php echo $tag['name']; ?></a><?php if($tagSize != $k+1):?>, <?php endif; ?>
+		<?php endforeach; ?>
+		</p>
+	<p>
+		<a href="#" class="bold">Related Companies: </a>
+		<?php 
+		$companySize = sizeof($relatedCompanies);
+		if($companySize > 0):
+			foreach($relatedCompanies as $k => $company): ?>
+			<a href="#" class="<?php echo ($k % 2) ? "deepblue" : "blue"; ?>"><?php echo $company['name']; ?></a><?php if($companySize != $k+1):?>, <?php endif; ?>
+			<?php endforeach;
+		else: ?>
+			No related companies
+		<?php endif; ?>
 	</p>
+
+	<?php if($content['body'] != ''): ?>
+	<p><?php echo $content['body']; ?></p>
+	<?php endif; ?>
+	
+	<?php foreach($specific as $type => $spec): ?>
+		<h3><?php 
+		if($type == 'research') { echo "Research question"; }
+		elseif($type == 'solution') { echo "Idea/Solution in one sentence"; }
+		elseif($type == 'opportunity') { echo "Opportunities"; }
+		elseif($type == 'threat') { echo "Threats"; }
+		?>:</h3>
+		<p><?php echo $spec; ?></p>
+	<?php endforeach; ?>
+	
+	<h3>References: </h3>
+	<p><?php echo ($content['references'] != '') ? $content['references'] : 'No references'; ?></p>
+	
 </div>

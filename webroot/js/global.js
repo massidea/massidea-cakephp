@@ -23,6 +23,7 @@
  * Initialize jsMeta so it can be used globally around page
  */
 var jsMeta = "";
+var loading = "";
 
 /**
  * If flash message is set up a, it is displayed and then removed and emptied
@@ -31,6 +32,10 @@ function showFlash() {
 	if(!$("#flash").is(':empty')) {
 		$("#flash:hidden").slideDown(500).delay(3000).slideUp(1000,function(){ $("#flash").empty(); });
 	}
+}
+
+function resetFlash() {
+	$("#flash").clearQueue().hide().empty();
 }
 
 /**
@@ -131,6 +136,7 @@ $(document).ready(function(){
 	 */
 	
 	jsMeta = jQuery.parseJSON($("#jsmetabox").text());
+	loading = '<img alt="Loading..." src="'+jsMeta.baseUrl+'/img/ajax-loader-black.gif">';
 	
 	/**
 	 * Needs commenting

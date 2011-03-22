@@ -21,19 +21,18 @@
  *	TODO: User checks when users done.
  *  @package        controllers
  *  @author         Jari Korpela
- *  @copyright      
+ *  @copyright      Jari Korpela
  *  @license        GPL v2
  *  @version        1.0
  */
 
 class ContentsController extends AppController {
 	
-	public $components = array('RequestHandler','Cookie','Cookievalidation','Content_','Tag_','Company_');
-	public $uses = array('Language','LinkedContent');
+	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
+	public $uses = array('LinkedContent');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Nodes->map = array('RelatedCompany' => 'RelatedCompanies');
 	}
 		
 	/**
@@ -51,6 +50,10 @@ class ContentsController extends AppController {
 	 * @param	enum $content_type Accepted values: 'all', 'challenge', 'idea', 'vision'
 	 */
 	public function browse($contentType = 'all') {
+		//$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
+		//$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));
+		//$this->Nodes->join = array($users, $lang);
+		
 		if($contentType = $this->Content_->validateContentType($contentType)) { 
 			$contents = $this->Nodes->find(array('type' => 'Content', 'class' => $contentType),array('limit' => 10, 'order' => 'created DESC'),true);
 		}
@@ -58,6 +61,7 @@ class ContentsController extends AppController {
 			$contentType = 'all';
 			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'created DESC'),true);
 		}
+
 		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
 	}
@@ -202,11 +206,27 @@ class ContentsController extends AppController {
 		if($contentId == -1) {
 			$this->redirect('/');
 		}
+		
+		$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
+		$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));
+		$this->Nodes->join = array($users, $lang);
 
-		$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
+		$content = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId));
 		if(empty($content)) {
 			$this->Session->setFlash('Invalid content ID');
 			$this->redirect('/');
+		}
+		$content = $content[0];
+		$contentSpecificData = $this->Content_->getContentSpecificDataFromData($content['Node']['data']);
+		
+		$tags = array();
+		$relatedCompanies = array();
+		foreach($content['Child'] as $child) {
+			if($child['type'] == 'Tag') {
+				$tags[] = $child;
+			} elseif ($child['type'] == 'RelatedCompany') {
+				$relatedCompanies[] = $child;
+			}
 		}
 		
 		$linkedContents = $this->LinkedContent->find('all',array(
@@ -216,7 +236,7 @@ class ContentsController extends AppController {
 		foreach($linkedContents as $linkedContent) {
 			$linkedContentsIds[] = $linkedContent['LinkedContent']['to'];
 		}
-		$linkedcontents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),array(),true);
+		$linkedContents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),array(),true);
 		
 
 		$sidebarCookies = $this->Cookie->read('expandStatus');
@@ -230,6 +250,12 @@ class ContentsController extends AppController {
 
 		$this->set('sidebarCookies',$sidebarCookies);
 		$this->set('contentId',$contentId);
+		$this->set('content',$content['Node']);
+		$this->set('language',$content['Language']);
+		$this->set('tags',$tags);
+		$this->set('relatedCompanies',$relatedCompanies);
+		$this->set('specific',$contentSpecificData);
+		$this->set('linkedContents',$linkedContents);
 
 		
 	}
@@ -258,7 +284,7 @@ class ContentsController extends AppController {
 	
 	/**
 	 * flag action - method
-	 * Flags content
+	 * Flags content // FLAGGING SHOULD BE MOVED TO OWN CONTROLLER
 	 * 
 	 * @author	
 	 * @param
@@ -267,43 +293,9 @@ class ContentsController extends AppController {
 		
 	}
 	
-	/**
-	 * link action - method
-	 * Links two contents together
-	 * 
-	 * @author Jari Korpela
-	 */
-	public function link() {
-		if ($this->RequestHandler->isAjax()) {
-            
-		}
-	}
 	
-	/**
-	 * linksearch action - method
-	 * Searches contents linked contents
-	 * 
-	 * @author Jari Korpela
-	 */
-	public function linksearch() {
-		$this->autoRender = false;
-		$this->autoLayout = false;
-		if ($this->RequestHandler->isAjax()) {
-			$title = $this->data['Content']['title'];
-			$id = $this->data['Content']['id'];
-			$contents = $this->Nodes->find(array('type' => 'Content', 'published' => 1),array('order' => 'title ASC'),true);
-			if(empty($contents)) { echo "[]";die; }
-		
-			$parsedContents = array();
-            foreach($contents as $content) {
-            	$parsedContents[] = array('id' => $content['Node']['id'],
-            							'class' => $content['Node']['class'],
-            							'title' => $content['Node']['title']);
-            }
-         
-            echo json_encode($parsedContents);
-		}
-	}
+	
+	
 	
 
 }

@@ -21,7 +21,6 @@ class Node extends AppModel {
 	private $_map = array();
 	private $_map_keys = array();
 	private $_join = array();
-	static $cls = null;
 
 /**
 * Deletes a record or multiple records based on criteria.
@@ -52,12 +51,11 @@ class Node extends AppModel {
 	function find($id = null, $params = array(), $walk = true) {
 
 		$hash = $this->_createHash($id);
-		$obj = Cache::read('Node:'.$hash);
+                $obj = Cache::read('Node:'.$hash);
 
-/*		if ($obj !== false)
+		if ($obj !== false) {
 			return $obj;
-*/
-
+		}
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
@@ -109,6 +107,7 @@ class Node extends AppModel {
 				$node_id++;
 			}
 
+			$this->writeCache($hash, $nodes);
 			return $nodes;
 			}
 
@@ -151,13 +150,9 @@ class Node extends AppModel {
 			$res = null;
 			$inst = null;
 
-//			if (!empty(Node::$cls))
-//				$inst = Node::$cls . 's';
-//			else {
-				$res = $bc->find(array('id' => $id));
-				if ($res)
-					$inst = $this->get_type($res['Baseclass']['type']);
-//			}
+			$res = $bc->find(array('id' => $id));
+			if ($res)
+				$inst = $this->get_type($res['Baseclass']['type']);
 
 			if ($inst) {
 				$t = new $inst();
@@ -174,19 +169,21 @@ class Node extends AppModel {
 				$node[0]['Node'] = $node[0][$inst];
 				unset($node[0][$inst]);
 
-				//$obj['Node'] = $node;
-				//$obj['Privileges'] = array('creator' => $res['Baseclass']['creator'], 'privileges' => $res['Baseclass']['privileges']);
+				$this->writeCache($hash, $node);
 				return $node;
 			}
 
 		}
 
-
-		Cache::write('Node:'.$hash, $obj);
-
+		$this->writeCache($hash, $obj);
 		return $obj;
 		}
 	}
+
+	function writeCache($hash, $obj) {
+		Cache::write('Node:'.$hash, $obj);
+	}
+
 
 /**
 * Inserts a new object or modifies existing object.
@@ -199,7 +196,6 @@ class Node extends AppModel {
 
 		$bc = new Baseclass();
 
-//		$type = $data['Node']['type'];
 		$type = $this->get_type($data['Node']['type']);
 
 
@@ -266,7 +262,7 @@ class Node extends AppModel {
 		$res = null;
 
 		if ($parent_node[0]['Node']['type'] == $child_node[0]['Node']['type']) {
-			$found = $this->query("select count(from) as found from linked_contents where from = $parent and to = $child");
+			$found = $this->query("select count(`from`) as found from linked_contents where `from` = $parent and `to` = $child");
 			if ($found[0][0]['found'] == '1')
 				return true;
 

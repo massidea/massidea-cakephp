@@ -38,6 +38,7 @@ class AppController extends Controller {
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
 		$this->Nodes = Classregistry::init('Node');
+		$this->Nodes->map = array('RelatedCompany' => 'RelatedCompanies');
 	}
 	
 	public function beforeRender() {

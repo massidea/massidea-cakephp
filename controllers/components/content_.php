@@ -65,6 +65,10 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		$content = $this->DataHandler->parseToNodes(array($node),$this->__type);
 		return $content;
 	}
+	
+	public function getContentSpecificDataFromData($data) {
+		return $this->DataHandler->parseExternals($data);
+	}
 		
 	public function saveContent() {
 		if(!empty($this->_contentData)) {

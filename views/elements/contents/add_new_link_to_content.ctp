@@ -24,7 +24,7 @@ $url_add_vision = $html->url(array('controller' => 'contents', 'action' => 'add'
 	<?php echo $form->end(); ?>
 	<div class="add_new_link_list">
 		<h2 class="margin">Available contents to link</h2>
-		<span class="shrinkFontMore bold small-padding-left-right">See</span>|<span class="shrinkFontMore bold small-padding-left-right">Link content by clicking</span>
+		<span class="shrinkFontMore bold small-padding-left-right">View</span>|<span class="shrinkFontMore bold small-padding-left-right">Link content by clicking</span>
 		<ul>
 			<li><?php echo $html->image('ajax-loader-black.gif'); ?></li>
 		</ul>

@@ -24,9 +24,91 @@ function searchPossibleLinks(formData) {
 		type: 'POST',
 		dataType: 'json',
 		data: formData,
-		url: jsMeta.baseUrl+"/contents/linksearch/",
+		url: jsMeta.baseUrl+"/linked_contents/contentlinksearch/",
 		success: function(data) {
 			sendDataToLinkList(data);
+			return true;
+		}
+	});
+	return false;
+}
+
+function searchFromData(searchquery,data) {
+	var returns = [];
+	var options = $("#LinkSearchOptionsViewForm > input:checkbox");
+	$.each(data,function(){
+		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
+			if(this.class == 'challenge' && options[0].checked) {
+				returns.push(this);
+			} else if(this.class == 'idea' && options[1].checked) {
+				returns.push(this);
+			} else if(this.class == 'vision' && options[2].checked) {
+				returns.push(this);
+			}
+		}
+	});
+	return returns;
+}
+
+function getLinkedOutput(data) {
+	var results = searchFromData($("#ContentsLinkForm > div.input > input").val(),data);
+	var thisContentId = $("#ContentsLinkForm > #ContentId").val();
+	if(results.length === 0) {
+		output = '<li>No contents found</li>';
+	} else {
+		var output = renderResults(thisContentId,results);
+	}
+	return output;
+}
+
+function sendDataToLinkList(data) {
+	
+	var ul = $("#add_new_link > .add_new_link_list > ul");
+	var output = '';
+	
+	$("#ContentsLinkForm > div.input > input, #LinkSearchOptionsViewForm > input:checkbox").live('keyup change', function(){
+		output = getLinkedOutput(data);
+		$(ul).html(output);
+	});
+	
+	if(data.length === 0) {
+		output = '<li>No contents found</li>';
+		$(ul).html(output);
+	} else {
+		output = getLinkedOutput(data);	
+		$(ul).html(output);
+	}
+}
+
+function linkContents(formData) {
+	$.ajax({ 
+		type: 'POST',
+		data: formData,
+		url: jsMeta.baseUrl+"/linked_contents/link/",
+		success: function(data) {
+			if(data == "1") {
+				resetFlash();
+				setFlash("Contents linked together successfully",'successfull');
+				showFlash();
+				$("#ContentsLinkForm").submit();
+			}
+			return true;
+		}
+	});
+	return false;
+}
+
+function flagContent(formData) {
+	$.ajax({ 
+		type: 'POST',
+		data: formData,
+		url: jsMeta.baseUrl+"/flags/add/",
+		success: function(data) {
+			if(data == "1") {
+				resetFlash();
+				setFlash("Content was flagged successfully",'successfull');
+				showFlash();
+			}
 			return true;
 		}
 	});
@@ -49,50 +131,6 @@ function renderResults(contentId,data) {
 		</li>';
 	});
 	return output;
-}
-
-function searchFromData(searchquery,data,options) {
-	var returns = [];
-console.debug(searchquery);
-	$.each(data,function(){
-		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
-			if(this.class == 'challenge' && options[0].checked) {
-				returns.push(this);
-			} else if(this.class == 'idea' && options[1].checked) {
-				returns.push(this);
-			} else if(this.class == 'vision' && options[2].checked) {
-				returns.push(this);
-			}
-		}
-	});
-	return returns;
-}
-
-function sendDataToLinkList(data) {
-	
-	var ul = $("#add_new_link > .add_new_link_list > ul");
-	var elements = new Array();
-	var thisContentId = $("#ContentsLinkForm > #ContentId").val();
-	
-	if(data.length === 0) {
-		output = '<li>No contents found</li>';
-		$(ul).html(output);
-	} else {
-		$(ul).html(renderResults(thisContentId,data));
-	}
-	
-	$("#ContentsLinkForm > div.input > input, #LinkSearchOptionsViewForm > input:checkbox").live('keyup change', function(){
-		var options = $("#LinkSearchOptionsViewForm > input:checkbox");
-		var results = searchFromData($("#ContentsLinkForm > div.input > input").val(),data,options);
-		
-		output = renderResults(thisContentId,results);
-		if(results.length === 0) {
-			output = '<li>No contents found</li>';
-		}
-		$(ul).html(output);
-	});
-	
-
 }
 
 $(document).ready(function(){
@@ -142,6 +180,27 @@ $(document).ready(function(){
 	
 	$("#ContentsLinkForm").submit(function(){
 		searchPossibleLinks($(this).serializeArray());
+		return false;
+	});
+	
+	$(".add_new_link_list > ul > li > .linked-title").live('click',function(){
+		
+		var linkData = {from:	$(this).children('.content_id_link_from').val(),
+						to:		$(this).children('.content_id_link_to').val()
+						};
+		
+		$("#add_new_link > .add_new_link_list > ul").html(loading);
+		linkContents(linkData);
+	});
+	
+	
+	$("#flagAddForm > a").click(function(){
+		$("#flagAddForm").submit();
+		return false;
+	});
+	
+	$("#flagAddForm").submit(function(){
+		flagContent($(this).serializeArray());
 		return false;
 	});
 

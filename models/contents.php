@@ -47,15 +47,8 @@ class Contents extends AppModel {
 
 	);
 	
-
+/*
 	var $hasOne = array(
-		'Language' => array(
-			'className' => 'Language',
-			'foreignKey' => 'id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Baseclass' => array(
 			'className' => 'Baseclass',
 			'foreignKey' => 'id',
@@ -63,6 +56,6 @@ class Contents extends AppModel {
 			'fields' => '',
 			'order' => ''
 		)
-	);
+	);*/
 }
 ?>
