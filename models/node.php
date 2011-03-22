@@ -7,6 +7,8 @@
 
 App::import('Model','Baseclass');
 
+
+
 /**
 * @package Model
 */
@@ -19,7 +21,6 @@ class Node extends AppModel {
 	private $_map = array();
 	private $_map_keys = array();
 	private $_join = array();
-	static $cls = null;
 
 /**
 * Deletes a record or multiple records based on criteria.
@@ -50,12 +51,11 @@ class Node extends AppModel {
 	function find($id = null, $params = array(), $walk = true) {
 
 		$hash = $this->_createHash($id);
-		$obj = Cache::read('Node:'.$hash);
+                $obj = Cache::read('Node:'.$hash);
 
-/*		if ($obj !== false)
+		if ($obj !== false) {
 			return $obj;
-*/
-
+		}
 
 		$bc = new Baseclass();
 		$class = get_class($bc);
@@ -107,6 +107,7 @@ class Node extends AppModel {
 				$node_id++;
 			}
 
+			$this->writeCache($hash, $nodes);
 			return $nodes;
 			}
 
@@ -149,13 +150,9 @@ class Node extends AppModel {
 			$res = null;
 			$inst = null;
 
-//			if (!empty(Node::$cls))
-//				$inst = Node::$cls . 's';
-//			else {
-				$res = $bc->find(array('id' => $id));
-				if ($res)
-					$inst = $this->get_type($res['Baseclass']['type']);
-//			}
+			$res = $bc->find(array('id' => $id));
+			if ($res)
+				$inst = $this->get_type($res['Baseclass']['type']);
 
 			if ($inst) {
 				$t = new $inst();
@@ -172,19 +169,21 @@ class Node extends AppModel {
 				$node[0]['Node'] = $node[0][$inst];
 				unset($node[0][$inst]);
 
-				//$obj['Node'] = $node;
-				//$obj['Privileges'] = array('creator' => $res['Baseclass']['creator'], 'privileges' => $res['Baseclass']['privileges']);
+				$this->writeCache($hash, $node);
 				return $node;
 			}
 
 		}
 
-
-		Cache::write('Node:'.$hash, $obj);
-
+		$this->writeCache($hash, $obj);
 		return $obj;
 		}
 	}
+
+	function writeCache($hash, $obj) {
+		Cache::write('Node:'.$hash, $obj);
+	}
+
 
 /**
 * Inserts a new object or modifies existing object.
@@ -236,12 +235,21 @@ class Node extends AppModel {
 	function _createHash($value) {
 
 		$tmp = null;
+
+		foreach ($this->_join as $join) {
+			foreach ($join as $v) {
+				$tmp .= is_array($v) ? implode($v) : $v;
+			}
+		}
+
+
                 if (is_array($value)) {
 			foreach ($value as $v)
 				$tmp .= is_array($v) ? implode($v) : $v;
 		}
                 else
-                        $tmp = (string)$value;
+                        $tmp .= (string)$value;
+
                 $hash = sha1($tmp);
 
 		return $hash;
@@ -258,14 +266,22 @@ class Node extends AppModel {
 
 		$parent_node = $this->find($parent);
 		$child_node = $this->find($child);
+		$found = null;
 
 		$res = null;
 
 		if ($parent_node[0]['Node']['type'] == $child_node[0]['Node']['type']) {
+			$found = $this->query("select count(`from`) as found from linked_contents where `from` = $parent and `to` = $child");
+			if ($found[0][0]['found'] == '1')
+				return true;
+
 			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
 		} else {
+			$found = $this->query("select count(parent_object) as found from mapping where parent_object = $parent and child_object = $child");
+			if ($found[0][0]['found'] == '1')
+				return true;
 			$hardlink = (int)$hardlink;
-			@$res = $this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
+			$res = @$this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
 		}
 
                 $phash = $this->_createHash($parent);
