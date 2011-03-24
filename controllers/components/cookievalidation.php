@@ -56,7 +56,7 @@ class CookievalidationComponent extends object {
 			case 'contentsView':
 				$groups = array('expandStatus' => array('name' => 'expandStatus',
 														'default' => 'block',
-														'types' => array('author','content','campaigns'),
+														'types' => array('linked'),
 														'values' => array('none','block'))
 				); break;
 			

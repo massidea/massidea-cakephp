@@ -84,7 +84,12 @@ class LinkedContentsController extends AppController {
 				$to = $this->params['form']['to'];
 				$from = $this->params['form']['from'];
 				$this->Nodes->link($from,$to,false);
-				echo 1;
+				
+				$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
+				$this->Nodes->join = array($users);
+				$linkedContent = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $to),array(),true);
+				
+				echo json_encode($linkedContent[0]);
 			}
 		}
 	}

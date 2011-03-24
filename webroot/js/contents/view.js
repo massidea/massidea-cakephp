@@ -1,17 +1,14 @@
-function expandCollapse(type) {
-	var target = $("#related-"+type+" > div");
-	var expandButton = $("#related-"+type+" > h2:first");
-	$(expandButton).unbind('click');
+function expandCollapse(name,launcher,target) {
+	$(launcher).unbind('click');
 	$(target).slideToggle('fast', function() {
-		saveToCookie('contentsView', 'expandStatus', type, $(target).is(':hidden') ? 'none' : 'block');
-		$(expandButton).bind('click', function () { expandCollapse(type); }); 
-		setImage(type);
+		saveToCookie('contentsView', 'expandStatus', name, $(target).is(':hidden') ? 'none' : 'block');
+		$(launcher).bind('click', function () { expandCollapse(name,launcher,target); }); 
+		setImage(launcher,target);
 	});
 }
 
-function setImage(type) {
-	var target = $("#related-"+type+" > div");
-	var expandButton = $("#related-"+type+" > h2:first > .icon");
+function setImage(launcher,target) {
+	var expandButton = $(launcher).children(".icon");
 	if ($(target).is(':hidden')){
 		$(expandButton).attr("src", jsMeta.baseUrl+"/img/icon_plus_tiny.png");
 	} else {
@@ -38,11 +35,11 @@ function searchFromData(searchquery,data) {
 	var options = $("#LinkSearchOptionsViewForm > input:checkbox");
 	$.each(data,function(){
 		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
-			if(this.class == 'challenge' && options[0].checked) {
+			if(this['class'] == 'challenge' && options[0].checked) {
 				returns.push(this);
-			} else if(this.class == 'idea' && options[1].checked) {
+			} else if(this['class'] == 'idea' && options[1].checked) {
 				returns.push(this);
-			} else if(this.class == 'vision' && options[2].checked) {
+			} else if(this['class'] == 'vision' && options[2].checked) {
 				returns.push(this);
 			}
 		}
@@ -80,22 +77,29 @@ function sendDataToLinkList(data) {
 	}
 }
 
+function addContentToList(data) {
+	
+}
+
 function linkContents(formData) {
+
 	$.ajax({ 
 		type: 'POST',
 		data: formData,
 		url: jsMeta.baseUrl+"/linked_contents/link/",
 		success: function(data) {
-			if(data == "1") {
+			if(data) {
 				resetFlash();
 				setFlash("Contents linked together successfully",'successfull');
 				showFlash();
 				$("#ContentsLinkForm").submit();
+				addContentToList(data);
+				return true;
+			} else {
+				return false;
 			}
-			return true;
 		}
 	});
-	return false;
 }
 
 function flagContent(formData) {
@@ -108,18 +112,19 @@ function flagContent(formData) {
 				resetFlash();
 				setFlash("Content was flagged successfully",'successfull');
 				showFlash();
+				return true;
+			} else {
+				return false;
 			}
-			return true;
 		}
 	});
-	return false;
 }
 
 function renderResults(contentId,data) {
 	var output = '';
 	$.each(data,function(){
 		output = output+ '\
-		<li class="border-'+this.class+' shrinkFontMore">\
+		<li class="border-'+this['class']+' shrinkFontMore">\
 			<a class="left" href='+jsMeta.baseUrl+'/contents/view/'+this.id+'>\
 				<img alt="" src="'+jsMeta.baseUrl+'/img/icon_eye.png">\
 			</a>\
@@ -134,16 +139,15 @@ function renderResults(contentId,data) {
 }
 
 $(document).ready(function(){
-	
-	var types = ['author','content','campaigns'];
-	$.each(types,function(index,type){
-		var expandButton = $("#related-"+type+" > h2:first");
-		$(expandButton).bind('click', function (){ expandCollapse(type); }); 
+		
+	$("#linked-container > h3").click(function(){
+		expandCollapse('linked',$(this),$("#linked-container > ul"));
 	});
+	
 	
 	$("#add_new_link").dialog({
 		closeOnEscape: true,
-		draggable: false,
+		draggable: true,
 		modal: true,
 		resizable: false,
 		width: 630,
@@ -159,24 +163,9 @@ $(document).ready(function(){
 			$("#ContentsLinkForm").submit();
 			linkedsFetched = true;
 		}
+		return false;
 	});
 	
-	$("#content-tabs").tabs();
-	$("#linked").tabs({
-			show: function(event,ui) {
-				if(ui.index === 0) {
-					$("#linked-all").hide();
-					$("#linked-challenges").removeClass("ui-tabs-hide");
-					$("#linked-ideas").removeClass("ui-tabs-hide");
-					$("#linked-visions").removeClass("ui-tabs-hide");
-				}
-			},
-			select: function(event,ui) {
-				if(ui.index === 4) {
-					return false;
-				}
-			}
-	});
 	
 	$("#ContentsLinkForm").submit(function(){
 		searchPossibleLinks($(this).serializeArray());
@@ -191,6 +180,7 @@ $(document).ready(function(){
 		
 		$("#add_new_link > .add_new_link_list > ul").html(loading);
 		linkContents(linkData);
+		return false;
 	});
 	
 	
@@ -202,6 +192,12 @@ $(document).ready(function(){
 	$("#flagAddForm").submit(function(){
 		flagContent($(this).serializeArray());
 		return false;
+	});
+	
+	$("#related-info").tabs({
+		selected: -1,
+		collapsible: true
+
 	});
 
 	

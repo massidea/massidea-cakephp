@@ -29,10 +29,10 @@
 class ContentsController extends AppController {
 	
 	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
-	public $uses = array('LinkedContent');
+	public $uses = array('Language','LinkedContent');
 	
 	public function beforeFilter() {
-		parent::beforeFilter();
+		parent::beforeFilter();		
 	}
 		
 	/**
@@ -97,9 +97,8 @@ class ContentsController extends AppController {
 				} else {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
 				}
-				
 				if($this->Content_->getContentPublishedStatus() === "1") {
-					$this->redirect('/');
+					$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Content_->getContentId()));
 				} else {
 					$this->redirect(array('controller' => 'contents', 'action' => 'edit', $this->Content_->getContentId()));
 				}
@@ -166,10 +165,9 @@ class ContentsController extends AppController {
 				}
 
 				if($this->Content_->getContentPublishedStatus() === "1") {
-					
-					$this->redirect('/');
+					$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Content_->getContentId()));
 				} else {
-					$this->redirect('edit/'.$contentId);
+					$this->redirect(array('controller' => 'contents', 'action' => 'edit',$contentId));
 				}
 
 			} else {
@@ -206,6 +204,7 @@ class ContentsController extends AppController {
 		if($contentId == -1) {
 			$this->redirect('/');
 		}
+		$this->set('content_class','wide');		
 		
 		$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
 		$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));
@@ -221,34 +220,45 @@ class ContentsController extends AppController {
 		
 		$tags = array();
 		$relatedCompanies = array();
-		foreach($content['Child'] as $child) {
-			if($child['type'] == 'Tag') {
-				$tags[] = $child;
-			} elseif ($child['type'] == 'RelatedCompany') {
-				$relatedCompanies[] = $child;
+		if(isset($content['Child'])) {
+			foreach($content['Child'] as $child) {
+				if($child['type'] == 'Tag') {
+					$tags[] = $child;
+				} elseif ($child['type'] == 'RelatedCompany') {
+					$relatedCompanies[] = $child;
+				}
 			}
 		}
 		
+		$linkedContentsCount = $this->LinkedContent->find('count',array(
+													'conditions' => array('LinkedContent.from' => $contentId)));
+		
 		$linkedContents = $this->LinkedContent->find('all',array(
-													'conditions' => array('LinkedContent.from' => $contentId)
+													'conditions' => array('LinkedContent.from' => $contentId),
+													'order' => array('LinkedContent.created DESC'),
+													'limit' => 10,
+													'page' => 1,
+													'offset' => 0
 		));
+		
 		$linkedContentsIds = array();
 		foreach($linkedContents as $linkedContent) {
 			$linkedContentsIds[] = $linkedContent['LinkedContent']['to'];
 		}
-		$linkedContents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),array(),true);
+		$idOrder = implode(",", $linkedContentsIds);
 		
+		$linkedContents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),
+												array('order' => array("FIELD(Contents.id, $idOrder) asc")),true);
 
-		$sidebarCookies = $this->Cookie->read('expandStatus');
+		$cookies = $this->Cookie->read('expandStatus');
 		$groups = $this->Cookievalidation->getGroups('contentsView','expandStatus');
-		if(!empty($sidebarCookies)) {
-			$sidebarCookies = $this->Cookievalidation->doMatchCheck($sidebarCookies);
+		if(!empty($cookies)) {
+			$cookies = $this->Cookievalidation->doMatchCheck($cookies);
 		} else {
-			$sidebarCookies = $this->Cookievalidation->useDefaults();
+			$cookies = $this->Cookievalidation->useDefaults();
 		}
 
-
-		$this->set('sidebarCookies',$sidebarCookies);
+		$this->set('cookies',$cookies);
 		$this->set('contentId',$contentId);
 		$this->set('content',$content['Node']);
 		$this->set('language',$content['Language']);
@@ -256,6 +266,7 @@ class ContentsController extends AppController {
 		$this->set('relatedCompanies',$relatedCompanies);
 		$this->set('specific',$contentSpecificData);
 		$this->set('linkedContents',$linkedContents);
+		$this->set('linkedContentsCount',$linkedContentsCount);
 
 		
 	}

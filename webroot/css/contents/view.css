@@ -38,14 +38,13 @@
 #contents #view-page #linked #linked-ideas { border-bottom: 1px solid #CCCCCC; color: #4B9B07; padding: 8px; }
 #contents #view-page #linked #linked-challenges a { color: #0089CF; }
 
-#contents #view-page #content-tabs { font-size: 0.85em; min-height: 225px; }
-#contents #view-page #content-tabs .giantFont { font-size: 2.5em; font-weight: bold; padding: 0px 10px; }
-#contents #view-page #content-tabs #overview_rating,
-#contents #view-page #content-tabs #overview_viewed { width: 210px; }
-#contents #view-page #content-tabs #overview_bottom { margin-top: 15px; }
-#contents #view-page #content-tabs #overview_top { margin-top: 10px; }
-#contents #view-page #content-tabs #give_gift_button,
-#contents #view-page #content-tabs #add_to_favourites_button { width: 180px; }
+#contents #view-page #related-overview .giantFont { font-size: 2.5em; font-weight: bold; padding: 0px 10px; }
+#contents #view-page #related-overview #overview_rating,
+#contents #view-page #related-overview #overview_viewed { width: 210px; }
+#contents #view-page #related-overview #overview_bottom { margin-top: 15px; }
+#contents #view-page #related-overview #overview_top { margin-top: 10px; }
+#contents #view-page #related-overview #give_gift_button,
+#contents #view-page #related-overview #add_to_favourites_button { width: 180px; }
 
 #add_new_link { padding: 0px 0px 0px 0px; display: none; background-color: #eee; }
 #add_new_link #ContentsLinkForm { margin-top: 5px; margin-left: 5px; }
@@ -59,3 +58,8 @@
 #add_new_link .add_new_link_list ul li .linked-title { width: 95%; }
 
 #add_new_link .box { background-color: #fff; border: 1px solid #AAA; margin: 5px 5px; padding: 5px;}
+
+#contents #view-page #content-page-head { width: 510px; }
+#contents #view-page #viewtop { width: 195px; }
+
+#contents #view-page #related-info { font-size: 0.85em; margin-top: 5px; }

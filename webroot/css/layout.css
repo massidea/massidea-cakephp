@@ -47,13 +47,20 @@
 .shrinkFontMost { font-size: 0.8em; }
 .margin-top { margin-top: 10px; }
 .margin { margin: 5px; }
+.nomargin { margin: 0px !important; }
+.small-margin-top-bottom { margin: 3px 0px; }
 .small-padding-top-bottom { padding: 3px 0px; }
 .small-padding-left-right { padding: 0px 3px; }
+.padding-left-right { padding: 0px 6px; }
+.big-padding-left-right { padding: 0px 10px; }
 .force-small-padding { padding: 4px !important; }
 .green { color: #4B9B07 !important; }
 .red { color: #D21034 !important; }
 .blue { color: #0089CF !important; }
 .deepblue { color: #003581 !important; }
+.grey { color: #CCCCCC !important; }
+.border-left { border-left: 1px solid #CCCCCC; padding: 0 0 0 10px !important; }
+.size16 { width: 16px; height: 16px; }
 
 p { margin: 10px 0; }
 
@@ -152,7 +159,7 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
  */
 #content { font-size: 1em; float: left; margin: -10px 14px 0px 16px; }
 #content .narrow { width: 500px; }
-#content .wide { width: auto; }
+#content .wide { width: 735px; }
 #content .column { width: 220px; float: left; margin: 0px 20px 0px 0px; }
 #content h2 { font-size: 1.7em; color: #000; padding: 0px 0px 10px 0px; margin: 10px 0px; }
 
@@ -179,10 +186,10 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 
 /** Element styles */
 #signuplink { padding-bottom: 2px; text-align: center; }
-.border-vision { border-left: 5px solid #FFC726; padding: 0 0 0 10px !important; }
-.border-idea { border-left: 5px solid #4B9B07; padding: 0 0 0 10px !important; }
-.border-challenge { border-left: 5px solid #D21034; padding: 0 0 0 10px !important; }
-.border-campaign { border-left: 5px solid #003581; padding: 0 0 0 10px !important; }
+.border-vision { border-left: 5px solid #FFC726; padding-left: 10px !important; }
+.border-idea { border-left: 5px solid #4B9B07; padding-left: 10px !important; }
+.border-challenge { border-left: 5px solid #D21034; padding-left: 10px !important; }
+.border-campaign { border-left: 5px solid #003581; padding-left: 10px !important; }
 #PrivateMessageForm label { display: block; float: left; font-weight: bold; width: 70px; }
 .gift { background: url("../img/cake.icon.png") no-repeat scroll 10px transparent; }
 .favourite_off { background: url("../img/icon_fav_off.png") no-repeat scroll 10px transparent; }

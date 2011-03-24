@@ -1,19 +1,103 @@
-<div id="viewtop" class="margin-top">
-	<div class="small-padding-top-bottom">
-		<span>Added: <?php echo $content['created']; ?></span>
-		<!-- AddThis Button BEGIN -->
-		<a href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4b12c6f671039279" class="addthis_button_expanded small-padding-left-right" title="View more services">
-			<img class="icon" height="16" width="125" style="border: 0pt none;" alt="Bookmark and Share" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif">
+<div id="viewtop" class="margin-top right small-padding-top-bottom border-left">
+	<p>Added: <?php echo $content['created']; ?></p>
+	<!-- AddThis Button BEGIN -->
+	<a href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4b12c6f671039279" class="addthis_button_expanded small-padding-left-right" title="View more services">
+		<img class="icon" height="16" width="125" style="border: 0pt none;" alt="Bookmark and Share" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif">
+	</a>
+	<script src="http://s7.addthis.com/js/250/addthis_widget.js#pub=xa-4b12c6f671039279" type="text/javascript"></script>
+	<!-- AddThis Button END -->
+	<p>
+	Language: <?php echo $language['name']; ?>
+	<br/>
+	Content views: 3452
+	<br/>
+	Content votes: 143
+	</p>
+	<ul>
+		<li>
+			<a href="#" id="content_vote_up" class="hoverLink left">
+			Like
+			<?php echo $html->image('icon_thumb_up.png',array('class' => 'icon')); ?>
+			</a>
+			<span class="left big-padding-left-right bold green">64%</span>
+			<a href="#" id="content_vote_down" class="hoverLink left">
+			<?php echo $html->image('icon_thumb_down.png',array('class' => 'icon')); ?>
+			Dislike
+			</a>
+			<div class="clear"></div>
+		</li>
+		
+		<li>
+			<a href="#" id="add_to_favourites_link" class="hoverLink blockLink">
+			<?php echo $html->image('icon_fav_off.png',array('class' => 'icon size16')); ?>
+			Add content to favourites
+			</a>
+		</li>
+		
+		<li>
+			<a href="#" id="give_gift_link" class="hoverLink blockLink">
+			<?php echo $html->image('cake.icon.png',array('class' => 'icon size16')); ?>
+			Give gift to content
+			</a>
+		</li>
+		
+		<li class="send-message left blockLink">
+			<input type="hidden" value="6" class="send-message-id" />
+			<input type="hidden" value="Hihhuli" class="send-message-name" />
+			<a href="#" class="hoverLink blockLink">
+			<?php echo $html->image('icon_message_off.png',array('class' => 'icon size16')); ?>
+			Send private message
+			</a>
+		</li>
+		<li class="left blockLink">
+			<?php echo $form->create('flag',array('action' => 'add')); ?>
+			<?php echo $form->hidden('id', array('value' => $content['id'])); ?>
+			<?php echo $form->hidden('type', array('value' => 'Content')); ?>
+			<a href="#" class="hoverLink blockLink">
+			<?php echo $html->image('icon_flag.png',array('class' => 'icon')); ?>
+			Flag as inappropriate
+			</a>
+			<?php echo $form->end(); ?>
+		</li>
+		
+		<li>
+			<div class="clear"></div>
+			<a href="<?php echo $html->url(array('action' => 'edit',$content['id'])); ?>" class="hoverLink blockLink">
+			<?php echo $html->image('icon_edit.png',array('class' => 'icon')); ?>
+			Edit content
+			</a>
+		</li>
+	
+	</ul>
+	<div class="clear"></div>
+	
+<?php 
+$expandIcons = array('block' => 'icon_minus_tiny.png',
+						'none' => 'icon_plus_tiny.png');
+ ?>
+	
+	<div id="linked-container" class="margin-top">
+		<h3 class="grey left small-padding-top-bottom pointerCursor">
+		<?php echo $html->image($expandIcons[$cookies['linked']],array('class' => 'icon')); ?>
+		Linked (<?php echo $linkedContentsCount; ?>)
+		</h3>
+		<a href="#" id="linked-addnewlink-link" class="hoverLink right small-padding-top-bottom">
+			<?php echo $html->image('icon_link.png',array('class' => 'icon')); ?>
+			Add new link
 		</a>
-		<script src="http://s7.addthis.com/js/250/addthis_widget.js#pub=xa-4b12c6f671039279" type="text/javascript"></script>
-		<!-- AddThis Button END -->
-		
-		<?php echo $form->create('flag',array('action' => 'add', 'class' => 'right')); ?>
-		<?php echo $form->hidden('id', array('value' => $content['id'])); ?>
-		<?php echo $form->hidden('type', array('value' => 'Content')); ?>
-		<a href="#">Flag as inappropriate</a>
-		<?php echo $form->end(); ?>
-		
 		<div class="clear"></div>
+		<ul style="display: <?php echo $cookies['linked']; ?>">
+		<?php if(!empty($linkedContents)): foreach($linkedContents as $content): ?>
+			<li class="border-<?php echo $content['Node']['class']; ?> small-margin-top-bottom">
+				<a href="#" class="bold left"><?php echo (empty($content['User']['username'])) ? 'Anonymous' : $content['User']['username']; ?>: </a>
+				<?php echo $html->image('icon_red_cross.png',array('class' => 'size16 right')); ?>
+				<div class="clear"></div>
+				<a href="<?php echo $html->url(array('action' => 'view',$content['Node']['id'])); ?>" class="hoverLink blockLink"><?php echo $content['Node']['title']; ?></a>
+			</li>
+		<?php endforeach; endif;?>
+			<li><a href="#" class="right hoverLink">Show more</a></li>
+		</ul>
+		
 	</div>
 </div>
+

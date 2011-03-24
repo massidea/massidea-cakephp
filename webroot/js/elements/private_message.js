@@ -67,12 +67,13 @@ function initSendPrivateMessageDialog() {
 $(document).ready(function(){
 	initSendPrivateMessageDialog();
 	
-	$(".send-message > input:button").click(function() {
+	$(".send-message > a").click(function() {
 		var id = $(this).siblings('.send-message-id');
 		var name = $(this).siblings('.send-message-name');
 		$("#PrivateMessageTo").text(name.val());
 		$("#PrivateMessageReceiver").val(id.val());
 		$("#send_private_message").dialog("open");
+		return false;
 	});
 	
 });

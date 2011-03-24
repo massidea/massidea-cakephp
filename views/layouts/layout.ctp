@@ -81,6 +81,7 @@ echo $html->docType('xhtml11');
 					</div>
 				</div>
 			</div>
+			<?php ?>
 			<?php if ($content_class == 'narrow'): ?>
 			<div id="sidebar">
 				<?php 
