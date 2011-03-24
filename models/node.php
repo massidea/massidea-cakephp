@@ -293,7 +293,7 @@ class Node extends AppModel {
 			if ($found[0][0]['found'] == '1')
 				return true;
 
-			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
+			@$res = $this->query("insert into linked_contents(`from`,`to`,`created`) values($parent,$child,now())");
 		} else {
 			$found = $this->query("select count(parent_object) as found from mapping where parent_object = $parent and child_object = $child");
 			if ($found[0][0]['found'] == '1')
