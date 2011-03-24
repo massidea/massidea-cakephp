@@ -21,6 +21,7 @@ class Node extends AppModel {
 	private $_map = array();
 	private $_map_keys = array();
 	private $_join = array();
+	private $_cache = true;
 
 /**
 * Deletes a record or multiple records based on criteria.
@@ -38,8 +39,10 @@ class Node extends AppModel {
 			$bc->deleteAll($id);
 		}
 
-		$hash = $this->_createHash($id);
-                $obj = Cache::delete('Node:'.$hash);
+		if ($this->_cache) {
+			$hash = $this->_createHash($id);
+        	        $obj = Cache::delete('Node:'.$hash);
+		}
 	}
 
 /**
@@ -50,11 +53,13 @@ class Node extends AppModel {
 */
 	function find($id = null, $params = array(), $walk = true) {
 
-		$hash = $this->_createHash($id);
-                $obj = Cache::read('Node:'.$hash);
+		if ($this->_cache) {
+			$hash = $this->_createHash($id);
+        	        $obj = Cache::read('Node:'.$hash);
 
-		if ($obj !== false) {
-			return $obj;
+			if ($obj !== false) {
+				return $obj;
+			}
 		}
 
 		$bc = new Baseclass();
@@ -107,9 +112,15 @@ class Node extends AppModel {
 				$node_id++;
 			}
 
-			$this->writeCache($hash, $nodes);
+			if ($this->_cache)
+				$this->writeCache($hash, $nodes);
+
 			return $nodes;
 			}
+
+			if ($this->_cache)
+				$this->writeCache($hash, $result);
+
 
 			return $result;
 		} else {
@@ -169,19 +180,24 @@ class Node extends AppModel {
 				$node[0]['Node'] = $node[0][$inst];
 				unset($node[0][$inst]);
 
-				$this->writeCache($hash, $node);
+				if ($this->_cache)
+					$this->writeCache($hash, $node);
+
 				return $node;
 			}
 
 		}
 
-		$this->writeCache($hash, $obj);
+		if ($this->_cache)
+			$this->writeCache($hash, $obj);
+
 		return $obj;
 		}
 	}
 
 	function writeCache($hash, $obj) {
-		Cache::write('Node:'.$hash, $obj);
+		if ($this->_cache)
+			Cache::write('Node:'.$hash, $obj);
 	}
 
 
@@ -221,9 +237,11 @@ class Node extends AppModel {
 		$success = $t->save($node_data);
 
 		$id = (string)$node_data['id'];
-                $hash = $this->_createHash($id);
 
-                $obj = Cache::delete('Node:'.$hash);
+		if ($this->_cache) {
+                	$hash = $this->_createHash($id);
+                	$obj = Cache::delete('Node:'.$hash);
+		}
 
 		return $success;
 	}
@@ -275,7 +293,7 @@ class Node extends AppModel {
 			if ($found[0][0]['found'] == '1')
 				return true;
 
-			@$res = $this->query("insert into linked_contents(`from`,`to`) values($parent,$child)");
+			@$res = $this->query("insert into linked_contents(`from`,`to`,`created`) values($parent,$child,now())");
 		} else {
 			$found = $this->query("select count(parent_object) as found from mapping where parent_object = $parent and child_object = $child");
 			if ($found[0][0]['found'] == '1')
@@ -284,11 +302,14 @@ class Node extends AppModel {
 			$res = @$this->query("insert into mapping(parent_object,child_object,hardlink) values($parent,$child,$hardlink)");
 		}
 
-                $phash = $this->_createHash($parent);
-                $chash = $this->_createHash($child);
 
-                Cache::delete('Node:'.$phash);
-                Cache::delete('Node:'.$chash);
+		if ($this->_cache) {
+	                $phash = $this->_createHash($parent);
+	                $chash = $this->_createHash($child);
+
+                	Cache::delete('Node:'.$phash);
+                	Cache::delete('Node:'.$chash);
+		}
 
 		if ($res)
 			return $res;
@@ -312,11 +333,13 @@ class Node extends AppModel {
 			@$res = $this->query("delete from mapping where parent_object = $parent and child_object = $child");
 		}
 
-		$phash = $this->_createHash($parent);
-                $chash = $this->_createHash($child);
+		if ($this->_cache) {
+			$phash = $this->_createHash($parent);
+        	        $chash = $this->_createHash($child);
 
-                Cache::delete('Node:'.$phash);
-                Cache::delete('Node:'.$chash);
+                	Cache::delete('Node:'.$phash);
+                	Cache::delete('Node:'.$chash);
+		}
 
 		return $res;
 	}
@@ -337,6 +360,9 @@ class Node extends AppModel {
 		if($name == 'join') {
 			foreach ($value as $v)
 				$this->_join[] = $v;
+		}
+		if($name == 'cache') {
+			$this->_cache = $value;
 		}
 	}
 
@@ -361,6 +387,7 @@ class Node extends AppModel {
 
 		return $inst;
 	}
+
 }
 
 ?>
