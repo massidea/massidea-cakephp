@@ -30,34 +30,6 @@ function searchPossibleLinks(formData) {
 	return false;
 }
 
-function searchFromData(searchquery,data) {
-	var returns = [];
-	var options = $("#LinkSearchOptionsViewForm > input:checkbox");
-	$.each(data,function(){
-		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
-			if(this['class'] == 'challenge' && options[0].checked) {
-				returns.push(this);
-			} else if(this['class'] == 'idea' && options[1].checked) {
-				returns.push(this);
-			} else if(this['class'] == 'vision' && options[2].checked) {
-				returns.push(this);
-			}
-		}
-	});
-	return returns;
-}
-
-function getLinkedOutput(data) {
-	var results = searchFromData($("#ContentsLinkForm > div.input > input").val(),data);
-	var thisContentId = $("#ContentsLinkForm > #ContentId").val();
-	if(results.length === 0) {
-		output = '<li>No contents found</li>';
-	} else {
-		var output = renderResults(thisContentId,results);
-	}
-	return output;
-}
-
 function sendDataToLinkList(data) {
 	
 	var ul = $("#add_new_link > .add_new_link_list > ul");
@@ -77,23 +49,61 @@ function sendDataToLinkList(data) {
 	}
 }
 
-function addContentToList(data) {
-	
+function getLinkedOutput(data) {
+	var results = searchFromData($("#ContentsLinkForm > div.input > input").val(),data);
+	var thisContentId = $("#ContentsLinkForm > #ContentId").val();
+	if(results.length === 0) {
+		output = '<li>No contents found</li>';
+	} else {
+		var output = renderResults(thisContentId,results);
+	}
+	return output;
 }
 
-function linkContents(formData) {
+function searchFromData(searchquery,data) {
+	var returns = [];
+	var options = $("#LinkSearchOptionsViewForm > input:checkbox");
+	$.each(data,function(){
+		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
+			if(this['class'] == 'challenge' && options[0].checked) {
+				returns.push(this);
+			} else if(this['class'] == 'idea' && options[1].checked) {
+				returns.push(this);
+			} else if(this['class'] == 'vision' && options[2].checked) {
+				returns.push(this);
+			}
+		}
+	});
+	return returns;
+}
 
+
+
+function linkContents(link,undo) {
+	var amountContainer = $("#linked-container > h3 > span");
+	var toId = link.id.split('-');
+	var linkData = {from:	$("#ContentsLinkForm > #ContentId").val(),
+					to:		toId[1]
+					};
+	$("#add_new_link > .add_new_link_list > ul").html(loading);
+	
 	$.ajax({ 
 		type: 'POST',
-		data: formData,
-		url: jsMeta.baseUrl+"/linked_contents/link/",
+		data: linkData,
+		url: jsMeta.baseUrl+"/linked_contents/add/",
 		success: function(data) {
-			if(data) {
+			if(data == 1) {
 				resetFlash();
 				setFlash("Contents linked together successfully",'successfull');
 				showFlash();
-				$("#ContentsLinkForm").submit();
-				addContentToList(data);
+				if(undo) {
+					$(link).parent().removeClass('link_deleted');
+					$(link).attr('src',jsMeta.baseUrl+'/img/icon_red_cross.png');
+					$(amountContainer).text(parseInt($(amountContainer).text())+1);
+				} else {	
+					$("#ContentsLinkForm").submit();
+					addContentToList(link);
+				}
 				return true;
 			} else {
 				return false;
@@ -102,23 +112,29 @@ function linkContents(formData) {
 	});
 }
 
-function flagContent(formData) {
-	$.ajax({ 
-		type: 'POST',
-		data: formData,
-		url: jsMeta.baseUrl+"/flags/add/",
-		success: function(data) {
-			if(data == "1") {
-				resetFlash();
-				setFlash("Content was flagged successfully",'successfull');
-				showFlash();
-				return true;
-			} else {
-				return false;
-			}
-		}
-	});
+function addContentToList(link) {
+	var container = $("#linked-container > ul");
+	var amountContainer = $("#linked-container > h3 > span");
+	var amount = $(amountContainer).text();
+	
+	var username = 'Testiukko'; //When users are ready this information should be logged users' username
+	var contentId = link.id.split('-')[1];
+	var title = link.text;
+	var contentClass = $(link).parent()[0].classList[0].split('-')[1];
+
+	var li = '<li class="border-'+contentClass+' small-margin-top-bottom">\
+			<a class="bold left" href="#">'+username+': </a>\
+			<img id="delete_linked_content-'+contentId+'" alt="" class="size16 right" src="/~jari/massidea/img/icon_red_cross.png">\
+			<div class="clear"></div>\
+			<a class="hoverLink blockLink" href="/~jari/massidea/contents/view/'+contentId+'">'+title+'</a>\
+		</li>';
+	$(li).prependTo(container).hide().slideDown().effect('highlight',{},1000);
+	$(amountContainer).text(parseInt(amount)+1);
+
+	return;
 }
+
+
 
 function renderResults(contentId,data) {
 	var output = '';
@@ -128,14 +144,39 @@ function renderResults(contentId,data) {
 			<a class="left" href='+jsMeta.baseUrl+'/contents/view/'+this.id+'>\
 				<img alt="" src="'+jsMeta.baseUrl+'/img/icon_eye.png">\
 			</a>\
-			<a class="left linked-title hoverLink" href="#">\
-				<input type="hidden" class="content_id_link_from" value="'+contentId+'">\
-				<input type="hidden" class="content_id_link_to" value="'+this.id+'">'+this.title+'\
-			</a>\
-		<div class="clear"></div>\
+			<a id="link_to_content-'+this.id+'" class="left linked-title hoverLink" href="#">'+this.title+'</a>\
+			<div class="clear"></div>\
 		</li>';
 	});
 	return output;
+}
+
+function deleteContentLink(link) {
+	
+	var selectedContentId = link.id.split('-')[1];
+	var thisContentId = $("#ContentsLinkForm > #ContentId").val();
+	
+	var formData = {from: thisContentId, to: selectedContentId};
+	var amountContainer = $("#linked-container > h3 > span");
+	
+	$.ajax({ 
+		type: 'POST',
+		data: formData,
+		url: jsMeta.baseUrl+"/linked_contents/delete/",
+		success: function(data) {
+			if(data == 1) {
+				resetFlash();
+				setFlash("Content link deleted successfully",'successfull');
+				showFlash();
+				$(amountContainer).text(parseInt($(amountContainer).text())-1);
+				$(link).parent().addClass('link_deleted');
+				$(link).attr('src',jsMeta.baseUrl+'/img/icon_undo.png');
+				return true;
+			} else {
+				return false;
+			}
+		}
+	});
 }
 
 $(document).ready(function(){
@@ -143,7 +184,6 @@ $(document).ready(function(){
 	$("#linked-container > h3").click(function(){
 		expandCollapse('linked',$(this),$("#linked-container > ul"));
 	});
-	
 	
 	$("#add_new_link").dialog({
 		closeOnEscape: true,
@@ -166,6 +206,14 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#linked-container > ul > li > img").click(function(){
+		if($(this).parent().hasClass('link_deleted')) {
+			linkContents(this,true);
+		} else {
+			deleteContentLink(this);
+		}
+		
+	});
 	
 	$("#ContentsLinkForm").submit(function(){
 		searchPossibleLinks($(this).serializeArray());
@@ -173,13 +221,7 @@ $(document).ready(function(){
 	});
 	
 	$(".add_new_link_list > ul > li > .linked-title").live('click',function(){
-		
-		var linkData = {from:	$(this).children('.content_id_link_from').val(),
-						to:		$(this).children('.content_id_link_to').val()
-						};
-		
-		$("#add_new_link > .add_new_link_list > ul").html(loading);
-		linkContents(linkData);
+		linkContents(this);
 		return false;
 	});
 	
@@ -194,11 +236,23 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$("#content-view-readers-list").infiniteCarousel({
+		inView: 6,
+		advance: 5,
+		imagePath: jsMeta.baseUrl+'/js/infinitecarousel/images/',
+		textholderHeight: .25,
+		padding: '8px'
+
+	});
+	
 	$("#related-info").tabs({
+		fx: { height: 'toggle', duration: 'fast' },
 		selected: -1,
 		collapsible: true
 
 	});
+	
+	
 
 	
 });

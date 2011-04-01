@@ -235,10 +235,7 @@ class ContentsController extends AppController {
 		
 		$linkedContents = $this->LinkedContent->find('all',array(
 													'conditions' => array('LinkedContent.from' => $contentId),
-													'order' => array('LinkedContent.created DESC'),
-													'limit' => 10,
-													'page' => 1,
-													'offset' => 0
+													'order' => array('LinkedContent.created DESC')
 		));
 		
 		$linkedContentsIds = array();

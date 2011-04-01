@@ -99,7 +99,7 @@ echo $html->docType('xhtml11');
 			</div>			
 		</div>
 	</div>
-	<div id="jsmetabox" style="display:none;">
+	<div id="jsmetabox">
     	<?php echo $Jsmeta->output(); ?>
     </div>
 </body>

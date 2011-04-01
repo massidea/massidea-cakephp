@@ -60,7 +60,6 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	
 	public function getContentData() {
 		$node = $this->_contentData;
-		var_dump(1);
 		$node['data'] = $this->_contentSpecificData;
 		$content = $this->DataHandler->parseToNodes(array($node),$this->__type);
 		return $content;
@@ -119,8 +118,8 @@ class Content_Component extends object { //The _ is added because we cant use wo
 				$this->addContentCompanyForEdit($child['name']);
 			}
 		}
-		$this->_contentTags = implode(', ',$this->_contentTags);
-		$this->_contentCompanies = implode(', ',$this->_contentCompanies);
+		$this->_contentTags = implode(',',$this->_contentTags);
+		$this->_contentCompanies = implode(',',$this->_contentCompanies);
 		return $this;
 	}
 	

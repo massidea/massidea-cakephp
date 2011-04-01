@@ -73,23 +73,36 @@ class LinkedContentsController extends AppController {
 	}
 	
 	/**
-	 * link action - method
+	 * add action - method
 	 * Links two things together
-	 * TODO: Data validation
+	 * TODO: Data validation and check that user who tries to add the link has privileges
 	 * @author Jari Korpela
 	 */
-	public function link() {
+	public function add() {
 		if ($this->RequestHandler->isAjax()) {
 			if (!empty($this->params['form'])) {
 				$to = $this->params['form']['to'];
 				$from = $this->params['form']['from'];
 				$this->Nodes->link($from,$to,false);
 				
-				$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
-				$this->Nodes->join = array($users);
-				$linkedContent = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $to),array(),true);
-				
-				echo json_encode($linkedContent[0]);
+				echo 1;
+			}
+		}
+	}
+	
+	/**
+	 * delete action - method
+	 * Deletes a link between Ids
+	 * TODO: Data validation and check that user who tries to delete the link has privileges
+	 * @author Jari Korpela
+	 */
+	public function delete() {
+		if ($this->RequestHandler->isAjax()) {
+			if (!empty($this->params['form'])) {
+				$to = $this->params['form']['to'];
+				$from = $this->params['form']['from'];
+				$this->Nodes->removeLink($from,$to);
+				echo 1;
 			}
 		}
 	}

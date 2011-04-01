@@ -28,7 +28,7 @@
  * GREY		= #CCCCCC
  */
  
-#contents #view-page .avatar { width: 50px; height: 50px; }
+#contents #view-page .avatar { width: 100px; height: 100px; }
 
 
 #contents #view-page #linked { font-size: 0.85em; }
@@ -52,7 +52,7 @@
 #add_new_link #add_new_link_buttons { width: 360px; margin-top: 3px; }
 #add_new_link #add_new_link_buttons a { display: block; float: right; padding-left: 5px; color: #0089CF; }
 #add_new_link .add_new_link_list { float: left; background-color: #fff; border: 1px solid #AAA; margin: 10px 5px; }
-#add_new_link .add_new_link_list ul { overflow: auto; height: 180px; width: 620px; }
+#add_new_link .add_new_link_list ul { overflow: auto; height: 180px; width: 618px; }
 #add_new_link .add_new_link_list ul img { padding-right: 5px; }
 #add_new_link .add_new_link_list ul li { margin: 5px; padding-left: 5px; width: 95%; }
 #add_new_link .add_new_link_list ul li .linked-title { width: 95%; }
@@ -63,3 +63,7 @@
 #contents #view-page #viewtop { width: 195px; }
 
 #contents #view-page #related-info { font-size: 0.85em; margin-top: 5px; }
+
+#contents #view-page .link_deleted { background-color: #CCCCCC; }
+#contents #view-page .link_deleted a { color: #000; }
+

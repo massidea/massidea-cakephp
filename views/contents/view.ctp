@@ -1,15 +1,18 @@
-<?php echo $this->Html->script(strtolower($this->name).DS.$this->action,array('inline' => false)); ?>
-<?php echo $this->element('global'.DS.'private_message', array('cache' => false));  ?>
-
-<?php echo $this->element('contents'.DS.'add_new_link_to_content', array('cache' => false));  ?>
+<?php 
+echo $this->Html->script('infinitecarousel'.DS.'jquery.infinitecarousel2.min',array('inline' => false));
+echo $this->Html->script(strtolower($this->name).DS.$this->action,array('inline' => false));
+echo $this->element('global'.DS.'private_message', array('cache' => false)); 
+echo $this->element('global'.DS.'flag', array('cache' => false));
+echo $this->element('contents'.DS.'add_new_link_to_content', array('cache' => false));
+?>
 
 <div id="related-info">
 		<ul>
 			<li><a href="#related-author">Hihhuli (241)</a></li>
+			<li><a href="#related-readers">Readers</a></li>
 			<li><a href="#related-tags">Tag related contents</a></li>
 			<li><a href="#related-related_companies">Company related contents</a></li>
 			<li><a href="#related-campaigns">Campaigns</a></li>
-			<li><a href="#related-readers">Readers</a></li>
 			<li><a href="#related-statistics">Statistics</a></li>
 		</ul>
 		<div id="related-author">
@@ -17,6 +20,11 @@
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
+		</div>
+		<div id="related-readers">
+
+			<?php echo $this->element('contents'.DS.'content_related_readers', array('cache' => false));  ?>
+	
 		</div>
 		<div id="related-tags">
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
@@ -30,17 +38,16 @@
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
 			<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
 		</div>
-		<div id="#related-campaigns"></div>
-		<div id="related-readers">
-			<?php echo $this->element('contents'.DS.'content_related_readers', array('cache' => false));  ?>
-		</div>
-			
+		
+		<div id="related-campaigns"></div>
+		
 		<div id="related-statistics"></div>
 	</div>
 
 <div id="content-page-head" class="left">
 	<div class="border-<?php echo $content['class']; ?> margin-top">
 		<h2><?php echo $content['title']; ?></h2>
+		<span class="grey">Published: <?php echo $content['created']; ?>, Last updated: <?php echo $content['modified']; ?></span>
 		<p class="italic magnifyFont"><?php echo $content['lead']; ?></p>
 	</div>
 	<p>

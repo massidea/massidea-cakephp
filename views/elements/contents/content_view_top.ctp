@@ -1,5 +1,4 @@
 <div id="viewtop" class="margin-top right small-padding-top-bottom border-left">
-	<p>Added: <?php echo $content['created']; ?></p>
 	<!-- AddThis Button BEGIN -->
 	<a href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4b12c6f671039279" class="addthis_button_expanded small-padding-left-right" title="View more services">
 		<img class="icon" height="16" width="125" style="border: 0pt none;" alt="Bookmark and Share" src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif">
@@ -49,15 +48,9 @@
 			Send private message
 			</a>
 		</li>
-		<li class="left blockLink">
-			<?php echo $form->create('flag',array('action' => 'add')); ?>
-			<?php echo $form->hidden('id', array('value' => $content['id'])); ?>
-			<?php echo $form->hidden('type', array('value' => 'Content')); ?>
-			<a href="#" class="hoverLink blockLink">
+		<li class="flag-page left blockLink">
 			<?php echo $html->image('icon_flag.png',array('class' => 'icon')); ?>
-			Flag as inappropriate
-			</a>
-			<?php echo $form->end(); ?>
+			<a href="#">Flag as inappropriate</a>
 		</li>
 		
 		<li>
@@ -70,16 +63,17 @@
 	
 	</ul>
 	<div class="clear"></div>
+	<hr class="margin-top grey" />
 	
 <?php 
 $expandIcons = array('block' => 'icon_minus_tiny.png',
 						'none' => 'icon_plus_tiny.png');
  ?>
 	
-	<div id="linked-container" class="margin-top">
+	<div id="linked-container" >
 		<h3 class="grey left small-padding-top-bottom pointerCursor">
 		<?php echo $html->image($expandIcons[$cookies['linked']],array('class' => 'icon')); ?>
-		Linked (<?php echo $linkedContentsCount; ?>)
+		Linked (<span><?php echo $linkedContentsCount; ?></span>)
 		</h3>
 		<a href="#" id="linked-addnewlink-link" class="hoverLink right small-padding-top-bottom">
 			<?php echo $html->image('icon_link.png',array('class' => 'icon')); ?>
@@ -87,15 +81,15 @@ $expandIcons = array('block' => 'icon_minus_tiny.png',
 		</a>
 		<div class="clear"></div>
 		<ul style="display: <?php echo $cookies['linked']; ?>">
-		<?php if(!empty($linkedContents)): foreach($linkedContents as $content): ?>
+		<?php if(!empty($linkedContents) && $linkedContentsCount > 0): foreach($linkedContents as $content): ?>
 			<li class="border-<?php echo $content['Node']['class']; ?> small-margin-top-bottom">
 				<a href="#" class="bold left"><?php echo (empty($content['User']['username'])) ? 'Anonymous' : $content['User']['username']; ?>: </a>
-				<?php echo $html->image('icon_red_cross.png',array('class' => 'size16 right')); ?>
+				<?php echo $html->image('icon_red_cross.png',array('class' => 'size16 right pointerCursor', 'id' => "delete_linked_content-".$content['Node']['id'])); ?>
 				<div class="clear"></div>
 				<a href="<?php echo $html->url(array('action' => 'view',$content['Node']['id'])); ?>" class="hoverLink blockLink"><?php echo $content['Node']['title']; ?></a>
 			</li>
 		<?php endforeach; endif;?>
-			<li><a href="#" class="right hoverLink">Show more</a></li>
+			<?php /* <li><a href="#" class="right hoverLink">Show more</a></li> */ ?>
 		</ul>
 		
 	</div>

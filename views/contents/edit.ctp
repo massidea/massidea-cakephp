@@ -79,7 +79,7 @@ $afterClear = '</div><div class="clear">';
 <?php echo $form->input('language_id', array('type' => 'select',
 											 'selected' => "en",
 											 'label' => 'Select language',
-											 'options' => $language_list, )); ?>
+											 'options' => $language_list )); ?>
 
 </div>
 <div class="clear"></div>

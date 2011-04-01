@@ -30,7 +30,7 @@ var loading = "";
  */
 function showFlash() {
 	if(!$("#flash").is(':empty')) {
-		$("#flash:hidden").slideDown(500).delay(3000).slideUp(1000,function(){ $("#flash").empty(); });
+		$("#flash:hidden").slideDown(500).delay(5000).slideUp(1000,function(){ $("#flash").empty(); });
 	}
 }
 
