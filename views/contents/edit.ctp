@@ -22,34 +22,30 @@ $vision = '(What is the vision of the future and why it is important)';
 $body = '';
 ?>
 
+<div id="form_content_realcontent">
 <?php if($content_type === 'challenge'): $body = $challenge; ?>
 
-<div id="form_content_realcontent">
 	<h2 class="light-gray border-problem">Share your challenge</h2>
 	<p>Challenge is personal, business or social related problem, need, situation or observation. It describes the current status of affairs and recognizes the need to resolve the matter. </p>
 	<p>Write to a person who is not familiar with the topic.</p>
 	<p>Keep your focus on challenge and not related solutions or visions. You can publish those one a separate document and link them later on to this challenge.</p>
-</div>
 
 <?php elseif($content_type === 'idea'): $body = $idea; ?>
 
-<div style="display: block;" id="form_content_realcontent">
 	<h2 class="light-gray border-idea">Share your new idea</h2>
 	<p>Ideas are solutions to today’s challenges and visions of the future related opportunities and threats. Idea can suggest small incremental improvement or radical revolutionary change in thinking, products, processes or organization. </p>
 	<p>Write to a person who is not familiar with the topic. </p>
 	<p>Keep your focus on idea and not related challenges or visions. You can publish those on a separate document and link them later on to this idea.</p>
-</div>
 
 <?php elseif($content_type === 'vision'): $body = $vision; ?>
 
-<div style="display: block;" id="form_content_realcontent">
 	<h2 class="light-gray border-finfo">Share your vision of the future</h2>
 	<p>Vision concern the long-term future which is usually at least 10 years away. It can be future scenario, trend or anti-trend, which is most likely to be realized. It can also describe an alternative unlikely future based on seed of change or weak signal, which might significantly change all our life if realized.</p>
 	<p>Write to a person who is not familiar with the topic.</p>
 	<p>Keep your focus on vision and not related challenges or ideas. You can publish those on a separate document and link them later on to this vision.</p>
-</div>
 
 <?php endif; ?>
+</div>
 
 
 <?php 

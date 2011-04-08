@@ -26,19 +26,6 @@ var jsMeta = "";
 var loading = "";
 
 /**
- * If flash message is set up a, it is displayed and then removed and emptied
- */
-function showFlash() {
-	if(!$("#flash").is(':empty')) {
-		$("#flash:hidden").slideDown(500).delay(5000).slideUp(1000,function(){ $("#flash").empty(); });
-	}
-}
-
-function resetFlash() {
-	$("#flash").clearQueue().hide().empty();
-}
-
-/**
  * 
  * @param 	text	Text to be set in flash message
  * @param	style	Sets flash with different style
@@ -57,6 +44,24 @@ function setFlash(text, style) {
 }
 
 /**
+ * If flash message is set up a, it is displayed and then removed and emptied
+ */
+function showFlash() {
+	if(!$("#flash").is(':empty')) {
+		$("#flash:hidden").slideDown(500).delay(5000).slideUp(1000,function(){ $("#flash").empty(); });
+	}
+}
+
+/**
+ * resetFlash stops effects, jumps to the end of effect, clears command queue, hides and empties the flash message. 
+ * 
+ */
+function resetFlash() {
+	$("#flash").stop(true,true).hide().empty();
+}
+
+
+/**
  * saveToCookie
  * Adds cookie via ajax request
  * @param 	page		Page to add cookie
@@ -64,22 +69,19 @@ function setFlash(text, style) {
  * @param 	type		Cookies' type
  * @param 	value		Cookies' value
  * @param 	successMsg	Not required. Shows flash message with text successMsg if defined
- * @return 	boolean		True If success, else false
  */
 function saveToCookie(page, event, type, value, successMsg) {
 	data = {'page':page,'event':event,'type':type,'value':value};
 	$.ajax({ 
 		type: 'POST',
 		data: data,
-		url: jsMeta.baseUrl+"/cookies/setcookie/",
+		url: jsMeta.baseUrl+"/cookies/add/",
 		success: function(data) {
 			if(successMsg && setFlash(successMsg)) {
 				showFlash();
 			}
-			return true;
 		}
 	});
-	return false;
 }
 
 /**
@@ -97,16 +99,17 @@ function countCharactersLeft(o,limit) {
 
 /**
  * eventAnimate
- * Function is used to show user that he activated some event. Background returns back to white.
+ * Function is used to show user that he activated some event. Background returns back to original.
  * @param jQuery object o	Object to put the animation to	
  * @param string color		The color to use
  * @return null
  */
 function eventAnimate(o,color) {
+	backColor = o.css('backgroundColor');
 	if(!color) { 
 		color = 'red';
 	}
-	$(o).animate({backgroundColor: color}, 1).animate({backgroundColor: "#ffffff"}, 1400);
+	o.animate({backgroundColor: color}, 1).animate({backgroundColor: backColor}, 1400);
 }
 
 function hexFromRGB(r, g, b) {
@@ -115,17 +118,15 @@ function hexFromRGB(r, g, b) {
 		g.toString( 16 ),
 		b.toString( 16 )
 	];
-	$.each( hex, function( nr, val ) {
-		if ( val.length === 1 ) {
+	$.each(hex, function(nr,val) {
+		if (val.length === 1) {
 			hex[ nr ] = "0" + val;
 		}
 	});
-	return hex.join( "" ).toUpperCase();
+	return hex.join("").toUpperCase();
 }
 
 $(document).ready(function(){
-	
-	showFlash();
 	
 	/**	
 	 * jsMeta box contains information about:
@@ -255,7 +256,7 @@ $(document).ready(function(){
 	 * Clicking any login link in anywhere site:
 	 * Opens the login_box dialog and focuses to the username field.
 	 */
-	$("a#login_link").each(function() {
+	$("a.loginLink").each(function() {
 		$(this).click(function (event) {
 			event.preventDefault();
 			$("#login_box").dialog( "option", "title", 'Login to Massidea' );
@@ -292,7 +293,7 @@ $(document).ready(function(){
 	$("#loginlink").hover(
 			 function(){
 				 var optPos = $("#loginlink").position().left;
-				 $("#user_options").clearQueue().css("left",optPos).show();
+				 $("#user_options").stop(true,true).css("left",optPos).show();
 				 },
 			 function(){$("#user_options").delay(1000).slideUp();}
 	);
@@ -303,7 +304,7 @@ $(document).ready(function(){
 	 * Out: Closes user options menu after 1000ms
 	 */
 	$("#user_options").hover(
-			function(){$("#user_options").clearQueue()},
+			function(){$("#user_options").stop(true,true)},
 			function(){$("#user_options").delay(1000).slideUp();}
 	);
 	
@@ -316,6 +317,8 @@ $(document).ready(function(){
 			window.open(value);
 		}
 	});
+	
+	showFlash();
 
 /**		 
 	 $("#notification_close").live("mouseover mouseout click", function(event){ 

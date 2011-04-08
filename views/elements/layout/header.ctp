@@ -5,7 +5,7 @@
 
 <div id="search">
 	<div id="search-top">
-		<a href="#" id="loginlink">Login</a> | <a href="#">Sign up</a>
+		<a href="#" id="loginlink" class="loginLink">Login</a> | <a href="#">Sign up</a>
 	</div>
 	<?php echo $this->element('layout'.DS.'forms'.DS.'globalsearch', array('cache' => true));  ?>
 	<div class="clear"></div>

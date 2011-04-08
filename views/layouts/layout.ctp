@@ -1,7 +1,5 @@
 <?php 
-//print_r($this);die;
 $layout = 'layout'.DS; //Used for element folder structures
-
 echo $html->docType('xhtml11'); 
 ?>
 
@@ -23,7 +21,7 @@ echo $html->docType('xhtml11');
 	),$css_for_layout); //Adds controller.css and its action.css files to CSS styles if they exists
 	
 	//Sidebar css file added if we have a sidebar
-	if ($content_class == 'narrow') {
+	if ($content_class == 'contentWithSidebar' || $content_class == 'contentWithTopAndSidebar') {
 		$cssFiles[] = 'sidebar'; //Sidebar CSS file
 	}
 	//Here we add additional CSS files from plugins etc.
@@ -72,7 +70,14 @@ echo $html->docType('xhtml11');
 			 $controller_id = strtolower($this->name);
 			 $action_id		= $this->action . '-page';
 			 $sidebar		= strtolower($this->name) . DS . 'sidebars' . DS. $this->action;
+			 $top			= strtolower($this->name) . DS . 'tops' . DS. $this->action;
 			 ?>
+			 
+			<?php if($content_class == 'contentWithTopAndSidebar'): ?>
+			<div id="content-top">
+				<?php echo $this->element($top, array('cache' => false)); ?>
+			</div>
+			<?php endif; ?>
 			
 			<div id="content">
 				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
@@ -82,7 +87,7 @@ echo $html->docType('xhtml11');
 				</div>
 			</div>
 			<?php ?>
-			<?php if ($content_class == 'narrow'): ?>
+			<?php if ($content_class == 'contentWithSidebar' || $content_class == 'contentWithTopAndSidebar'): ?>
 			<div id="sidebar">
 				<?php 
 				/**

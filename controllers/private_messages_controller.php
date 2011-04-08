@@ -48,6 +48,8 @@ class PrivateMessagesController extends AppController {
 					die;
 				}
             }
+		} else {
+			$this->redirect('/');
 		}
 	}
 	

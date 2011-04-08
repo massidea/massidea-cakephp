@@ -26,14 +26,13 @@
  */
 
 //App::import('i18n'); Needed for translations
-App::import('Vendor', 'Jsmeta', array('file' => 'jsmeta.php'));
+App::import('Lib', 'Jsmeta', array('file' => 'jsmeta.php'));
 
 class AppController extends Controller {
 	public $layout = 'layout';
 	public $helpers = array('Session','Html','Form','Cache');
 	public $components = array('Session');
-	var $uses = array('Baseclass', 'Contents', 'Groups', 'Files', 'Tags', 'RelatedCompanies', 'LinkedContents');
-	var $Nodes;
+	public $Nodes;
 	
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
@@ -41,13 +40,12 @@ class AppController extends Controller {
 		$this->Nodes->map = array('RelatedCompany' => 'RelatedCompanies');
 		
 		/**
-		 * Automated class load for content
+		 * Setting content class
 		 * 
-		 * content_class is used to define how the page is viewed. Default narrow.
-		 * 'narrow' class leaves space for sidebar while 'wide' class does not.
+		 * content_class is used to define how the page is viewed. Default contentWithSidebar.
 		 * Should be overridden in controller if wished to use wide class.
 		 */
-		$this->set('content_class','narrow');
+		$this->set('content_class','contentWithSidebar');
 		//End of automated class load for content
 	}
 	
@@ -55,7 +53,7 @@ class AppController extends Controller {
 		/**
 		 * Automated CSS load
 		 * 
-		 * $cssFiles array is used to automatically load controller and action specific CSS files for layout if some exist.
+		 * $cssFiles array is used to automatically load controller and action specific CSS files for layout if either one exists.
 		 * 
 		 * We search for controller specific CSS file from: css/controller/controller.css
 		 * Then we search for action specific CSS file from: css/controller/action.css
@@ -74,7 +72,7 @@ class AppController extends Controller {
 				
 		/**
 		 * Jsmeta - Inject JSON encoded PHP variables for Javascript access (hidden metabox in layout)
-		 * Uses jsmeta.php in vendors
+		 * Uses jsmeta.php in libs
 		 */
 		$Jsmeta = new Jsmeta();
 		$this->set('Jsmeta',$Jsmeta->append("baseUrl",$this->base));

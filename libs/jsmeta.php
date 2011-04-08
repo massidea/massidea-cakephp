@@ -20,7 +20,7 @@
 /**
  *  Jsmeta - class
  *
- *  @package    vendors
+ *  @package    libs
  *  @author     Jaakko Paukamainen (ZEND version), Jari Korpela (Imported from ZEND to CakePHP)
  *  @copyright  2010 Jaakko Paukamainen
  *  @license    GPL v2

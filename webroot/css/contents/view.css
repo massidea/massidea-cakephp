@@ -30,21 +30,12 @@
  
 #contents #view-page .avatar { width: 100px; height: 100px; }
 
-
 #contents #view-page #linked { font-size: 0.85em; }
 #contents #view-page #linked #linked-container { height: 200px; overflow: auto; }  
 #contents #view-page #linked #linked-challenges { border-bottom: 1px solid #CCCCCC; color: #D21034; padding: 8px; }
 #contents #view-page #linked #linked-visions { color: #FFC726; padding: 8px; }
 #contents #view-page #linked #linked-ideas { border-bottom: 1px solid #CCCCCC; color: #4B9B07; padding: 8px; }
 #contents #view-page #linked #linked-challenges a { color: #0089CF; }
-
-#contents #view-page #related-overview .giantFont { font-size: 2.5em; font-weight: bold; padding: 0px 10px; }
-#contents #view-page #related-overview #overview_rating,
-#contents #view-page #related-overview #overview_viewed { width: 210px; }
-#contents #view-page #related-overview #overview_bottom { margin-top: 15px; }
-#contents #view-page #related-overview #overview_top { margin-top: 10px; }
-#contents #view-page #related-overview #give_gift_button,
-#contents #view-page #related-overview #add_to_favourites_button { width: 180px; }
 
 #add_new_link { padding: 0px 0px 0px 0px; display: none; background-color: #eee; }
 #add_new_link #ContentsLinkForm { margin-top: 5px; margin-left: 5px; }
@@ -59,10 +50,7 @@
 
 #add_new_link .box { background-color: #fff; border: 1px solid #AAA; margin: 5px 5px; padding: 5px;}
 
-#contents #view-page #content-page-head { width: 510px; }
-#contents #view-page #viewtop { width: 195px; }
-
-#contents #view-page #related-info { font-size: 0.85em; margin-top: 5px; }
+#content-top #related-info { font-size: 0.85em; }
 
 #contents #view-page .link_deleted { background-color: #CCCCCC; }
 #contents #view-page .link_deleted a { color: #000; }

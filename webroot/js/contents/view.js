@@ -124,9 +124,9 @@ function addContentToList(link) {
 
 	var li = '<li class="border-'+contentClass+' small-margin-top-bottom">\
 			<a class="bold left" href="#">'+username+': </a>\
-			<img id="delete_linked_content-'+contentId+'" alt="" class="size16 right" src="/~jari/massidea/img/icon_red_cross.png">\
+			<img id="delete_linked_content-'+contentId+'" alt="" class="size16 right" src="'+jsMeta.baseUrl+'/img/icon_red_cross.png">\
 			<div class="clear"></div>\
-			<a class="hoverLink blockLink" href="/~jari/massidea/contents/view/'+contentId+'">'+title+'</a>\
+			<a class="hoverLink blockLink" href="'+jsMeta.baseUrl+'/contents/view/'+contentId+'">'+title+'</a>\
 		</li>';
 	$(li).prependTo(container).hide().slideDown().effect('highlight',{},1000);
 	$(amountContainer).text(parseInt(amount)+1);
@@ -179,11 +179,8 @@ function deleteContentLink(link) {
 	});
 }
 
-$(document).ready(function(){
-		
-	$("#linked-container > h3").click(function(){
-		expandCollapse('linked',$(this),$("#linked-container > ul"));
-	});
+function contentLinkInit() {
+	var linkedsFetched = false;
 	
 	$("#add_new_link").dialog({
 		closeOnEscape: true,
@@ -196,7 +193,6 @@ $(document).ready(function(){
 		autoOpen: false
 	});
 	
-	var linkedsFetched = false;
 	$("#linked-addnewlink-link").click(function(){
 		$("#add_new_link").dialog("open");
 		if(!linkedsFetched) {
@@ -225,6 +221,15 @@ $(document).ready(function(){
 		return false;
 	});
 	
+}
+
+$(document).ready(function(){
+		
+	$("#linked-container > h3").click(function(){
+		expandCollapse('linked',$(this),$("#linked-container > ul"));
+	});
+
+	contentLinkInit();
 	
 	$("#flagAddForm > a").click(function(){
 		$("#flagAddForm").submit();
@@ -251,8 +256,6 @@ $(document).ready(function(){
 		collapsible: true
 
 	});
-	
-	
 
 	
 });

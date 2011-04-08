@@ -29,7 +29,7 @@
 class ContentsController extends AppController {
 	
 	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
-	public $uses = array('Language','LinkedContent');
+	public $uses = array('Contents','Language','LinkedContent','Tags', 'RelatedCompanies');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();		
@@ -204,7 +204,7 @@ class ContentsController extends AppController {
 		if($contentId == -1) {
 			$this->redirect('/');
 		}
-		$this->set('content_class','wide');		
+		$this->set('content_class','contentWithTopAndSidebar');		
 		
 		$users = array('table' => 'users', 'alias' => 'User', 'type' => 'left', 'conditions' => array("User.id = Privileges.creator"));
 		$lang = array('table' => 'languages', 'alias' => 'Language', 'type' => 'left', 'conditions' => array("Contents.language_id = Language.id"));

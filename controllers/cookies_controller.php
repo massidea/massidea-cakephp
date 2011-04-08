@@ -100,7 +100,7 @@ class CookiesController extends AppController {
 
 	
 	/**
-	 *  setcookie
+	 *  Add
 	 *  Used to set cookies withing site.
 	 *  Doesn't really have params as they come from ajax post event
 	 *  "Returns" int $result by echoing it if use of the function is correct, otherwise dies.
@@ -114,7 +114,7 @@ class CookiesController extends AppController {
 	 *  
 	 *  @author Jari Korpela $page = null, $event = null, $type = null, $value = null
 	 */
-	public function setcookie() {
+	public function add() {
 		if ($this->RequestHandler->isAjax()) {
             if (!empty($this->params['form'])) {
             	$page = $this->params['form']['page'];
@@ -138,6 +138,8 @@ class CookiesController extends AppController {
 				
 				echo $result;
             }
+		} else {
+			$this->redirect('/');
 		}
 	}
 	

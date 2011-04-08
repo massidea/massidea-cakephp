@@ -27,7 +27,8 @@
  */
  
 class LinkedContentsController extends AppController {
-	var $components = array('RequestHandler');
+	public $uses = array('LinkedContent','Contents','Tags','RelatedCompanies');
+	public $components = array('RequestHandler');
 	public $helpers = null; //Set helpers off
 	
 	public function beforeFilter() {
@@ -38,12 +39,12 @@ class LinkedContentsController extends AppController {
 	}
 		
 	/**
-	 * contentlinksearch action - method
+	 * contentLinkSearch action - method
 	 * Searches contents linked contents
 	 * TODO: Get only logged in users contents
 	 * @author Jari Korpela
 	 */
-	public function contentlinksearch() {
+	public function contentLinkSearch() {
 		if ($this->RequestHandler->isAjax()) {
 			if (!empty($this->data)) {
 				$title = $this->data['Content']['title'];
@@ -69,6 +70,8 @@ class LinkedContentsController extends AppController {
 	         
 	            echo json_encode($parsedContents);
 			}
+		} else {
+			$this->redirect('/');
 		}
 	}
 	
@@ -87,6 +90,8 @@ class LinkedContentsController extends AppController {
 				
 				echo 1;
 			}
+		} else {
+			$this->redirect('/');
 		}
 	}
 	
@@ -104,6 +109,8 @@ class LinkedContentsController extends AppController {
 				$this->Nodes->removeLink($from,$to);
 				echo 1;
 			}
+		} else {
+			$this->redirect('/');
 		}
 	}
 }
