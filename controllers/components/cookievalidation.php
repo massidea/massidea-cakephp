@@ -26,10 +26,14 @@
  */ 
 class CookievalidationComponent extends object {
 	
+	public $components = array('Cookie');
 	protected $chosenGroups = array();
 	protected $event = null;
+	private $controller;
 	
-	
+	function initialize(&$controller) {
+		$this->controller = $controller;
+	}
 	/**
 	 *  getGroups
 	 *  Function to get cookie groups and their defined types and values
@@ -54,10 +58,11 @@ class CookievalidationComponent extends object {
 		*/
 		switch($page){
 			case 'contentsView':
-				$groups = array('expandStatus' => array('name' => 'expandStatus',
-														'default' => 'block',
-														'types' => array('linked'),
-														'values' => array('none','block'))
+				$groups = array('expandStatus' => 
+							array('name' => 'expandStatus',
+								'default' => 'block',
+								'types' => array('linked'),
+								'values' => array('none','block'))
 				); break;
 			
 				
@@ -114,5 +119,18 @@ class CookievalidationComponent extends object {
 		}
 		return $defaultValues;
 	}
+	
+	public function getAndValidateCookies($event) {
+		$cookies = $this->Cookie->read($event);
+		$page = Inflector::variable($this->controller->name.'_'.$this->controller->action);
+		$this->getGroups($page,$event);
+		if(!empty($cookies)) {
+			$validCookies = $this->doMatchCheck($cookies);
+		} else {
+			$validCookies = $this->useDefaults();
+		}
+		return $validCookies;
+	}
+
 	
 }

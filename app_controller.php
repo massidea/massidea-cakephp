@@ -43,7 +43,7 @@ class AppController extends Controller {
 		 * Setting content class
 		 * 
 		 * content_class is used to define how the page is viewed. Default contentWithSidebar.
-		 * Should be overridden in controller if wished to use wide class.
+		 * Should be overridden in controller if wished to use other class.
 		 */
 		$this->set('content_class','contentWithSidebar');
 		//End of automated class load for content

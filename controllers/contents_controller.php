@@ -61,7 +61,6 @@ class ContentsController extends AppController {
 			$contentType = 'all';
 			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'Contents.created DESC'),true);
 		}
-
 		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
 	}
@@ -90,13 +89,9 @@ class ContentsController extends AppController {
 				
 				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
 				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
-				
-				$errors = array();
-				if(empty($errors)) {
-					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
-				} else {
-					$this->Session->setFlash('Your content has NOT been successfully saved.');
-				}
+
+				$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
+
 				if($this->Content_->getContentPublishedStatus() === "1") {
 					$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Content_->getContentId()));
 				} else {
@@ -104,15 +99,14 @@ class ContentsController extends AppController {
 				}
 			} else {
 				$this->Session->setFlash('Your content has NOT been successfully saved.');
+				$this->redirect('/');
 			}
-		} else { // If FORM is NOT Posted
-
+		} else {
 			//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
-	
 			if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
 				$this->redirect(array('controller' => '/'));
 			}
-	
+
 			$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
 			$this->set('content_type',$contentType);
 		}
@@ -121,6 +115,9 @@ class ContentsController extends AppController {
 	/**
 	 * edit action - method
 	 * Edits content
+	 * 
+	 * Routes that direct to this action are:
+	 * Router::connect('/contents/edit/*', array('controller' => 'contents', 'action' => 'edit'));
 	 * 
 	 * @author	Jari Korpela
 	 * @param	int $contentId
@@ -247,13 +244,8 @@ class ContentsController extends AppController {
 		$linkedContents = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $linkedContentsIds),
 												array('order' => array("FIELD(Contents.id, $idOrder) asc")),true);
 
-		$cookies = $this->Cookie->read('expandStatus');
-		$groups = $this->Cookievalidation->getGroups('contentsView','expandStatus');
-		if(!empty($cookies)) {
-			$cookies = $this->Cookievalidation->doMatchCheck($cookies);
-		} else {
-			$cookies = $this->Cookievalidation->useDefaults();
-		}
+												
+		$cookies = $this->Cookievalidation->getAndValidateCookies('expandStatus');
 
 		$this->set('cookies',$cookies);
 		$this->set('contentId',$contentId);
@@ -264,7 +256,6 @@ class ContentsController extends AppController {
 		$this->set('specific',$contentSpecificData);
 		$this->set('linkedContents',$linkedContents);
 		$this->set('linkedContentsCount',$linkedContentsCount);
-
 		
 	}
 	
