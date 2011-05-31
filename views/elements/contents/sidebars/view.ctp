@@ -24,7 +24,7 @@ Content votes: 143
 		</a>
 	</li>
 	
-	<li>
+	<li class="margin-top small-padding-top-bottom">
 		<div class="hoverLink">
 			<a href="#" id="add_to_favourites_link" class="blockLink">
 			<?php echo $html->image('icon_fav_off.png',array('class' => 'icon size16')); ?>
@@ -33,14 +33,14 @@ Content votes: 143
 		</div>
 	</li>
 	
-	<li>
+	<li class="small-padding-top-bottom">
 		<a href="#" id="give_gift_link" class="hoverLink blockLink">
 		<?php echo $html->image('cake.icon.png',array('class' => 'icon size16')); ?>
 		Give gift to content
 		</a>
 	</li>
 	
-	<li class="send-message blockLink">
+	<li class="send-message blockLink small-padding-top-bottom">
 		<input type="hidden" value="6" class="send-message-id" />
 		<input type="hidden" value="Hihhuli" class="send-message-name" />
 		<a href="#" class="hoverLink blockLink">
@@ -48,13 +48,14 @@ Content votes: 143
 		Send private message
 		</a>
 	</li>
-	<li class="flag-page">
+	
+	<li class="flag-page small-padding-top-bottom">
 		<a href="#" class="hoverLink blockLink">
 		<?php echo $html->image('icon_flag.png',array('class' => 'icon')); ?>
 		Flag as inappropriate</a>
 	</li>
 	
-	<li>
+	<li class="small-padding-top-bottom">
 		<a href="<?php echo $html->url(array('action' => 'edit',$content['id'])); ?>" class="hoverLink blockLink">
 		<?php echo $html->image('icon_edit.png',array('class' => 'icon')); ?>
 		Edit content
@@ -62,23 +63,23 @@ Content votes: 143
 	</li>
 
 </ul>
-<hr class="margin-top grey" />
+
 
 <?php 
 $expandIcons = array('block' => 'icon_minus_tiny.png',
 					'none' => 'icon_plus_tiny.png');
  ?>
 
-<div id="linked-container" >
-	<h3 class="grey left small-padding-top-bottom pointerCursor">
+<div id="linked-container" class="margin-top" >
+	<h3 class="grey left small-padding-top-bottom pointerCursor noBackground nomargin">
 	<?php echo $html->image($expandIcons[$cookies['linked']],array('class' => 'icon')); ?>
 	Linked (<span><?php echo $linkedContentsCount; ?></span>)
 	</h3>
-	<a href="#" id="linked-addnewlink-link" class="hoverLink right small-padding-top-bottom">
+	<a href="#" id="linked-addnewlink-link" class="hoverLink right small-padding-top-bottom ">
 		<?php echo $html->image('icon_link.png',array('class' => 'icon')); ?>
-		Add new link
+		Add link
 	</a>
-	<div class="clear"></div>
+	<div class="clear dot-line-720"></div>
 	<ul style="display: <?php echo $cookies['linked']; ?>">
 	<?php if(!empty($linkedContents) && $linkedContentsCount > 0): foreach($linkedContents as $content): ?>
 		<li class="border-<?php echo $content['Node']['class']; ?> small-margin-top-bottom">

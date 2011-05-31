@@ -67,9 +67,9 @@ class DataHandlerComponent extends Object {
 	}
 	/**
 	 * addHtmlSpecialCharsToArrayValues
-	 * Goes through $data array and adds addHtmlSpecialChars to values
+	 * Goes through $data array and adds htmlSpecialChars to values
 	 * @author	Jari Korpela
-	 * @param	array $data - Data to which add addHtmlSpecialChars
+	 * @param	array $data - Data to which add htmlSpecialChars
 	 * @return	array $newData - The same data array with addHtmlSpecialChars added	 *
 	 */
 	public function addHtmlSpecialCharsToArrayValues($data) {
@@ -82,7 +82,7 @@ class DataHandlerComponent extends Object {
 	
 	/**
 	 * toExternals
-	 * Forms' array data to string (#key[base64encoded value]#otherkey[...])
+	 * Forms array data to string (#key[base64encoded value]#otherkey[...])
 	 * @author	Jussi Raitanen
 	 * @param	array $data - Associative array to form into string
 	 * @return	string $data - Result string	 *
@@ -100,7 +100,7 @@ class DataHandlerComponent extends Object {
 	 * parseExternals
 	 * Parses string data formatted as (#key[base64encoded value]#otherkey[...]) to array
 	 * @author	Jussi Raitanen
-	 * @param	string $data - Associative array to form into string
+	 * @param	string $data - String to form into associative array
 	 * @return	array $data - Result array
 	 */
 	public function parseExternals($data) {
@@ -302,7 +302,8 @@ class DataHandlerComponent extends Object {
 	public function removeLinksBetweenNodes($parentId,$childs) {
 		foreach($childs as $child) {
 			$this->Nodes->removeLink($parentId, $child['id']);
-		}		
+		}
+		return true;		
 	}
 	
 }

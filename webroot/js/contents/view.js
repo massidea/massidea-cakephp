@@ -61,10 +61,12 @@ function getLinkedOutput(data) {
 }
 
 function searchFromData(searchquery,data) {
+	var searchquery = searchquery.toLowerCase();
 	var returns = [];
 	var options = $("#LinkSearchOptionsViewForm > input:checkbox");
 	$.each(data,function(){
-		if(this.title.indexOf(searchquery) > -1 || searchquery.length == 0){
+		//console.log(this.title +" "+this.id);
+		if(this.title.toLowerCase().indexOf(searchquery) > -1 || searchquery.length == 0){
 			if(this['class'] == 'challenge' && options[0].checked) {
 				returns.push(this);
 			} else if(this['class'] == 'idea' && options[1].checked) {
@@ -93,9 +95,7 @@ function linkContents(link,undo) {
 		url: jsMeta.baseUrl+"/linked_contents/add/",
 		success: function(data) {
 			if(data == 1) {
-				resetFlash();
-				setFlash("Contents linked together successfully",'successfull');
-				showFlash();
+				flash("Contents linked together successfully",true,'successfull');
 				if(undo) {
 					$(link).parent().removeClass('link_deleted');
 					$(link).attr('src',jsMeta.baseUrl+'/img/icon_red_cross.png');
@@ -124,7 +124,7 @@ function addContentToList(link) {
 
 	var li = '<li class="border-'+contentClass+' small-margin-top-bottom">\
 			<a class="bold left" href="#">'+username+': </a>\
-			<img id="delete_linked_content-'+contentId+'" alt="" class="size16 right" src="'+jsMeta.baseUrl+'/img/icon_red_cross.png">\
+			<img id="delete_linked_content-'+contentId+'" alt="" class="size16 right pointerCursor" src="'+jsMeta.baseUrl+'/img/icon_red_cross.png">\
 			<div class="clear"></div>\
 			<a class="hoverLink blockLink" href="'+jsMeta.baseUrl+'/contents/view/'+contentId+'">'+title+'</a>\
 		</li>';
@@ -202,7 +202,7 @@ function contentLinkInit() {
 		return false;
 	});
 	
-	$("#linked-container > ul > li > img").click(function(){
+	$("#linked-container > ul > li > img").live('click',function(){
 		if($(this).parent().hasClass('link_deleted')) {
 			linkContents(this,true);
 		} else {

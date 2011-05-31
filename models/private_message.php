@@ -25,5 +25,6 @@ class PrivateMessage extends AppModel {
 			'foreignKey' => 'sender'
 		)
 	);
+	
 }
 ?>

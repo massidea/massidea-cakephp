@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+/**
+ * User controller signup action CSS file
+ *
+ * ID:s that are used by layout and layout.css and must not be used to avoid duplicate id's:
+ * #alert 
+ * #background
+ * #container 
+ * #header 
+ * #title
+ * #search
+ * #search-top
+ * #search-field 
+ * #globalSearch
+ * #search-submit
+ * #submitsearch 
+ * #select
+ */
+ 
+ /**
+ * CSS "constants" cheat sheet
+ *
+ * RED 		= #D21034
+ * BLUE		= #0089CF
+ * GREEN	= #4B9B07
+ * YELLOW	= #FFC726
+ * DEEPBLUE	= #003581
+ * GREY		= #CCCCCC
+ */
+ 
+#content #UserSignupForm fieldset {
+	margin-bottom: 20px;
+}
+
+#content #UserSignupForm fieldset legend {
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 10px 0 10px 0;
+}
+
+#content #UserSignupForm fieldset .input {
+	clear: left;
+	display: block;
+}
+
+#content #UserSignupForm fieldset .input label {
+	font-weight: bold;
+	width: 160px;
+	display: block;
+	float: left;
+	padding: 3px 0 1px 0;
+}
+
+#content #UserSignupForm fieldset .input input {
+	width: 180px;
+	padding: 2px 0 2px 0;
+}
+
+#content #UserSignupForm fieldset .input .ajax-indicator {
+	font-weight: bold;
+	margin-left: 5px;
+	display: inline;	
+}
+
+#content #UserSignupForm fieldset .input .ajax-indicator img {
+	vertical-align: top;
+}
+
+#content #UserSignupForm .submit {
+	padding-top: 10px;
+}
+
+#content #UserSignupForm .error-message {
+	color: red;
+}

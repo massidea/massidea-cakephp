@@ -27,18 +27,21 @@ echo $html->docType('xhtml11');
 	//Here we add additional CSS files from plugins etc.
 	$cssFiles[] = 'smoothness'.DS.'jquery-ui-1.8.7.custom.css'; //jQuery UI CSS file
 	echo $html->css($cssFiles);
-
 	?>
 	
 	<!--[if IE 7]> <?php echo $html->css('ie7fix'); ?> <![endif]-->
 	<?php 
-	echo $html->script(array('jquery-1.4.4.min', //jQuery javascript library
+	$jsFiles = array_merge(array('jquery-1.4.4.min', //jQuery javascript library
 							'jquery-ui-1.8.7.custom.min', //User Interface extension for jQuery
 							'jquery.cookie', //jQuery cookie plugin
 							'global' //All global JS things used in site
-	)); 
+							), $js_for_layout);
+	echo $html->script($jsFiles); 
 	?>
 
+	<?php 
+	//$jsFiles = 
+	?>
 	<?php echo $scripts_for_layout; ?>	
 
 </head>
@@ -52,7 +55,8 @@ echo $html->docType('xhtml11');
 	<div id="background">
 		<div id="container">
 			<div id="header">
-				<?php echo $this->element($layout.'header', array('cache' => true)); ?> 
+				<?php echo $this->element($layout.'header', array('cache' => false)); ?> 
+				<?php echo $this->element('global'.DS.'login', array('cache' => false)); ?>
 			</div>
 			<div id="menu">
 				<?php echo $this->element($layout.'menu', array('cache' => true)); ?>

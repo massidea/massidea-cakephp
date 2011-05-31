@@ -1,0 +1,66 @@
+@CHARSET "UTF-8";
+/**
+ * User controller login action CSS file
+ *
+ * ID:s that are used by layout and layout.css and must not be used to avoid duplicate id's:
+ * #alert 
+ * #background
+ * #container 
+ * #header 
+ * #title
+ * #search
+ * #search-top
+ * #search-field 
+ * #globalSearch
+ * #search-submit
+ * #submitsearch 
+ * #select
+ */
+ 
+ /**
+ * CSS "constants" cheat sheet
+ *
+ * RED 		= #D21034
+ * BLUE		= #0089CF
+ * GREEN	= #4B9B07
+ * YELLOW	= #FFC726
+ * DEEPBLUE	= #003581
+ * GREY		= #CCCCCC
+ */
+ 
+#content #UserLoginForm fieldset {
+	margin-bottom: 20px;
+}
+
+#content #UserLoginForm fieldset legend {
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 10px 0 10px 0;
+}
+
+#content #UserLoginForm fieldset .input {
+	clear: left;
+	display: block;
+}
+
+#content #UserLoginForm fieldset .input label {
+	font-weight: bold;
+	width: 100px;
+	display: block;
+	float: left;
+	padding: 3px 0 1px 0;
+}
+
+#content #UserLoginForm fieldset .input input {
+	width: 180px;
+	padding: 2px 0 2px 0;
+}
+
+#content #authMessage {
+	margin-top: 5px;
+	padding: 5px;
+	border: 1px solid #DDD;
+	color: red;
+	text-align: center;
+	background-color: #EEE;
+}
