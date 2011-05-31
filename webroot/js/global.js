@@ -60,6 +60,25 @@ function resetFlash() {
 	$("#flash").stop(true,true).hide().empty();
 }
 
+/**
+ * Combination of setFlash, showFlash and resetFlash functions
+ * @param text	string	Text to be set in flash message
+ * @param reset	boolean Reset flash before showing
+ * @param style	string	Sets flash with different style
+ * @return boolean		false if fails, otherwise true
+ */
+function flash(text,reset,style) {
+	if(text && style) {
+		if(reset) {
+			resetFlash();
+		}
+		setFlash(text,style);
+		showFlash();
+		return true;
+	}
+	return false;
+}
+
 
 /**
  * saveToCookie
@@ -105,6 +124,7 @@ function countCharactersLeft(o,limit) {
  * @return null
  */
 function eventAnimate(o,color) {
+	o.stop(true,true);
 	backColor = o.css('backgroundColor');
 	if(!color) { 
 		color = 'red';
@@ -160,6 +180,8 @@ $(document).ready(function(){
 		resizable: false,
 		title: 'Login to Massidea',
 		dialogClass: "fixedDialog",
+		width: 250,
+		height: 125,
 		autoOpen: false
 	});
 

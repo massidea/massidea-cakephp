@@ -40,13 +40,14 @@ class Company_Component extends Object {
 		if($objectId != -1) {
 			$this->DataHandler->addLinkBetween($objectId,$this->_existingCompanies);
 			$this->DataHandler->saveData($this->_newCompanies,$objectId);
+			return true;
 		} else {
 			return false;
 		}
 	}
 
 	public function setCompaniesForSave($companies) {
-		$companies = explode(',',$companies); // Get tags to array
+		$companies = explode(',',$companies); // Get companies to array
 		$companyList = $this->DataHandler->striptagsAndTrimArrayValues($companies); // Trims of whitespaces etc.
 		
 		$this->DataHandler->setPrivileges($this->_privileges); // Privileges must be set before parsing is possible		
@@ -64,6 +65,15 @@ class Company_Component extends Object {
 		$this->_existingCompanies = $existingCompanies;
 		
 		return $this;
+	}
+	
+	public function removeLinksToObject($objectId = -1) {
+		if($objectId != -1) {
+			$this->DataHandler->removeLinkBetween($objectId,$this->_existingCompanies); //Luomatta
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public function getCompanies() {

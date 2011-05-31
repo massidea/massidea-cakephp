@@ -6,7 +6,7 @@ $url_add_vision = $html->url(array('controller' => 'contents', 'action' => 'add'
 ?>
 
 <div id="add_new_link">
-	<?php echo $form->create('Content', array('url' => array('controller' => 'contents', 'action' => 'linksearch'),
+	<?php echo $form->create('Content', array('url' => array('controller' => 'linked_contents', 'action' => 'contentLinkSearch'),
 												'id' => 'ContentsLinkForm', 'class' => 'left')); ?>
 	<?php echo $form->hidden('id', array('value' => $contentId)); ?>
 	<?php echo $form->input('title',array('label' => 'Search: ')); ?>

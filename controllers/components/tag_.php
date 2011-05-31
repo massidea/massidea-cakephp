@@ -45,14 +45,6 @@ class Tag_Component extends Object {
 		}
 	}
 	
-	public function removeLinksToObject($objectId = -1) {
-		if($objectId != -1) {
-			$this->DataHandler->removeLinkBetween($objectId,$this->_existingTags); //Luomatta
-		} else {
-			return false;
-		}
-	}
-	
 	/**
 	 * setTagsForSave
 	 * @param string $tags
@@ -69,7 +61,7 @@ class Tag_Component extends Object {
 		
 		$newTagList = $this->DataHandler->getNewDataNames($tagList,$this->__type,$existingTags);
 		$newTags = $this->DataHandler->parseNamesToNodes($newTagList,$this->__type,true);
-				
+		
 		$this->_tagList = $tagList;
 		$this->_tags = $tags;
 		$this->_newTagList = $newTagList;
@@ -79,12 +71,21 @@ class Tag_Component extends Object {
 		return $this;
 	}
 	
+	public function removeLinksToObject($objectId = -1) {
+		if($objectId != -1) {
+			$this->DataHandler->removeLinkBetween($objectId,$this->_existingTags); //Luomatta
+		} else {
+			return false;
+		}
+	}	
 	
 	public function getTags() {
 		return $this->_tags;
 	}
 	
 	public function getNewAndExistingTags() {
+		//var_dump($this->_newTags);
+		//var_dump($this->_existingTags);die;
 		return array_merge($this->_newTags,$this->_existingTags);
 	}
 		

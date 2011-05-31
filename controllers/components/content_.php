@@ -70,7 +70,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	}
 		
 	public function saveContent() {
-		if(!empty($this->_contentData)) {
+		if(!empty($this->_contentData) && !empty($this->_contentSpecificData)) {
 
 			$node = $this->_contentData;
 			$node['data'] = $this->_contentSpecificData;
@@ -82,6 +82,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 			$this->_setContentId($contentId); //Set the saved contents id
 			return $contentId;
 		}
+		return false;
 	}
 	
 	public function getContentDataForEdit() {
@@ -143,7 +144,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	
 	public function setContentPrivileges($data) {
 		$this->_privileges = $data;
-		$this->DataHandler->setPrivileges($this->_privileges); // Privileges must be set before parsing is possible	
+		$this->DataHandler->setPrivileges($this->_privileges); 
 		return $this;
 	}
 	
@@ -151,6 +152,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 		$contentSpecificData = $this->DataHandler->addHtmlSpecialCharsToArrayValues($data);
 		$contentSpecificData = $this->DataHandler->toExternals($contentSpecificData);
 		$this->_contentSpecificData = $contentSpecificData;
+		return $this;
 	}
 	
 	/**
@@ -184,6 +186,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	
 	public function removeChildsFromContent($childsToDelete) {
 		$this->DataHandler->removeLinksBetweenNodes($this->_contentId,$childsToDelete);
+		return $this;
 	}
 	
 
