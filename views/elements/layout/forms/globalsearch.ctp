@@ -1,4 +1,4 @@
-<?php echo $form->create(null, array('url' => array('controller' => 'search',
+<?php echo $form->create('headerSearchForm', array('url' => array('controller' => 'search',
 													'action'	 => 'global'),
 									'type' => 'post')); ?>
 

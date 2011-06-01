@@ -1,8 +1,7 @@
 <?php echo $this->Html->script('elements'.DS.'flag',array('inline' => false)); ?>
-<?php $flagTypes = array('Spam',
+<?php $flagTypes = array('Spam/Advertising',
 						'Sexual content',
-						'Violent or Repulsive content',
-						'Hateful or Abusive content',
+						'Violent/Repulsive/Hateful/Abusive content',
 						'Copyright violation',
 						'Other'
 						

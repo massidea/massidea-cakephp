@@ -29,7 +29,7 @@ function textValidation(obj) {
 	}
 }
 
-function textCount(obj,inputDefinitions,allInputs) {
+function textCount(obj,inputDefinitions) {
 	var field = $(obj).parent().parent();
 
 	var thisMin = inputDefinitions[field[0].id][0];
@@ -61,7 +61,6 @@ function textCount(obj,inputDefinitions,allInputs) {
 	}
 
 	$(thisProgress).html(progressText);
-	publishValidation(allInputs);	
 }
 
 function enableSubmit(bool) {
@@ -80,8 +79,9 @@ function publishValidation(allInputs) {
 	if($("#content_publish > fieldset > input:first").is(":checked")) {
 		var submitOk = true;
 		$(allInputs).each(function(){
-			var thisProgress = $('#'+ $(this).parent().parent()[0].id + '> .limit');
-			if(thisProgress.hasClass('bad')) { submitOk = false; }
+			if( $('#'+ $(this).parent().parent()[0].id + '> .limit').hasClass('bad')) { 
+				submitOk = false;
+			}
 		});
 		
 		if(submitOk) {
@@ -142,13 +142,14 @@ $(document).ready(function() {
 	});
 	                 
 	$(allInputs).live('keydown keyup', function(){
-		textCount(this,inputDefinitions,allInputs);
+		textCount(this,inputDefinitions);
+		publishValidation(allInputs)
 		//if (this.name == "content_keywords") textValidation(this);
 	});
 	
 	
 	$(allInputs).each(function(){
-			textCount(this,inputDefinitions,allInputs);
+			textCount(this,inputDefinitions);
 			/*
 			if (this.name == "content_keywords") textValidation(this);
 			
@@ -184,6 +185,7 @@ $(document).ready(function() {
 				position: { corner: { target: 'topLeft', tooltip: 'bottomLeft' } }
 			});*/
 	});
+	publishValidation(allInputs);
 		
 	/**
 	 * Set content publish button to disabled after click

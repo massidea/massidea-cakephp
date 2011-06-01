@@ -61,6 +61,7 @@
 .grey { color: #CCCCCC !important; }
 .border-left { border-left: 1px solid #CCCCCC; padding: 0 0 0 10px !important; }
 .size16 { width: 16px; height: 16px; }
+.noBackground { background: none !important; }
 
 p { margin: 10px 0; }
 
@@ -94,6 +95,46 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #alert p { padding: 0px; margin: 0px; }
 #background { background: white; }
 #container { width: 750px; margin: 0 auto; padding: 0px 1px 20px 1px; background: none repeat scroll 0 0 #FFFFFF; }
+
+/**
+ * Login
+*/
+
+#login_box {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #CCCCCC;
+    display: none;
+    font-size: 11px;
+}
+
+#login_box label {
+	display: block;
+	float:left;
+	width: 70px;
+}
+
+#login_box fieldset input {
+	width: 150px;
+}
+
+#login_box fieldset div {
+	padding-bottom: 5px;
+}
+
+#login_box a {
+    color: #0089CF !important;
+    text-decoration: none;
+    float: right;
+}
+
+#login_box .submit {
+	float: left;
+}
+
+#login_box .submit input {
+	width: 80px;
+}
+
 
 /** 
  * Header consists of:
@@ -200,3 +241,4 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 .gift { background: url("../img/cake.icon.png") no-repeat scroll 10px transparent; }
 .favourite_off { background: url("../img/icon_fav_off.png") no-repeat scroll 10px transparent; }
 .favourite_on { background: url("../img/icon_fav_on.png") no-repeat scroll 10px transparent; }
+

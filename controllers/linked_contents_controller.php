@@ -67,12 +67,14 @@ class LinkedContentsController extends AppController {
 		            							'title' => $content['Node']['title']);
 	            	}
 	            }
-	         
 	            echo json_encode($parsedContents);
+	            
+			} else {
+				$this->redirect('/');
 			}
 		} else {
 			$this->redirect('/');
-		}
+		} 
 	}
 	
 	/**
@@ -84,11 +86,14 @@ class LinkedContentsController extends AppController {
 	public function add() {
 		if ($this->RequestHandler->isAjax()) {
 			if (!empty($this->params['form'])) {
+				
 				$to = $this->params['form']['to'];
 				$from = $this->params['form']['from'];
 				$this->Nodes->link($from,$to,false);
 				
 				echo 1;
+			} else {
+				$this->redirect('/');
 			}
 		} else {
 			$this->redirect('/');
