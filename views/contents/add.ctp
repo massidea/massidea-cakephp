@@ -209,7 +209,7 @@ $body = '';
 										'legend' 	=> __('Do you want to publish your content now?',true),
 										'label'		=> true,
 										'div'		=> array('id' => 'content_publish', 'class' => 'row'),
-										'options'	=> array('1' => __('Yes',true), '0' => __('No, I want to save it for later editing',true),
+										'options'	=> array('1' => __('Yes',true), '0' => __('No, I want to save it for later editing',true)),
 										'value'		=> '1',
 										'after'		=> '</div><div class="clear">'							
 )); 
