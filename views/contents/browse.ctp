@@ -1,5 +1,5 @@
 <h2>
-	Recent posts
+	<?php __('Recent posts') ?>
 	<a href="#">
 		<?php echo $html->image('icon_rss_28x28.png',array('alt' => 'RSS', 'class' => 'rsslogo')); ?>
 	</a>
@@ -21,7 +21,7 @@
 			</h3>
 			<p><?php echo $content['Node']['lead']; ?></p>
 			<p>
-				<a href="#">Tags: </a>
+				<a href="#"><?php __('Tags') ?>: </a>
 				<?php if(isset($content['Child'])): $i=0; foreach($content['Child'] as $child):
 						if($child['type'] == 'Tag'): $i++;
 				?>
@@ -30,7 +30,7 @@
 			</p>
 			<p class="translate">
 				<span class="summary_translatelink_meta"><?php echo json_encode(array('id' => $content['Node']['id'], 'language_name' => $content['Language']['name'])); ?></span>
-				<span class="summary_translatelink_text">[<a onclick="toggleTranslation('<?php echo $content['Node']['id']; ?>'); return false;" href="#">Show original</a>, translated from <?php echo $content['Language']['name']; ?>]</span>
+				<span class="summary_translatelink_text">[<a onclick="toggleTranslation('<?php echo $content['Node']['id']; ?>'); return false;" href="#"><?php __('Show original') ?></a>, <?php __('translated from') ?> <?php echo $content['Language']['name']; ?>]</span>
 			</p>
 		</div>
 	</div>
