@@ -2,6 +2,7 @@
 class User extends AppModel {
 	var $name = 'Users';
 	var $displayField = 'name';
+	var $primaryKey = 'id';
 
 	var $hasOne = array(
 		'languages' => array(
@@ -114,6 +115,10 @@ class User extends AppModel {
 			'rule' => '_comparePasswords',
 			'message' => 'Passwords do not match'
 		),
+		'hometown' => array(
+			'rule' => 'notEmpty',
+			'message' => 'This field cannot be left blank'
+		),
 		'email' => array(
 			'emailRule-1' => array(
 				'rule' => 'email',
@@ -125,6 +130,14 @@ class User extends AppModel {
 				'rule' => 'isUnique',
 				'message' => 'Email address exists'
 			)
+		),
+		'status' => array(
+			'rule' => 'notEmpty',
+			'message' => 'This field cannot be left blank'
+		),
+		'agreement' => array(
+			'rule' => array('equalTo', '1'),
+			'message' => 'You must agree to the terms in order to sign up'
 		),
 		'recaptcha_response_field' => array(
 			'checkRecaptcha' => array( 

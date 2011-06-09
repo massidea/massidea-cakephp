@@ -115,9 +115,11 @@ class AppController extends Controller {
 		if($this->RequestHandler->isAjax()) {
 			$this->autoRender = false;
 			$this->autoLayout = false;
-
+			
 			$modelName = key($this->data);
 			$fieldName = key($this->data[$modelName]);
+
+			$this->loadModel($modelName);
 			$this->{$modelName}->set($this->data);
 			
 			if(!$this->{$modelName}->validates(array('fieldList' => $fieldName))) {
