@@ -27,15 +27,18 @@
  * DEEPBLUE	= #003581
  * GREY		= #CCCCCC
  */
- 
-#content #UserSignupForm fieldset {
-	margin-bottom: 20px;
+
+#content #UserSignupForm h2 {
+	color: #AAA;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	background: transparent url("../../img/gray_dot_line_500.png") bottom no-repeat;
 }
 
-#content #UserSignupForm fieldset legend {
-	font-size: 1.3em;
-	font-weight: bold;
-	padding: 10px 0 10px 0;
+#content #UserSignupForm fieldset {
+	margin: 5px 0 5px 0;
 }
 
 #content #UserSignupForm fieldset .input {
@@ -51,8 +54,10 @@
 	padding: 3px 0 1px 0;
 }
 
-#content #UserSignupForm fieldset .input input {
-	width: 180px;
+#content #UserSignupForm fieldset .input input, select {
+	border: 1px solid #7F9DB9;
+	background-color: #FAFAFA;
+	width: 260px;
 	padding: 2px 0 2px 0;
 }
 
@@ -64,6 +69,14 @@
 
 #content #UserSignupForm fieldset .input .ajax-indicator img {
 	vertical-align: top;
+}
+
+#content #UserSignupForm .separator {
+	padding: 5px 0 5px 0;
+}
+
+#content #UserSignupForm .recaptcha-label {
+	padding-top: 5px;
 }
 
 #content #UserSignupForm .submit {

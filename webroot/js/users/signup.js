@@ -1,3 +1,17 @@
+function createBoxElements(obj) {
+	var parentElement = $(obj).parent();
+	var messageBox = $(parentElement).children('.error-message');
+	var indicatorBox = $(parentElement).children('.ajax-indicator');
+	
+	/* If no error-message box exist, create one */
+	if(!$(indicatorBox).length) {
+		indicatorBox = $('<div class="ajax-indicator">*</div>').insertAfter($(obj));
+	}
+	if(!$(messageBox).length) {
+		messageBox = $('<div class="error-message" style="display: none"></div>').insertAfter($(indicatorBox));
+	}
+}
+
 function validateField(obj) {
 	var dataArray = {};
 	dataArray[obj.name] = $(obj).val();
@@ -20,14 +34,6 @@ function appendData(obj, data) {
 	var parentElement = $(obj).parent();
 	var messageBox = $(parentElement).children('.error-message');
 	var indicatorBox = $(parentElement).children('.ajax-indicator');
-	
-	/* If no error-message box exist, create one */
-	if(!$(indicatorBox).length) {
-		indicatorBox = $('<div class="ajax-indicator"></div>').appendTo($(parentElement));
-	}
-	if(!$(messageBox).length) {
-		messageBox = $('<div class="error-message" style="display: none"></div>').appendTo($(parentElement));
-	}
 	
 	/* If data contains an error message */
 	if(data != 1) {
@@ -56,24 +62,43 @@ function comparePasswords(obj, obj2) {
 	appendData(obj, result);
 }
 
-
 $(document).ready(function(){
-	/* Assing tabindex values to each input textfield */
-	
 	var inputIndex = 1;
-	$('#UserSignupForm').find(':input[type="text"],:input[type="password"]').each(function(e){
-		$(this).attr('tabindex', inputIndex++);
-		
-		if(this.id == 'UserPasswordConfirm') {
-			$(this).blur(function(){
-				comparePasswords(this, $('#UserPassword'));
-			});
-		} else {
-			$(this).blur(function(){
-				validateField(this);
-			});
+	/* Loop through all the input fields in signup form */
+	$('#UserSignupForm').find(':input[type!="hidden"]').each(function(e){ 
+
+		/* Bind validation functions to form elements */
+		switch(this.id)
+		{
+			case 'UserUsername':
+			case 'UserPassword':
+			case 'ProfileHometown':
+			case 'UserEmail':
+				createBoxElements(this);
+				$(this).blur(function(){ validateField(this); });
+				break;
+			case 'UserPasswordConfirm':
+				createBoxElements(this);
+				$(this).blur(function(){ comparePasswords(this, $('#UserPassword')); });
+				break;
+			case 'ProfileStatus':
+				createBoxElements(this);
+				$(this).change(function(){ validateField(this); });
+				break;
 		}
 		
+		/* Assing tabindex values to each input textfield */
+		$(this).attr('tabindex', inputIndex++);
+
 	});
 	
+	/* Bind agreement links to trigger existing links in layout */
+	$('#UserSignupForm .terms_link').click(function(event) {
+		event.preventDefault();
+		$('#terms_link').click();
+	});
+	$('#UserSignupForm .privacy_link').click(function(event) {
+		event.preventDefault();
+		$('#privacy_link').click();
+	});
 });

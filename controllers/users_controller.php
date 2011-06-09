@@ -37,6 +37,7 @@ class UsersController extends AppController {
 	}
 	
 	function login() {
+		$this->set('content_class', 'contentWithFullPage');
 		// If already logged in, redirect to home
 		// TODO: redirect back where came from
 		if($this->Session->read('Auth.User')) {
@@ -71,7 +72,7 @@ class UsersController extends AppController {
 				}
 				// Continue authentication
 				if($this->Auth->login($this->data)) {
-					$this->Session->setFlash('Successfully logged in!');
+					$this->Session->setFlash(__('Successfully logged in!', true));
 					$this->redirect('/');
 				}
 			}
@@ -84,14 +85,59 @@ class UsersController extends AppController {
 	}
 	
 	function signup() {
-		if(!empty($this->data)) {
-			$this->User->create();
-			if($this->User->save($this->data)) {
-				$this->Auth->login($this->data);
-				$this->Session->setFlash('Registration successful!');
-				$this->redirect('/');
-			} 
+		// If already logged in, redirect to home
+		// TODO: redirect back where came from
+		if($this->Session->read('Auth.User')) {
+			$this->redirect('/');
 		}
+		
+		if(!empty($this->data)) {
+			// Validate fields
+			$validUserData = $this->User->saveAll($this->data['User'], array('validate' => 'only'));
+			$validProfileData = $this->User->Profile->saveAll($this->data['Profile'], array('validate' => 'only'));
+			
+			if($validUserData && $validProfileData) {
+				// Save user data
+				$userSaved = $this->User->saveAll($this->data['User'], array('validate' => false));
+
+				if($userSaved) {
+					// Reformat array structure for saving multiple key-value pairs
+					$this->data['Profile'] = $this->__reformatProfileData($this->User->id, $this->data['Profile']);
+					// Save profile data
+					$profileSaved = $this->User->Profile->saveAll($this->data['Profile'], array('validate' => false));
+					if($profileSaved) {
+						$this->Auth->login($this->data);
+						$this->Session->setFlash(__('Registration successful!', true));
+						$this->redirect('/');
+					} else {
+						CakeLog::write('error', "Registration failed, couldn't save profile data");
+						$this->User->delete($this->User->id);
+						$this->Session->setFlash(__('Registration failed', true));
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * __reformatProfileData
+	 * 
+	 * Reformats given $array's structure for profile-model.
+	 * @param string $userId User record's id
+	 * @param array $array Profile data
+	 */
+	private function __reformatProfileData($userId, $array) {
+		$i = 0;
+		$return = array();
+		foreach($array as $key => $value) {
+			$return[$i] = array(
+				'user_id' => $userId,
+				'key' => $key,
+				'value' => $value
+			);
+			$i++;			
+		}
+		return $return;
 	}
 	
 }
