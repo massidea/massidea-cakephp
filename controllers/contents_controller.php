@@ -133,6 +133,8 @@ class ContentsController extends AppController {
 			
 			$contentBeforeSave = $this->Nodes->find(array('type' => 'Content', 'Contents.id' => $contentId),array(),true);
 			$childsToDelete = $contentBeforeSave[0]['Child'];
+			
+			
 
 			foreach($childsToDelete as $key => $child) {
 				foreach($this->Tag_->getNewAndExistingTags() as $tag) {
@@ -214,7 +216,6 @@ class ContentsController extends AppController {
 		}
 		$content = $content[0];
 		$contentSpecificData = $this->Content_->getContentSpecificDataFromData($content['Node']['data']);
-		
 		$tags = array();
 		$relatedCompanies = array();
 		if(isset($content['Child'])) {

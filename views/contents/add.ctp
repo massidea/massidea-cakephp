@@ -25,7 +25,7 @@ $body = '';
 <div id="form_content_realcontent">
 <?php if($content_type === 'challenge'): $body = $challenge; ?>
 
-	<h2 class="light-gray border-problem">Share your challenge</h2>
+	<h2 class="light-gray border-problem"><?php __('Share your challenge') ?></h2>
 	<p>Challenge is personal, business or social related problem, need, situation or observation. It describes the current status of affairs and recognizes the need to resolve the matter. </p>
 	<p>Write to a person who is not familiar with the topic.</p>
 	<p>Keep your focus on challenge and not related solutions or visions. You can publish those one a separate document and link them later on to this challenge.</p>

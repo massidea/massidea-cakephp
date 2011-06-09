@@ -31,7 +31,9 @@
 		<p>hihiHAH hHAH hHHrh hfshsfh fsh fshsh fshsf fsh</p>
 	</div>
 	
-	<div id="related-campaigns"></div>
-	
+	<div id="related-campaigns">
+	<?php echo $this->element('contents'.DS.'linked_to_campaigns', array('cache' => false));  ?>
+	</div>
+		
 	<div id="related-statistics"></div>
 </div>

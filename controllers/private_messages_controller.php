@@ -47,7 +47,9 @@ class PrivateMessagesController extends AppController {
 				} else {
 					die;
 				}
-            }
+            } else {
+				$this->redirect('/');
+			}
 		} else {
 			$this->redirect('/');
 		}

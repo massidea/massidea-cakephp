@@ -56,6 +56,7 @@ echo $html->docType('xhtml11');
 		<div id="container">
 			<div id="header">
 				<?php echo $this->element($layout.'header', array('cache' => false)); ?> 
+				<?php echo $this->element('global'.DS.'login', array('cache' => false)); ?>
 			</div>
 			<div id="menu">
 				<?php echo $this->element($layout.'menu', array('cache' => true)); ?>

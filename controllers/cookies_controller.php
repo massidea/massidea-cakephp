@@ -108,9 +108,9 @@ class CookiesController extends AppController {
 	 *  Cookie setting can only fail if there is an error in data set in _getGroups, for example name is missing.
 	 *  
 	 *  @param	string $page 	This parameter is used to find out the controller and view for path
-	 *  @param	string $event	Event is groups' name
-	 *  @param	string $type 	Type is cookies' name
-	 *  @param	string $value 	Value represents cookies' value
+	 *  @param	string $event	Event is groups name
+	 *  @param	string $type 	Type is cookies name
+	 *  @param	string $value 	Value represents cookies value
 	 *  
 	 *  @author Jari Korpela $page = null, $event = null, $type = null, $value = null
 	 */
