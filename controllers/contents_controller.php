@@ -29,7 +29,7 @@
 class ContentsController extends AppController {
 	
 	public $components = array('Cookie','Cookievalidation','Content_','Tag_','Company_');
-	public $uses = array('Contents','Language','LinkedContent','Tags', 'RelatedCompanies');
+	public $uses = array('Contents','Language','LinkedContent','Tags', 'RelatedCompanies','Baseclasses');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();		
@@ -61,6 +61,15 @@ class ContentsController extends AppController {
 			$contentType = 'all';
 			$contents = $this->Nodes->find(array('type' => 'Content'),array('limit' => 10, 'order' => 'Contents.created DESC'),true);
 		}
+		$userIdsAndCounts = array();
+		
+		foreach($contents as $content) {
+			if(isset($content['User']['id']) && !isset($userIdsAndCounts[$content['User']['id']])) {
+				$userIdsAndCounts[$content['User']['id']] = $this->Baseclasses->find('count',array('conditions' => array('type' => 'Content', 'creator' => $content['User']['id'])));
+			}
+		}
+		
+		$this->set('contentCounts',$userIdsAndCounts);
 		$this->set('content_type',$contentType);
 		$this->set('contents',$contents);
 	}
@@ -79,10 +88,11 @@ class ContentsController extends AppController {
 	public function add($contentType = 'challenge', $related = 0) {
 
 		if (!empty($this->data)) { // If form has been posted
-			$this->data['Privileges']['creator'] = NULL;
+			$this->data['Privileges']['creator'] = $this->Session->read('Auth.User.id');
 			$this->Content_->setAllContentDataForSave($this->data);
-			$this->Tag_->setTagsForSave($this->data['Tags']['tags']);
-			$this->Company_->setCompaniesForSave($this->data['Companies']['companies']);
+			$this->Tag_->setTagsForSave($this->data['Tags']['tags'],$this->data['Privileges']);
+			$this->Company_->setCompaniesForSave($this->data['Companies']['companies'],$this->data['Privileges']);
+
 
 			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
 				//TODO: This area is missing a method to link the $related content to this content. Should be done when the link method is ready.

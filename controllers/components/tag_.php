@@ -34,10 +34,11 @@ class Tag_Component extends Object {
 	protected $_newTags = array();
 	protected $_newTagList = array();
 	protected $_existingTags = array();
-	protected $_privileges = array('privileges' => 777, 'creator' => NULL);
+	protected $_privileges = array('privileges' => 555, 'creator' => NULL);
 		
 	public function linkTagsToObject($objectId = -1) {
 		if($objectId != -1) {
+			$this->DataHandler->setPrivileges($this->_privileges);
 			$this->DataHandler->addLinkBetween($objectId,$this->_existingTags);
 			$this->DataHandler->saveData($this->_newTags,$objectId); //Needs to make to work :O
 		} else {
@@ -50,7 +51,8 @@ class Tag_Component extends Object {
 	 * @param string $tags
 	 * @return Object Tag_Component
 	 */
-	public function setTagsForSave($tags) {
+	public function setTagsForSave($tags, $privileges) {
+		$this->_privileges = $privileges;
 		$tags = explode(',',$tags); // Get tags to array
 		$tagList = $this->DataHandler->striptagsAndTrimArrayValues($tags); // Trims of whitespaces etc.
 		

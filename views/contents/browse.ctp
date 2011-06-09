@@ -16,7 +16,7 @@
 		</div>
 		<div class="context">
 			<h3>
-				<a class="username" href="#"><?php echo $content['Privileges']['creator']; ?> (1)</a>
+				<a class="username" href="#"><?php echo $content['User']['username']; ?> (<?php echo isset($contentCounts[$content['User']['id']]) ? $contentCounts[$content['User']['id']] : 0; ?>)</a>
 				<strong><a href="<?php echo $html->url(array('controller' => 'contents', 'action' => 'view', $content['Node']['id'])); ?>"><?php echo $content['Node']['title']; ?></a></strong>
 			</h3>
 			<p><?php echo $content['Node']['lead']; ?></p>

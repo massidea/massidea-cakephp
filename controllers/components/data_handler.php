@@ -17,6 +17,9 @@
 
 /**
  *  DataHandler  -  class
+ *  
+ *  BE AWARE THAT THIS COMPONENT IS SHARED WITH ALL OTHER COMPONENTS THAT USE THIS COMPONENT!
+ *  THIS MEANS THAT PRIVILEGES VARIABLE MAY CHANGE FROM DIFFERENT COMPONENTS! ALWAYS SET THE PRIVILEGES JUST BEFORE SAVING!
  *
  *  @package    Components
  *  @author     Jari Korpela
@@ -27,6 +30,7 @@
 class DataHandlerComponent extends Object {
 	
 	protected $_privileges = array();
+	private $Nodes;
 	
 	function __construct() {
 		$this->Nodes = Classregistry::init('Node');
@@ -304,6 +308,10 @@ class DataHandlerComponent extends Object {
 			$this->Nodes->removeLink($parentId, $child['id']);
 		}
 		return true;		
+	}
+	
+	public function getPrivileges() {
+		return $this->_privileges;
 	}
 	
 }
