@@ -179,7 +179,7 @@ $(document).ready(function(){
 		modal: true,
 		resizable: false,
 		title: 'Login to Massidea',
-		dialogClass: "fixedDialog",
+		dialogClass: "fixedDialog ie7_login_fix",
 		width: 250,
 		height: 125,
 		autoOpen: false
