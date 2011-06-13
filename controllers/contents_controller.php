@@ -87,39 +87,45 @@ class ContentsController extends AppController {
 	 */
 	public function add($contentType = 'challenge', $related = 0) {
 
-		if (!empty($this->data)) { // If form has been posted
-			$this->data['Privileges']['creator'] = $this->Session->read('Auth.User.id');
-			$this->Content_->setAllContentDataForSave($this->data);
-			$this->Tag_->setTagsForSave($this->data['Tags']['tags'],$this->data['Privileges']);
-			$this->Company_->setCompaniesForSave($this->data['Companies']['companies'],$this->data['Privileges']);
-
-
-			if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
-				//TODO: This area is missing a method to link the $related content to this content. Should be done when the link method is ready.
-				
-				$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
-				$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
-
-				$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
-
-				if($this->Content_->getContentPublishedStatus() === "1") {
-					$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Content_->getContentId()));
+		if(isset($this->userId)) {
+		
+			if (!empty($this->data)) { // If form has been posted
+				$this->data['Privileges']['creator'] = $userId;
+				$this->Content_->setAllContentDataForSave($this->data);
+				$this->Tag_->setTagsForSave($this->data['Tags']['tags'],$this->data['Privileges']);
+				$this->Company_->setCompaniesForSave($this->data['Companies']['companies'],$this->data['Privileges']);
+	
+	
+				if($this->Content_->saveContent() !== false) { //If saving the content was successfull then...
+					//TODO: This area is missing a method to link the $related content to this content. Should be done when the link method is ready.
+					
+					$this->Tag_->linkTagsToObject($this->Content_->getContentId()); //We have content ID after content has been saved
+					$this->Company_->linkCompaniesToObject($this->Content_->getContentId());
+	
+					$this->Session->setFlash('Your content has been successfully saved.', 'flash'.DS.'successfull_operation');
+	
+					if($this->Content_->getContentPublishedStatus() === "1") {
+						$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Content_->getContentId()));
+					} else {
+						$this->redirect(array('controller' => 'contents', 'action' => 'edit', $this->Content_->getContentId()));
+					}
 				} else {
-					$this->redirect(array('controller' => 'contents', 'action' => 'edit', $this->Content_->getContentId()));
+					$this->Session->setFlash('Your content has NOT been successfully saved.');
+					$this->redirect('/');
 				}
 			} else {
-				$this->Session->setFlash('Your content has NOT been successfully saved.');
-				$this->redirect('/');
+				//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
+				if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
+					$this->redirect(array('controller' => '/'));
+				}
+	
+				$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
+				$this->set('content_type',$contentType);
 			}
 		} else {
-			//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
-			if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
-				$this->redirect(array('controller' => '/'));
-			}
-
-			$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
-			$this->set('content_type',$contentType);
+			$this->redirect('/');
 		}
+		
 	}
 	
 	/**

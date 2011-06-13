@@ -59,7 +59,7 @@ echo $html->docType('xhtml11');
 				<?php echo $this->element('global'.DS.'login', array('cache' => false)); ?>
 			</div>
 			<div id="menu">
-				<?php echo $this->element($layout.'menu', array('cache' => true)); ?>
+				<?php echo $this->element($layout.'menu', array('cache' => false)); ?>
 			</div>
 			<?php 
 			/**

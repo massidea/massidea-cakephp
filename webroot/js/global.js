@@ -179,8 +179,8 @@ $(document).ready(function(){
 		modal: true,
 		resizable: false,
 		title: 'Login to Massidea',
-		dialogClass: "fixedDialog ie7_login_fix",
-		width: 250,
+		dialogClass: "fixedDialog",
+		width: 300,
 		height: 125,
 		autoOpen: false
 	});
