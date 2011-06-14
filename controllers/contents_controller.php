@@ -90,7 +90,7 @@ class ContentsController extends AppController {
 		if(isset($this->userId)) {
 		
 			if (!empty($this->data)) { // If form has been posted
-				$this->data['Privileges']['creator'] = $userId;
+				$this->data['Privileges']['creator'] = $this->userId;
 				$this->Content_->setAllContentDataForSave($this->data);
 				$this->Tag_->setTagsForSave($this->data['Tags']['tags'],$this->data['Privileges']);
 				$this->Company_->setCompaniesForSave($this->data['Companies']['companies'],$this->data['Privileges']);
