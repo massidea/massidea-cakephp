@@ -5,22 +5,22 @@
 <script src="http://s7.addthis.com/js/250/addthis_widget.js#pub=xa-4b12c6f671039279" type="text/javascript"></script>
 <!-- AddThis Button END -->
 <p>
-Language: <?php echo $language['name']; ?>
+<?php __('Language') ?>: <?php echo $language['name']; ?>
 <br/>
-Content views: 3452
+<?php __('Content views') ?>: 3452
 <br/>
-Content votes: 143
+<?php __('Content votes') ?>: 143
 </p>
 <ul>
 	<li>
 		<a href="#" id="content_vote_up" class="hoverLink">
-		Like
+		<?php __('Like') ?>
 		<?php echo $html->image('icon_thumb_up.png',array('class' => 'icon')); ?>
 		</a>
 		<span class="big-padding-left-right bold green">64%</span>
 		<a href="#" id="content_vote_down" class="hoverLink">
 		<?php echo $html->image('icon_thumb_down.png',array('class' => 'icon')); ?>
-		Dislike
+		<?php __('Dislike') ?>
 		</a>
 	</li>
 	
@@ -28,7 +28,7 @@ Content votes: 143
 		<div class="hoverLink">
 			<a href="#" id="add_to_favourites_link" class="blockLink">
 			<?php echo $html->image('icon_fav_off.png',array('class' => 'icon size16')); ?>
-			Add content to favourites
+			<?php __('Add content to favourites') ?>
 			</a>
 		</div>
 	</li>
@@ -36,7 +36,7 @@ Content votes: 143
 	<li class="small-padding-top-bottom">
 		<a href="#" id="give_gift_link" class="hoverLink blockLink">
 		<?php echo $html->image('cake.icon.png',array('class' => 'icon size16')); ?>
-		Give gift to content
+		<?php __('Give gift to content') ?>
 		</a>
 	</li>
 	
@@ -45,20 +45,20 @@ Content votes: 143
 		<input type="hidden" value="Hihhuli" class="send-message-name" />
 		<a href="#" class="hoverLink blockLink">
 		<?php echo $html->image('icon_message_off.png',array('class' => 'icon size16')); ?>
-		Send private message
+		<?php __('Send private message') ?>
 		</a>
 	</li>
 	
 	<li class="flag-page small-padding-top-bottom">
 		<a href="#" class="hoverLink blockLink">
 		<?php echo $html->image('icon_flag.png',array('class' => 'icon')); ?>
-		Flag as inappropriate</a>
+		<?php __('Flag as inappropriate') ?></a>
 	</li>
 	
 	<li class="small-padding-top-bottom">
 		<a href="<?php echo $html->url(array('action' => 'edit',$content['id'])); ?>" class="hoverLink blockLink">
 		<?php echo $html->image('icon_edit.png',array('class' => 'icon')); ?>
-		Edit content
+		<?php __('Edit content') ?>
 		</a>
 	</li>
 
@@ -73,11 +73,11 @@ $expandIcons = array('block' => 'icon_minus_tiny.png',
 <div id="linked-container" class="margin-top" >
 	<h3 class="grey left small-padding-top-bottom pointerCursor noBackground nomargin">
 	<?php echo $html->image($expandIcons[$cookies['linked']],array('class' => 'icon')); ?>
-	Linked (<span><?php echo $linkedContentsCount; ?></span>)
+	<?php __('Linked') ?> (<span><?php echo $linkedContentsCount; ?></span>)
 	</h3>
 	<a href="#" id="linked-addnewlink-link" class="hoverLink right small-padding-top-bottom ">
 		<?php echo $html->image('icon_link.png',array('class' => 'icon')); ?>
-		Add link
+		<?php __('Add link') ?>
 	</a>
 	<div class="clear dot-line-720"></div>
 	<ul style="display: <?php echo $cookies['linked']; ?>">

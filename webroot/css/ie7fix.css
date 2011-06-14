@@ -4,3 +4,4 @@
 #header #search #search-submit  { float:right; width:50px; margin-left:-35px; }
 #header #search #select { margin-top:-3px; }
 #header #search #search-top #user_options { top: 25px; }
+.ie7_login_fix { width: 267px !important; }

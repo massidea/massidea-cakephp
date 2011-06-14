@@ -1,10 +1,10 @@
 <div class="box">
-	<h4>Corresponding author</h4>
+	<h4><?php __('Corresponding author') ?></h4>
 	<div class="box-user-content">
 		<?php echo $html->image('no_profile_img_placeholder.png', array('class' => 'avatar')); ?>
 		<div class="left" id="content-authorinfo">
 			<a href="#">Hihhuli</a>
-			<p>Joined: 03 Jan 2011</p>
+			<p><?php __('Joined') ?>: 03 Jan 2011</p>
 		</div>
 		<div class="clear"></div>
 		<div class="send-message">

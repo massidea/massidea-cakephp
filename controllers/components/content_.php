@@ -74,6 +74,7 @@ class Content_Component extends object { //The _ is added because we cant use wo
 
 			$node = $this->_contentData;
 			$node['data'] = $this->_contentSpecificData;
+			$this->DataHandler->setPrivileges($this->_privileges);
 			
 			$content = $this->DataHandler->parseToNodes(array($node),$this->__type);
 			$contentId = $this->DataHandler->saveData($content);
@@ -144,7 +145,6 @@ class Content_Component extends object { //The _ is added because we cant use wo
 	
 	public function setContentPrivileges($data) {
 		$this->_privileges = $data;
-		$this->DataHandler->setPrivileges($this->_privileges); 
 		return $this;
 	}
 	
