@@ -34,7 +34,7 @@ var loading = "";
 function setFlash(text, style) {
 	if($("#flash").is(':empty')) {
 		if(style == 'successfull') {
-			$("#flash").html('<div id="successfull_operation" class="flashBox">'+text+'</div>');
+			$("#flash").html('<div id="successfull_operation" class="message">'+text+'</div>');
 		} else {
 			$("#flash").text(text);
 		}
@@ -47,8 +47,39 @@ function setFlash(text, style) {
  * If flash message is set up a, it is displayed and then removed and emptied
  */
 function showFlash() {
-	if(!$("#flash").is(':empty')) {
-		$("#flash:hidden").slideDown(500).delay(5000).slideUp(1000,function(){ $("#flash").empty(); });
+	var flashPusher = $("#flashPusher");
+	var flashBox = $("#flash");
+	if(!flashBox.is(':empty')) {
+		// Get #flash height
+		var flashHeight = flashBox.height();
+		// Offset #flash position to outside screen
+		flashBox.css('top', -flashHeight);
+		flashBox.show();
+		// Animate flashbar "push"
+		flashBox.animate({
+			top: '0'
+		},
+		{
+			duration: 1000,
+			step: function(now, fx) {
+				flashPusher.height(now+flashHeight);
+			},
+			complete: function() {
+				// Animate flashbar "pull"
+				$(this).delay(5000).animate({
+					top: -flashHeight
+				},
+				{
+					duration: 1000,
+					step: function(now, fx) {
+						flashPusher.height(now+flashHeight);
+					},
+					complete: function() {
+						$(this).empty();
+					}
+				});
+			}
+		});
 	}
 }
 

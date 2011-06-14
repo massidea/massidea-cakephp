@@ -51,6 +51,7 @@ echo $html->docType('xhtml11');
 		echo $this->element($layout.'alert', array('cache' => false)); 
 	?> 
 	</div>
+	<div id="flashPusher"></div>
 	<div id="flash"><?php echo $session->flash(); ?></div>
 	<div id="background">
 		<div id="container">
