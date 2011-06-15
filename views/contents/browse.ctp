@@ -25,7 +25,7 @@
 				<?php if(isset($content['Child'])): $i=0; foreach($content['Child'] as $child):
 						if($child['type'] == 'Tag'): $i++;
 				?>
-				<a href="#"><span class="<?php echo ($i%2)?'first':'second'; ?>_tag"><?php echo $child['name']; ?></span></a>
+				<a href="#"><span class="<?php echo ($i%2)?'deepblue':'blue'; ?>"><?php echo $child['name']; ?></span></a>
 				<?php endif; endforeach; endif; ?>
 			</p>
 			<p class="translate">
