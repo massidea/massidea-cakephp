@@ -78,9 +78,11 @@ class Content_Component extends object { //The _ is added because we cant use wo
 			
 			$content = $this->DataHandler->parseToNodes(array($node),$this->__type);
 			$contentId = $this->DataHandler->saveData($content);
-			$contentId = $contentId[0];
-			
-			$this->_setContentId($contentId); //Set the saved contents id
+
+			if(!empty($contentId)) {
+				$contentId = $contentId[0];
+				$this->_setContentId($contentId); //Set the saved contents id
+			} 
 			return $contentId;
 		}
 		return false;
