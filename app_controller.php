@@ -57,8 +57,10 @@ class AppController extends Controller {
 		 * 
 		 * content_class is used to define how the page is viewed. Default contentWithSidebar.
 		 * Should be overridden in controller if wished to use other class.
+		 * The content_sidebar defines which side the sidebar is.
 		 */
 		$this->set('content_class','contentWithSidebar');
+		$this->set('content_sidebar','right');
 		
 		/**
 		 * Setting Logged in user ID to userId variable
