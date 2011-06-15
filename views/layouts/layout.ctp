@@ -84,16 +84,8 @@ echo $html->docType('xhtml11');
 			</div>
 			<?php endif; ?>
 			
-			<div id="content">
-				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
-					<div id="<?php echo $action_id; ?>">
-						<?php echo $content_for_layout ?>
-					</div>
-				</div>
-			</div>
-			<?php ?>
 			<?php if ($content_class == 'contentWithSidebar' || $content_class == 'contentWithTopAndSidebar'): ?>
-			<div id="sidebar">
+			<div id="sidebar" class="<?php echo $content_sidebar ?>">
 				<?php 
 				/**
 				 * Its important that sidebar element is not cached because its view may also depend on parameters
@@ -103,6 +95,14 @@ echo $html->docType('xhtml11');
 				?>
 			</div>
 			<?php endif; ?>
+			
+			<div id="content">
+				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
+					<div id="<?php echo $action_id; ?>">
+						<?php echo $content_for_layout ?>
+					</div>
+				</div>
+			</div>			
 			<div class="clear"></div>
 			<div id="footer">
 				<?php echo $this->element($layout.'footer', array('cache' => true)); ?>
