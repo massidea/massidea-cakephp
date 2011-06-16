@@ -235,14 +235,18 @@ class Node extends AppModel {
 
 		$t = new $inst();
 		$success = $t->save($node_data);
-
-		$id = (string)$node_data['id'];
-
-		if ($this->_cache) {
-                	$hash = $this->_createHash($id);
-                	$obj = Cache::delete('Node:'.$hash);
+		
+		if($success) {
+			$id = (string)$node_data['id'];
+			if ($this->_cache) {
+				$hash = $this->_createHash($id);
+				$obj = Cache::delete('Node:'.$hash);
+			}
+		} else {
+			$this->validationErrors = $t->validationErrors;
+			$bc->delete($last_id);
 		}
-
+		
 		return $success;
 	}
 

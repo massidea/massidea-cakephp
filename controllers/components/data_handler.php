@@ -314,4 +314,8 @@ class DataHandlerComponent extends Object {
 		return $this->_privileges;
 	}
 	
+	public function getValidationErrors() {
+		return $this->Nodes->validationErrors;
+	}
+	
 }
