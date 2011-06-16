@@ -6,8 +6,8 @@ class Contents extends AppModel {
 	var $validate = array(
 		'title' => array(
 			'maxlength' => array(
-				'rule' => array('maxlength',140)
-				//'message' => 'Your custom message here',
+				'rule' => array('maxlength',120),
+				'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

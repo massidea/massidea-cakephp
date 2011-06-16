@@ -111,17 +111,17 @@ class ContentsController extends AppController {
 					}
 				} else {
 					$this->Session->setFlash('Your content has NOT been successfully saved.');
-					$this->redirect('/');
 				}
-			} else {
-				//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
-				if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
-					$this->redirect(array('controller' => '/'));
-				}
-	
-				$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
-				$this->set('content_type',$contentType);
 			}
+			
+			//$this->helpers[] = 'TinyMce.TinyMce'; //Commented out for future use...
+			if(!$contentType = $this->Content_->validateContentType($contentType)) { //We validate the contentType received from url to prevent XSS.
+				$this->redirect(array('controller' => '/'));
+			}
+
+			$this->set('language_list',$this->Language->find('list',array('order' => array('Language.name' => 'ASC'))));
+			$this->set('content_type',$contentType);
+
 		} else {
 			$this->redirect('/');
 		}
