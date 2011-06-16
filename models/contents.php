@@ -6,7 +6,7 @@ class Contents extends AppModel {
 	var $validate = array(
 		'title' => array(
 			'maxlength' => array(
-				'rule' => array('maxlength',4),
+				'rule' => array('maxlength',140),
 				'message' => 'Maximum length of 140 characters exceeded',
 				'allowEmpty' => false,
 				//'required' => false,
