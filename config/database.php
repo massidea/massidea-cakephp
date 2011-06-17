@@ -81,6 +81,7 @@ class DATABASE_CONFIG {
 		'password' => '',
 		'database' => 'massidea',
 		'prefix' => '',
+		'encoding' => 'utf8'
 	);
 
 	var $test = array(
@@ -91,5 +92,6 @@ class DATABASE_CONFIG {
 		'password' => 'password',
 		'database' => 'test_database_name',
 		'prefix' => '',
+		'encoding' => 'utf8'
 	);
 }

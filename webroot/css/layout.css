@@ -124,7 +124,8 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 #login_box a {
     color: #0089CF !important;
     text-decoration: none;
-    float: right;
+    float: left;
+    padding: 0 0 0 10px;
 }
 
 #login_box .submit {
@@ -227,9 +228,10 @@ a:visited, a:hover, a:active { text-decoration:none; color: #0089CF; }
 /**
  * Flash
  */
-#flash { background: #000; color: white; text-align: center; font-weight: bold;  z-index: 99999; width: 300px;  position: fixed; margin-left: -150px; left: 50%; display: none; }
-#flash .flashBox  { padding: 6px; }
-#flash #successfull_operation { background: #4B9B07; }
+#flashPusher { display: block; height: 0px; }
+#flash { display: none; color: white; text-align: center; font-weight: bold; z-index: 99999; width: 100%; position: fixed; min-height: 32px; background: #333 bottom url('../img/flashback.png') repeat-x; }
+#flash .message { padding: 10px 0 10px 0; }
+#flash #successfull_operation { background: #334733 bottom url('../img/flashback-green.png') repeat-x; }
 
 /** Element styles */
 #signuplink { padding-bottom: 2px; text-align: center; }
