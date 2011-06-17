@@ -6,44 +6,44 @@ class Contents extends AppModel {
 	var $validate = array(
 		'title' => array(
 			'maxlength' => array(
-				'rule' => array('maxlength',140)
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
+				'rule' => array('maxlength',140),
+				'message' => 'Maximum length of 140 characters exceeded',
+				'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
+			)
 		),
 		'lead' => array(
 			'maxlength' => array(
 				'rule' => array('maxlength',320),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
+				'message' => 'Maximum length of 320 characters exceeded',
+				'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
+			)
 		),
 		'body' => array(
 			'maxlength' => array(
 				'rule' => array('maxlength',4000),
-				//'message' => 'Your custom message here',
+				'message' => 'Maximum length of 4000 characters exceeded'
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
+			)
 		),
 		'references' => array(
 			'maxlength' => array(
 				'rule' => array('maxlength',2000),
-				//'message' => 'Your custom message here',
+				'message' => 'Maximum length of 2000 characters exceeded'
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+			)
+		)
 
 	);
 	

@@ -51,6 +51,7 @@ echo $html->docType('xhtml11');
 		echo $this->element($layout.'alert', array('cache' => false)); 
 	?> 
 	</div>
+	<div id="flashPusher"></div>
 	<div id="flash"><?php echo $session->flash(); ?></div>
 	<div id="background">
 		<div id="container">
@@ -59,7 +60,7 @@ echo $html->docType('xhtml11');
 				<?php echo $this->element('global'.DS.'login', array('cache' => false)); ?>
 			</div>
 			<div id="menu">
-				<?php echo $this->element($layout.'menu', array('cache' => true)); ?>
+				<?php echo $this->element($layout.'menu', array('cache' => false)); ?>
 			</div>
 			<?php 
 			/**
@@ -83,16 +84,8 @@ echo $html->docType('xhtml11');
 			</div>
 			<?php endif; ?>
 			
-			<div id="content">
-				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
-					<div id="<?php echo $action_id; ?>">
-						<?php echo $content_for_layout ?>
-					</div>
-				</div>
-			</div>
-			<?php ?>
 			<?php if ($content_class == 'contentWithSidebar' || $content_class == 'contentWithTopAndSidebar'): ?>
-			<div id="sidebar">
+			<div id="sidebar" class="<?php echo $content_sidebar ?>">
 				<?php 
 				/**
 				 * Its important that sidebar element is not cached because its view may also depend on parameters
@@ -102,6 +95,14 @@ echo $html->docType('xhtml11');
 				?>
 			</div>
 			<?php endif; ?>
+			
+			<div id="content">
+				<div id="<?php echo $controller_id; ?>" class="<?php echo $content_class; ?>">
+					<div id="<?php echo $action_id; ?>">
+						<?php echo $content_for_layout ?>
+					</div>
+				</div>
+			</div>			
 			<div class="clear"></div>
 			<div id="footer">
 				<?php echo $this->element($layout.'footer', array('cache' => true)); ?>

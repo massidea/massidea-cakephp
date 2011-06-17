@@ -23,6 +23,7 @@ $url_view_vision = $html->url(array('controller' => 'contents', 'action' => 'vis
 <div class="right">
 	<div id="addNewContent">
 		<input id="addNewContentButton" type="button" value="Add new content" />
+		<?php if(isset($userId)): ?>
 		<div id="addNewContentDialog">
 			<div id="add_new_challenge" class="add_new">
 				<div class="add_new_info">
@@ -56,6 +57,7 @@ $url_view_vision = $html->url(array('controller' => 'contents', 'action' => 'vis
 			</div>
 			<div class="clear"></div>
 		</div>
+		<?php endif; ?>
 	</div>
 </div>
 <div class="clear"></div>

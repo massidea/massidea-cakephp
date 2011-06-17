@@ -34,10 +34,11 @@ class Company_Component extends Object {
 	protected $_newCompanies = array();
 	protected $_newCompaniesList = array();	
 	protected $_existingCompanies = array();
-	protected $_privileges = array('privileges' => 777, 'creator' => NULL);
+	protected $_privileges = array('privileges' => 555, 'creator' => NULL);
 		
 	public function linkCompaniesToObject($objectId = -1) {
 		if($objectId != -1) {
+			$this->DataHandler->setPrivileges($this->_privileges);
 			$this->DataHandler->addLinkBetween($objectId,$this->_existingCompanies);
 			$this->DataHandler->saveData($this->_newCompanies,$objectId);
 			return true;
@@ -46,7 +47,8 @@ class Company_Component extends Object {
 		}
 	}
 
-	public function setCompaniesForSave($companies) {
+	public function setCompaniesForSave($companies,$privileges) {
+		$this->_privileges = $privileges;
 		$companies = explode(',',$companies); // Get companies to array
 		$companyList = $this->DataHandler->striptagsAndTrimArrayValues($companies); // Trims of whitespaces etc.
 		

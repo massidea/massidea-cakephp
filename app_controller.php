@@ -33,11 +33,14 @@ class AppController extends Controller {
 	public $helpers = array('Session', 'Html', 'Form', 'Cache');
 	public $components = array('Session', 'Auth');
 	public $Nodes;
+	public $userId = null;
 	
 	public function beforeFilter() {
 		$this->set('title_for_layout','Massidea.org');
-		$this->Nodes = Classregistry::init('Node');
 		
+		$this->userId = $this->Session->read('Auth.User.id');
+		
+		$this->Nodes = Classregistry::init('Node');
 		$this->Nodes->map = array('RelatedCompany' => 'RelatedCompanies');
 		
 		/**
@@ -54,8 +57,15 @@ class AppController extends Controller {
 		 * 
 		 * content_class is used to define how the page is viewed. Default contentWithSidebar.
 		 * Should be overridden in controller if wished to use other class.
+		 * The content_sidebar defines which side the sidebar is.
 		 */
 		$this->set('content_class','contentWithSidebar');
+		$this->set('content_sidebar','right');
+		
+		/**
+		 * Setting Logged in user ID to userId variable
+		 */
+		$this->set('userId',$this->userId);
 		//End of automated class load for content
 	}
 	
